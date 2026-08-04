@@ -18,7 +18,7 @@ const PROVIDERS = [
   {
     key: "google",
     label: "Continue with Google",
-    colorClass: "bg-white text-gray-800 border border-gray-300 hover:bg-gray-50",
+    colorClass: "bg-white text-neutral-800 border border-neutral-300 hover:bg-neutral-50",
     icon: (
       <svg className="h-5 w-5 mr-2" viewBox="0 0 48 48">
         <g>
@@ -112,7 +112,7 @@ const SocialAuth = ({ redirectTo = "/" }) => {
   return (
     <div className="space-y-3">
       {error && (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded mb-3 text-xs">
+        <div className="bg-error-100 border border-error-400 text-error-700 px-4 py-2 rounded mb-3 text-xs">
           {error}
         </div>
       )}

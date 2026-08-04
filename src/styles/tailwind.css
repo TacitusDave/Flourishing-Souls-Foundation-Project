@@ -112,4 +112,34 @@
     white-space: nowrap !important;
     border: 0 !important;
   }
+
+  /* Full-bleed: break an element out of any centered/max-width ancestor
+     so it spans the true viewport edge-to-edge, regardless of screen size. */
+  .full-bleed {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+}
+
+/* Slow ambient gradient drift for hero sections that don't have real
+   photo/video media yet - swap for a <video>/<img> background later
+   without needing to touch this animation. */
+@keyframes hero-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-animated-gradient {
+  background-size: 200% 200%;
+  animation: hero-drift 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-animated-gradient {
+    animation: none;
+  }
 }

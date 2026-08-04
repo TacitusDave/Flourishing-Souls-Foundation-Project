@@ -83,8 +83,8 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-        <span className="ml-4 text-lg font-medium text-gray-700 dark:text-gray-200">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600" />
+        <span className="ml-4 text-lg font-medium text-neutral-600 dark:text-neutral-300">
           Loading admin dashboard...
         </span>
       </div>
@@ -93,7 +93,7 @@ const Dashboard = () => {
 
   if (error) {
     return (
-      <div className="max-w-lg mx-auto mt-12 p-4 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200 rounded-lg shadow">
+      <div className="max-w-lg mx-auto mt-12 p-4 bg-error-100 dark:bg-error-900 text-error-700 dark:text-error-200 rounded-lg shadow">
         <p className="font-semibold">Error loading dashboard: {error}</p>
       </div>
     );
@@ -101,60 +101,60 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 md:p-8">
-      <h1 className="text-2xl md:text-3xl font-bold text-primary mb-8">
+      <h1 className="text-2xl md:text-3xl font-bold text-brand-600 mb-8">
         Admin Dashboard
       </h1>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
         {/* Users */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
-          <FaUsers className="text-3xl text-primary mb-2" />
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
+          <FaUsers className="text-3xl text-brand-600 mb-2" />
           <div className="font-semibold text-2xl">{userCount}</div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">Users</div>
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">Users</div>
         </div>
         {/* Donations */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
           <FaDonate className="text-3xl text-green-600 mb-2" />
           <div className="font-semibold text-2xl">
             &#8358; {donationTotal.toLocaleString()}
           </div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">
             Total Donations
           </div>
         </div>
         {/* Volunteers */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
           <FaHandsHelping className="text-3xl text-yellow-600 mb-2" />
           <div className="font-semibold text-2xl">{volunteerCount}</div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">
             Volunteers
           </div>
         </div>
         {/* Support Requests */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
           <FaUserShield className="text-3xl text-blue-600 mb-2" />
           <div className="font-semibold text-2xl">{supportRequests}</div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">
             Support Requests
           </div>
         </div>
         {/* Events */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
           <FaCalendarAlt className="text-3xl text-purple-700 mb-2" />
           <div className="font-semibold text-2xl">{eventCount}</div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">Events</div>
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">Events</div>
         </div>
         {/* Gallery */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 flex flex-col items-center">
+        <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-4 flex flex-col items-center">
           <FaImage className="text-3xl text-pink-500 mb-2" />
           <div className="font-semibold text-2xl">{galleryItems}</div>
-          <div className="text-sm text-gray-700 dark:text-gray-200">
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">
             Gallery Items
           </div>
         </div>
       </div>
 
       {/* Divider */}
-      <hr className="my-8 border-gray-200 dark:border-gray-700" />
+      <hr className="my-8 border-neutral-200 dark:border-neutral-800" />
 
       {/* Management Panel */}
       <ManagementPanel />

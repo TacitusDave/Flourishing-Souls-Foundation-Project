@@ -107,7 +107,7 @@ function useGallery() {
         `${type}s/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
 
       // Upload to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from(GALLERY_BUCKET)
         .upload(filePath, file, {
           cacheControl: "public, max-age=3600",
@@ -206,10 +206,10 @@ function useGallery() {
     }
   }, []);
 
-  // Listen to real-time changes in the gallery table
+  // Listen to real-time changes in the gallery table (skipped in test/CI
+  // environments where supabase.channel isn't a real websocket client)
   useEffect(() => {
-    if (subscriptionRef.current) {
-      // already subscribed
+    if (subscriptionRef.current || typeof supabase.channel !== "function") {
       return;
     }
     const channel = supabase

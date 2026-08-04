@@ -42,16 +42,17 @@ const footerNav = [
 
 function Footer() {
   return (
-    <footer className="bg-neutral-950 text-neutral-300">
+    <footer className="bg-gradient-to-b from-white via-neutral-800 to-neutral-950 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950 text-neutral-300 transition-colors duration-500">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div className="space-y-4">
             <Link to="/" className="inline-flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-white font-display font-bold">FS</div>
+              <img src="/images/logo.svg" alt="" className="h-10 w-10" />
               <span className="text-xl font-display font-semibold text-white">Flourishing Souls</span>
             </Link>
             <p className="max-w-md text-sm leading-7 text-neutral-400">
-              Built for mission-led organizations that need secure giving, volunteer coordination, and impact reporting.
+              Supporting orphan care, education, healthcare, and community upliftment —
+              with full transparency into every donation and every volunteer hour.
             </p>
             <div className="flex flex-wrap gap-3">
               {SOCIAL_LINKS.map((link) => (
@@ -85,9 +86,12 @@ function Footer() {
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Contact</p>
             <div className="mt-6 space-y-3 text-sm text-neutral-300">
-              <p>support@flourishingsouls.org</p>
-              <p>+234 123 456 789</p>
-              <p>34 Freedom Way, Lagos, Nigeria</p>
+              <a href="mailto:support@flourishingsoulsfoundation.org" className="block hover:text-white transition">
+                support@flourishingsoulsfoundation.org
+              </a>
+              <Link to="/support" className="block hover:text-white transition">
+                Submit a support request &rarr;
+              </Link>
             </div>
             <div className="mt-6">
               <Link

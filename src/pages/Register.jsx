@@ -124,21 +124,21 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-indigo-50 from-20% to-blue-100 dark:from-gray-900 dark:to-indigo-950 flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-md bg-white/90 dark:bg-slate-900/95 border border-slate-100 dark:border-slate-800 rounded-xl shadow-lg p-7 mt-10">
+    <div className="min-h-screen bg-gradient-to-tr from-brand-50 from-20% to-accent-100 dark:from-neutral-900 dark:to-brand-950 flex flex-col justify-center items-center p-4">
+      <div className="w-full max-w-md bg-white/90 dark:bg-neutral-900/95 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg p-7 mt-10">
         <div className="flex flex-col items-center mb-6">
           <img
-            src="/images/logo.png"
+            src="/images/logo.svg"
             alt="Flourishing Souls Foundation"
             className="w-16 h-16 rounded-full mb-2"
             width={64}
             height={64}
             loading="lazy"
           />
-          <h1 className="text-2xl font-extrabold text-indigo-600 dark:text-indigo-300 mb-1">
+          <h1 className="text-2xl font-extrabold text-brand-600 dark:text-brand-300 mb-1">
             Create your account
           </h1>
-          <div className="text-sm text-slate-600 dark:text-slate-300">
+          <div className="text-sm text-neutral-600 dark:text-neutral-300">
             Welcome! Join the Flourishing Souls Community.
           </div>
         </div>
@@ -148,7 +148,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold mb-1 text-neutral-700 dark:text-neutral-300"
             >
               Full Name
             </label>
@@ -162,10 +162,10 @@ const Register = () => {
               className={`w-full px-3 py-2 rounded border
                 ${
                   formErrors.name
-                    ? "border-red-400 focus:ring-red-300"
-                    : "border-slate-200 focus:ring-indigo-200"
+                    ? "border-error-400 focus:ring-error-300"
+                    : "border-neutral-200 focus:ring-brand-200"
                 }
-                focus:outline-none focus:ring-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 transition`}
+                focus:outline-none focus:ring-2 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 transition`}
               disabled={submitting}
               aria-invalid={!!formErrors.name}
               aria-describedby={formErrors.name && "name-error"}
@@ -173,7 +173,7 @@ const Register = () => {
             />
             {formErrors.name && (
               <div
-                className="text-xs text-red-500 mt-1"
+                className="text-xs text-error-600 mt-1"
                 id="name-error"
                 role="alert"
               >
@@ -185,7 +185,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold mb-1 text-neutral-700 dark:text-neutral-300"
             >
               Email Address
             </label>
@@ -199,10 +199,10 @@ const Register = () => {
               className={`w-full px-3 py-2 rounded border
                 ${
                   formErrors.email
-                    ? "border-red-400 focus:ring-red-300"
-                    : "border-slate-200 focus:ring-indigo-200"
+                    ? "border-error-400 focus:ring-error-300"
+                    : "border-neutral-200 focus:ring-brand-200"
                 }
-                focus:outline-none focus:ring-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 transition`}
+                focus:outline-none focus:ring-2 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 transition`}
               disabled={submitting}
               aria-invalid={!!formErrors.email}
               aria-describedby={formErrors.email && "email-error"}
@@ -210,7 +210,7 @@ const Register = () => {
             />
             {formErrors.email && (
               <div
-                className="text-xs text-red-500 mt-1"
+                className="text-xs text-error-600 mt-1"
                 id="email-error"
                 role="alert"
               >
@@ -221,7 +221,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold mb-1 text-neutral-700 dark:text-neutral-300"
             >
               Password
             </label>
@@ -236,10 +236,10 @@ const Register = () => {
               className={`w-full px-3 py-2 rounded border
                 ${
                   formErrors.password
-                    ? "border-red-400 focus:ring-red-300"
-                    : "border-slate-200 focus:ring-indigo-200"
+                    ? "border-error-400 focus:ring-error-300"
+                    : "border-neutral-200 focus:ring-brand-200"
                 }
-                focus:outline-none focus:ring-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 transition`}
+                focus:outline-none focus:ring-2 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 transition`}
               disabled={submitting}
               aria-invalid={!!formErrors.password}
               aria-describedby={formErrors.password && "password-error"}
@@ -247,7 +247,7 @@ const Register = () => {
             />
             {formErrors.password && (
               <div
-                className="text-xs text-red-500 mt-1"
+                className="text-xs text-error-600 mt-1"
                 id="password-error"
                 role="alert"
               >
@@ -258,7 +258,7 @@ const Register = () => {
           <div>
             <label
               htmlFor="passwordConfirm"
-              className="block text-sm font-semibold mb-1 text-gray-700 dark:text-gray-300"
+              className="block text-sm font-semibold mb-1 text-neutral-700 dark:text-neutral-300"
             >
               Confirm Password
             </label>
@@ -273,10 +273,10 @@ const Register = () => {
               className={`w-full px-3 py-2 rounded border
                 ${
                   formErrors.passwordConfirm
-                    ? "border-red-400 focus:ring-red-300"
-                    : "border-slate-200 focus:ring-indigo-200"
+                    ? "border-error-400 focus:ring-error-300"
+                    : "border-neutral-200 focus:ring-brand-200"
                 }
-                focus:outline-none focus:ring-2 bg-white dark:bg-slate-800 text-gray-900 dark:text-gray-100 transition`}
+                focus:outline-none focus:ring-2 bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 transition`}
               disabled={submitting}
               aria-invalid={!!formErrors.passwordConfirm}
               aria-describedby={formErrors.passwordConfirm && "passwordConfirm-error"}
@@ -284,7 +284,7 @@ const Register = () => {
             />
             {formErrors.passwordConfirm && (
               <div
-                className="text-xs text-red-500 mt-1"
+                className="text-xs text-error-600 mt-1"
                 id="passwordConfirm-error"
                 role="alert"
               >
@@ -300,17 +300,17 @@ const Register = () => {
               checked={form.agree}
               onChange={handleChange}
               disabled={submitting}
-              className={`w-4 h-4 accent-indigo-600 border border-slate-200 dark:border-slate-700 ${
-                formErrors.agree ? "ring-2 ring-red-400" : ""
+              className={`w-4 h-4 accent-brand-600 border border-neutral-200 dark:border-neutral-700 ${
+                formErrors.agree ? "ring-2 ring-error-400" : ""
               }`}
               aria-invalid={!!formErrors.agree}
               aria-describedby={formErrors.agree && "agree-error"}
               required
             />
-            <label htmlFor="agree" className="text-xs text-gray-700 dark:text-gray-300 ml-2 select-none">
+            <label htmlFor="agree" className="text-xs text-neutral-700 dark:text-neutral-300 ml-2 select-none">
               I agree to the{" "}
               <a
-                className="underline hover:text-indigo-600"
+                className="underline hover:text-brand-600"
                 href="/privacy"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -319,7 +319,7 @@ const Register = () => {
               </a>{" "}
               and{" "}
               <a
-                className="underline hover:text-indigo-600"
+                className="underline hover:text-brand-600"
                 href="/terms"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -331,7 +331,7 @@ const Register = () => {
           </div>
           {formErrors.agree && (
             <div
-              className="text-xs text-red-500 mt-1"
+              className="text-xs text-error-600 mt-1"
               id="agree-error"
               role="alert"
             >
@@ -342,18 +342,18 @@ const Register = () => {
           <button
             type="submit"
             disabled={submitting}
-            className={`w-full py-2 rounded font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow transition 
+            className={`w-full py-2 rounded font-bold text-white bg-brand-600 hover:bg-brand-700 shadow transition 
               ${submitting && "opacity-60 pointer-events-none"}`}
           >
             {submitting ? "Creating..." : "Register"}
           </button>
           {registerError && (
-            <div className="text-xs text-red-500 bg-red-100 rounded p-2 mt-2" role="alert">
+            <div className="text-xs text-error-600 bg-error-100 rounded p-2 mt-2" role="alert">
               {registerError}
             </div>
           )}
           {registerSuccess && (
-            <div className="text-xs text-green-600 bg-green-100 rounded p-2 mt-2" role="status">
+            <div className="text-xs text-success-600 bg-success-100 rounded p-2 mt-2" role="status">
               Registration successful! Redirecting to your dashboard…
             </div>
           )}
@@ -362,30 +362,30 @@ const Register = () => {
         {/* Or continue with social auth */}
         <div className="mt-7">
           <div className="flex items-center my-2">
-            <div className="flex-1 border-t border-slate-200 dark:border-slate-700"></div>
-            <span className="mx-3 text-xs text-slate-400">or</span>
-            <div className="flex-1 border-t border-slate-200 dark:border-slate-700"></div>
+            <div className="flex-1 border-t border-neutral-200 dark:border-neutral-700"></div>
+            <span className="mx-3 text-xs text-neutral-400">or</span>
+            <div className="flex-1 border-t border-neutral-200 dark:border-neutral-700"></div>
           </div>
           <SocialAuth disabled={submitting} />
         </div>
-        <div className="mt-6 text-xs text-gray-600 dark:text-gray-400 text-center">
+        <div className="mt-6 text-xs text-neutral-600 dark:text-neutral-400 text-center">
           Already have an account?{" "}
           <Link
             to="/login"
-            className="underline font-semibold text-indigo-700 dark:text-indigo-300 hover:text-indigo-900"
+            className="underline font-semibold text-brand-700 dark:text-brand-300 hover:text-brand-900"
           >
             Sign In
           </Link>
         </div>
-        <div className="mt-4 text-center text-[11px] text-gray-400 dark:text-slate-500">
+        <div className="mt-4 text-center text-[11px] text-neutral-400 dark:text-neutral-500">
           By registering, you agree to our{" "}
-          <a href="/privacy" className="underline hover:text-indigo-500">
+          <a href="/privacy" className="underline hover:text-brand-500">
             Privacy Policy
           </a>
           .
         </div>
       </div>
-      <footer className="mt-8 text-xs text-slate-400 dark:text-slate-500 text-center">
+      <footer className="mt-8 text-xs text-neutral-400 dark:text-neutral-500 text-center">
         &copy; {new Date().getFullYear()} Flourishing Souls Foundation. All rights reserved.
       </footer>
     </div>

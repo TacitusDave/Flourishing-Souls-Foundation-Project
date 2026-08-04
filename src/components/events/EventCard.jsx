@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { Button, Modal, Notification } from "../common/ThemeProvider";
+import Button from "../common/Button";
+import Modal from "../common/Modal";
 import { CalendarIcon, MapPinIcon, UserGroupIcon } from "@heroicons/react/24/outline";
 
 /**
@@ -29,8 +29,6 @@ const EventCard = ({
   className = "",
   showAttendees = false,
   attendees = [],
-  // For modals/notifications
-  notify,
 }) => {
   const [coverLoaded, setCoverLoaded] = React.useState(false);
   const [coverError, setCoverError] = React.useState(false);
@@ -62,7 +60,7 @@ const EventCard = ({
 
   // Accessibility: cover image alt
   const imgAlt =
-    event.coverImageAlt ||
+    event.image_alt ||
     `Cover image for ${event.title || "event"}`;
 
   // Registration logic
@@ -86,7 +84,7 @@ const EventCard = ({
           att.avatar ? (
             <img
               key={att.id}
-              className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-700 object-cover"
+              className="inline-block h-8 w-8 rounded-full ring-2 ring-white dark:ring-neutral-700 object-cover"
               src={att.avatar}
               alt={att.name || "User"}
               loading="lazy"
@@ -94,7 +92,7 @@ const EventCard = ({
           ) : (
             <div
               key={att.id}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-300 text-xs font-bold ring-2 ring-white dark:ring-slate-700"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-neutral-300 text-xs font-bold ring-2 ring-white dark:ring-neutral-700"
               title={att.name}
             >
               {att.name ? att.name[0] : "U"}
@@ -102,7 +100,7 @@ const EventCard = ({
           )
         )}
         {attendees.length > 5 && (
-          <span className="ml-2 text-xs text-gray-400 align-middle">{`+${attendees.length - 5} more`}</span>
+          <span className="ml-2 text-xs text-neutral-400 align-middle">{`+${attendees.length - 5} more`}</span>
         )}
       </div>
     ) : null;
@@ -111,10 +109,10 @@ const EventCard = ({
   const renderCover = () => (
     <div className="relative">
       {!coverLoaded && !coverError && (
-        <div className="animate-pulse h-44 bg-gray-200 dark:bg-slate-700 rounded-t-lg" />
+        <div className="animate-pulse h-44 bg-neutral-200 dark:bg-neutral-700 rounded-t-lg" />
       )}
       <img
-        src={coverError ? "/images/logo.png" : event.coverImage}
+        src={coverError ? "/images/logo.svg" : event.image_url}
         alt={imgAlt}
         className={`h-44 w-full object-cover rounded-t-lg transition-opacity duration-700 ${
           coverLoaded ? "opacity-100" : "opacity-0"
@@ -125,59 +123,56 @@ const EventCard = ({
         onError={() => setCoverError(true)}
       />
       {isLive && (
-        <span className="absolute top-3 left-3 bg-green-600 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 left-3 bg-success-600 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
           Upcoming
         </span>
       )}
       {status === "past" && (
-        <span className="absolute top-3 left-3 bg-gray-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 left-3 bg-neutral-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
           Past
         </span>
       )}
       {isWaitlist && isFull && (
-        <span className="absolute top-3 right-3 bg-yellow-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 right-3 bg-warning-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
           Waitlist
         </span>
       )}
     </div>
   );
 
-  // Notification component: (success/error)
-  const notifyToast = notify ? Notification : null;
-
   return (
     <div
-      className={`bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl ${className}`}
+      className={`bg-white dark:bg-neutral-800 rounded-lg shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl ${className}`}
       aria-live="polite"
     >
       {renderCover()}
       <div className="flex flex-1 flex-col p-4">
         <header>
-          <h3 className="text-lg font-extrabold mb-1 text-primary-700 dark:text-primary-300 line-clamp-2">
+          <h3 className="text-lg font-extrabold mb-1 text-brand-700 dark:text-brand-300 line-clamp-2">
             {event.title}
           </h3>
-          <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-300 mb-2">
-            <CalendarIcon className="w-4 h-4 mr-1 text-primary-400" />
+          <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-300 mb-2">
+            <CalendarIcon className="w-4 h-4 mr-1 text-brand-400" />
             <span>{formattedDate}</span>
           </div>
         </header>
 
         {event.description && (
           <div className="mb-2">
-            <p className="text-sm text-gray-600 dark:text-gray-200 line-clamp-3">
+            <p className="text-sm text-neutral-600 dark:text-neutral-200 line-clamp-3">
               {event.description}
             </p>
           </div>
         )}
 
         <div className="mb-2 flex items-center gap-4 flex-wrap text-xs">
-          <div className="flex items-center gap-1 font-medium text-gray-700 dark:text-gray-200">
+          <div className="flex items-center gap-1 font-medium text-neutral-700 dark:text-neutral-200">
             <MapPinIcon className="w-4 h-4 mr-1" />
             <span>{locationDisplay}</span>
           </div>
           <div className="flex items-center gap-1">
-            <span className="text-gray-400">·</span>
-            <span className="uppercase py-0.5 px-1.5 rounded-full bg-gray-100 dark:bg-slate-700 text-primary-600 dark:text-primary-400 font-semibold text-xxs tracking-wider">
+            <span className="text-neutral-400">·</span>
+            <span className="uppercase py-0.5 px-1.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-brand-600 dark:text-brand-400 font-semibold text-xxs tracking-wider">
               {eventType}
             </span>
           </div>
@@ -185,18 +180,18 @@ const EventCard = ({
 
         {attendeeCount !== undefined && (
           <div className="flex items-center space-x-2 mt-2 text-xs">
-            <UserGroupIcon className="w-4 h-4 mr-1 text-primary-400" />
+            <UserGroupIcon className="w-4 h-4 mr-1 text-brand-400" />
             <span>
               <strong>{attendeeCount}</strong> attending
               {spotsLeft !== undefined && (
                 <>
                   {" "}
-                  <span className="text-gray-400">/</span>{" "}
+                  <span className="text-neutral-400">/</span>{" "}
                   <span
                     className={`font-semibold ${
                       isFull
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-green-600 dark:text-green-400"
+                        ? "text-error-600 dark:text-error-400"
+                        : "text-success-600 dark:text-success-400"
                     }`}
                   >
                     {isFull
@@ -212,18 +207,14 @@ const EventCard = ({
         {renderAvatars()}
 
         <div className="mt-auto flex flex-col gap-2">
-          <Link
-            to={`/events/${event.id}`}
-            className="text-xs text-primary-600 dark:text-primary-400 hover:underline font-semibold inline-block"
-            tabIndex={0}
+          <button
+            type="button"
+            className="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold inline-block text-left"
             aria-label={`View more details about ${event.title}`}
-            onClick={(e) => {
-              if (event.external) e.preventDefault();
-              setDetailsOpen(true);
-            }}
+            onClick={() => setDetailsOpen(true)}
           >
             View details
-          </Link>
+          </button>
 
           {/* Action buttons */}
           {showActions && (
@@ -312,7 +303,7 @@ const EventCard = ({
         <div className="max-w-lg p-5">
           <header>
             <h2 className="text-xl font-semibold mb-2">{event.title}</h2>
-            <div className="flex items-center gap-2 text-xs text-gray-400 mb-4">
+            <div className="flex items-center gap-2 text-xs text-neutral-400 mb-4">
               <CalendarIcon className="w-4 h-4 mr-1" />
               <span>{formattedDate}</span>
               <span className="mx-2">•</span>
@@ -322,16 +313,15 @@ const EventCard = ({
           </header>
           <img
             className="w-full h-52 object-cover mb-3 rounded"
-            src={coverError ? "/images/logo.png" : event.coverImage}
+            src={coverError ? "/images/logo.svg" : event.image_url}
             alt={imgAlt}
             loading="lazy"
             onLoad={() => setCoverLoaded(true)}
             onError={() => setCoverError(true)}
           />
           <div className="mb-4">
-            <p className="text-gray-700 dark:text-gray-200">{event.description}</p>
+            <p className="text-neutral-700 dark:text-neutral-200">{event.description}</p>
           </div>
-          {notifyToast && <Notification />}
           <div className="flex gap-2 justify-end">
             <Button variant="ghost" onClick={() => setDetailsOpen(false)}>
               Close
@@ -361,8 +351,8 @@ EventCard.propTypes = {
     description: PropTypes.string,
     location: PropTypes.string,
     date: PropTypes.string,
-    coverImage: PropTypes.string,
-    coverImageAlt: PropTypes.string,
+    image_url: PropTypes.string,
+    image_alt: PropTypes.string,
     type: PropTypes.string,
     external: PropTypes.bool,
   }).isRequired,
@@ -384,7 +374,6 @@ EventCard.propTypes = {
       name: PropTypes.string,
     })
   ),
-  notify: PropTypes.func,
 };
 
 export default EventCard;

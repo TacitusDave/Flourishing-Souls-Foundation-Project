@@ -55,25 +55,24 @@ const Receipt = ({
         <html>
           <head>
             <title>Donation Receipt</title>
-            <link rel="stylesheet" href="/main.css" />
             <style>
               body { font-family: Arial,sans-serif; padding:2em;background:#FFF;}
               .receipt {max-width:400px;margin:auto;}
               .header {display:flex;align-items:center;gap:1em;}
               .logo {height:40px;margin-right:12px;}
-              .thank-you {color:#06b6d4;font-weight:bold;}
+              .thank-you {color:#7c3aed;font-weight:bold;}
               table {width:100%;margin-top:1em;margin-bottom:1em;}
               td {padding: 0.3em 0;}
               .info {color:#555;font-size:0.96em;}
               .amount {font-size:1.25em;color:#16a34a;font-weight:600;}
-              .ref {font-size:0.95em;color:#6366f1;}
+              .ref {font-size:0.95em;color:#7c3aed;}
               .footer {text-align:center;color:#575757;font-size:0.92em;}
             </style>
           </head>
           <body>
             <div class="receipt">
               <div class="header">
-                <img src="/images/logo.png" alt="logo" class="logo" />
+                <img src="/images/logo.svg" alt="logo" class="logo" />
                 <div>
                   <div style="font-size:1.09em;font-weight:600">${organization || receiptOrg || ""}</div>
                   <div style="font-size:0.92em;color:#94a3b8">Official Donation Receipt</div>
@@ -120,37 +119,37 @@ const Receipt = ({
   // For now, the Print dialog supports "Save as PDF" in modern browsers.
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-lg border border-gray-200 dark:border-gray-700 p-6 relative z-50">
+    <div className="w-full max-w-md mx-auto bg-white dark:bg-neutral-900 shadow-warm-md rounded-2xl border border-neutral-200 dark:border-neutral-700 p-6 relative">
       {/* Ribbon or badge */}
-      <div className="absolute top-0 right-0 bg-green-500 text-white text-[11px] px-3 py-1 rounded-bl-lg font-bold shadow">
+      <div className="absolute top-0 right-0 bg-success-500 text-white text-[11px] px-3 py-1 rounded-tr-2xl rounded-bl-lg font-bold shadow">
         Official Receipt
       </div>
 
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <img
-          src="/images/logo.png"
+          src="/images/logo.svg"
           alt="Flourishing Souls Foundation Logo"
           className="h-10 w-10 object-contain rounded"
           loading="lazy"
         />
         <div>
-          <h3 className="font-semibold text-lg leading-tight text-primary-600 dark:text-primary-400">
+          <h3 className="font-display font-semibold text-lg leading-tight text-brand-600 dark:text-brand-400">
             {organization || receiptOrg || "Donation"}
           </h3>
-          <div className="text-xs text-gray-500 dark:text-gray-400">
+          <div className="text-xs text-neutral-500 dark:text-neutral-400">
             Donation Receipt
           </div>
         </div>
       </div>
 
-      <hr className="my-2 border-gray-200 dark:border-gray-700" />
+      <hr className="my-2 border-neutral-200 dark:border-neutral-700" />
 
       <div className="mb-2">
-        <div className="text-primary-600 font-bold text-base mb-1">
+        <div className="text-brand-600 dark:text-brand-400 font-bold text-base mb-1">
           Thank you for your donation!
         </div>
-        <span className="text-xs text-gray-600 dark:text-gray-400">
+        <span className="text-xs text-neutral-600 dark:text-neutral-400">
           Below is a summary of your transaction:
         </span>
       </div>
@@ -158,33 +157,33 @@ const Receipt = ({
       <table className="w-full text-sm mb-3">
         <tbody>
           <tr>
-            <td className="py-1 text-gray-600">Name</td>
-            <td className="py-1 text-right font-medium">
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Name</td>
+            <td className="py-1 text-right font-medium text-neutral-900 dark:text-neutral-100">
               {name || <em>Anonymous Donor</em>}
             </td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Email</td>
-            <td className="py-1 text-right">{email || <span>-</span>}</td>
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Email</td>
+            <td className="py-1 text-right text-neutral-900 dark:text-neutral-100">{email || <span>-</span>}</td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Phone</td>
-            <td className="py-1 text-right">{phone || <span>-</span>}</td>
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Phone</td>
+            <td className="py-1 text-right text-neutral-900 dark:text-neutral-100">{phone || <span>-</span>}</td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Date</td>
-            <td className="py-1 text-right">
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Date</td>
+            <td className="py-1 text-right text-neutral-900 dark:text-neutral-100">
               {getReadableDate(created_at)}
             </td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Status</td>
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Status</td>
             <td className="py-1 text-right">
               <span
                 className={
                   status === "success" || status === "Success"
-                    ? "text-green-600 dark:text-green-400 font-semibold"
-                    : "text-red-600 dark:text-red-400"
+                    ? "text-success-600 dark:text-success-400 font-semibold"
+                    : "text-error-600 dark:text-error-400"
                 }
               >
                 {status || "Success"}
@@ -192,21 +191,21 @@ const Receipt = ({
             </td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Amount</td>
-            <td className="py-1 text-right text-lg text-green-700 dark:text-green-400 font-bold">
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Amount</td>
+            <td className="py-1 text-right text-lg text-success-700 dark:text-success-400 font-bold">
               ₦{Number(amount).toLocaleString()}
             </td>
           </tr>
           <tr>
-            <td className="py-1 text-gray-600">Reference</td>
-            <td className="py-1 text-right text-indigo-500 dark:text-indigo-400 break-all font-mono">
+            <td className="py-1 text-neutral-500 dark:text-neutral-400">Reference</td>
+            <td className="py-1 text-right text-brand-500 dark:text-brand-400 break-all font-mono">
               {reference}
             </td>
           </tr>
           {id && (
             <tr>
-              <td className="py-1 text-gray-600">Receipt ID</td>
-              <td className="py-1 text-right text-xs text-gray-500 dark:text-gray-400">
+              <td className="py-1 text-neutral-500 dark:text-neutral-400">Receipt ID</td>
+              <td className="py-1 text-right text-xs text-neutral-500 dark:text-neutral-400">
                 {id}
               </td>
             </tr>
@@ -214,7 +213,7 @@ const Receipt = ({
         </tbody>
       </table>
 
-      <div className="my-4 text-xs text-slate-500 text-center">
+      <div className="my-4 text-xs text-neutral-500 text-center">
         <span>
           This is an official acknowledgment of your donation. Please keep this receipt for your records.
         </span>
@@ -224,19 +223,19 @@ const Receipt = ({
         <button
           type="button"
           onClick={handlePrint}
-          className="w-full md:w-auto px-4 py-2 rounded bg-primary-600 hover:bg-primary-700 text-white font-semibold shadow transition focus:ring-2 focus:ring-primary-400"
+          className="w-full md:w-auto px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold shadow transition focus:ring-2 focus:ring-brand-400"
         >
           Print / Save as PDF
         </button>
         <button
           type="button"
-          className="w-full md:w-auto px-4 py-2 rounded border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 font-medium hover:bg-gray-100 dark:hover:bg-gray-600 transition"
+          className="w-full md:w-auto px-4 py-2 rounded-xl border border-neutral-300 dark:border-neutral-600 bg-white dark:bg-neutral-800 text-neutral-700 dark:text-neutral-100 font-medium hover:bg-neutral-100 dark:hover:bg-neutral-700 transition"
           onClick={onClose}
         >
           Close
         </button>
       </div>
-      <div className="mt-5 text-center text-xs text-gray-400">
+      <div className="mt-5 text-center text-xs text-neutral-400">
         &copy; {new Date().getFullYear()} {organization || receiptOrg || "Flourishing Souls Foundation"}. All rights reserved.
       </div>
     </div>

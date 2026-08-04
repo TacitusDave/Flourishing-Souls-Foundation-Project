@@ -159,7 +159,7 @@ const PaystackButton = ({
         className
           ? className
           : // Default styling
-            "w-full py-2 px-6 rounded bg-primary-600 text-white font-semibold hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition disabled:opacity-60"
+            "w-full py-2.5 px-6 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 transition disabled:opacity-60"
       }
       style={style}
       onClick={handlePay}

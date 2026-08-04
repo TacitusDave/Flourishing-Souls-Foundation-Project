@@ -106,25 +106,25 @@ const SupportRequestForm = ({
   return (
     <div
       className={
-        "max-w-lg w-full mx-auto px-4 py-6 rounded-md shadow bg-white dark:bg-gray-900 " +
+        "max-w-lg w-full mx-auto px-4 py-6 rounded-2xl shadow-warm-sm bg-white dark:bg-neutral-900 " +
         className
       }
       style={style}
     >
       {submitted && (
-        <div className="mb-4 bg-green-100 border border-green-300 text-green-800 rounded p-3 text-center transition">
+        <div className="mb-4 bg-success-100 border border-success-300 text-success-800 rounded p-3 text-center transition">
           <div className="font-semibold mb-1">Request submitted successfully!</div>
           <div>
             Thank you for reaching out. Your support request{" "}
             {requestId && (
               <>
-                <span className="font-mono text-xs bg-green-200 py-1 px-2 rounded ml-1">
+                <span className="font-mono text-xs bg-success-200 py-1 px-2 rounded ml-1">
                   #{requestId}
                 </span>
               </>
             )}
             {hideAfterSubmit && (
-              <span className="block text-xs text-gray-600 mt-1">
+              <span className="block text-xs text-neutral-500 mt-1">
                 This notice will disappear automatically.
               </span>
             )}
@@ -133,20 +133,20 @@ const SupportRequestForm = ({
       )}
       {!hideAfterSubmit || !submitted ? (
         <form ref={formRef} onSubmit={handleSubmit} noValidate>
-          <h2 className="text-2xl font-bold mb-4 text-primary-700 dark:text-primary-300 text-center">
+          <h2 className="text-2xl font-bold mb-4 text-brand-700 dark:text-brand-300 text-center">
             Contact Support
           </h2>
           <div className="mb-3">
             <label htmlFor="support-name" className="block font-medium mb-1">
-              Name <span className="text-red-500">*</span>
+              Name <span className="text-error-600">*</span>
             </label>
             <input
               id="support-name"
               name="name"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.name ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.name ? "border-error-400" : "border-neutral-300")
               }
               value={form.name}
               onChange={handleChange}
@@ -155,20 +155,20 @@ const SupportRequestForm = ({
               required
             />
             {errors.name && (
-              <div className="text-xs text-red-500 mt-1">{errors.name}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.name}</div>
             )}
           </div>
           <div className="mb-3">
             <label htmlFor="support-email" className="block font-medium mb-1">
-              Email <span className="text-red-500">*</span>
+              Email <span className="text-error-600">*</span>
             </label>
             <input
               id="support-email"
               name="email"
               type="email"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.email ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.email ? "border-error-400" : "border-neutral-300")
               }
               value={form.email}
               onChange={handleChange}
@@ -177,20 +177,20 @@ const SupportRequestForm = ({
               required
             />
             {errors.email && (
-              <div className="text-xs text-red-500 mt-1">{errors.email}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.email}</div>
             )}
           </div>
           <div className="mb-3">
             <label htmlFor="support-subject" className="block font-medium mb-1">
-              Subject <span className="text-red-500">*</span>
+              Subject <span className="text-error-600">*</span>
             </label>
             <input
               id="support-subject"
               name="subject"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.subject ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.subject ? "border-error-400" : "border-neutral-300")
               }
               value={form.subject}
               onChange={handleChange}
@@ -199,20 +199,20 @@ const SupportRequestForm = ({
               required
             />
             {errors.subject && (
-              <div className="text-xs text-red-500 mt-1">{errors.subject}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.subject}</div>
             )}
           </div>
           <div className="mb-4">
             <label htmlFor="support-message" className="block font-medium mb-1">
-              Message <span className="text-red-500">*</span>
+              Message <span className="text-error-600">*</span>
             </label>
             <textarea
               id="support-message"
               name="message"
               rows={5}
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition resize-vertical " +
-                (errors.message ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition resize-vertical " +
+                (errors.message ? "border-error-400" : "border-neutral-300")
               }
               value={form.message}
               onChange={handleChange}
@@ -220,18 +220,18 @@ const SupportRequestForm = ({
               required
             />
             {errors.message && (
-              <div className="text-xs text-red-500 mt-1">{errors.message}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.message}</div>
             )}
           </div>
           {submissionError && (
-            <div className="mb-3 text-red-600 bg-red-50 border border-red-300 rounded p-2 text-xs">
+            <div className="mb-3 text-error-600 bg-error-50 border border-error-300 rounded p-2 text-xs">
               {submissionError}
             </div>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2 px-4 rounded bg-primary-600 hover:bg-primary-700 text-white font-semibold transition focus:ring-2 focus:ring-primary-500 disabled:opacity-70"
+            className="w-full py-2 px-4 rounded bg-brand-600 hover:bg-brand-700 text-white font-semibold transition focus:ring-2 focus:ring-brand-500 disabled:opacity-70"
           >
             {submitting ? (
               <span>

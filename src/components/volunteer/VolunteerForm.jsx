@@ -119,17 +119,17 @@ const VolunteerForm = ({
   return (
     <div
       className={
-        "max-w-xl w-full mx-auto px-4 py-8 rounded-md shadow bg-white dark:bg-gray-900 " +
+        "max-w-xl w-full mx-auto px-4 py-8 rounded-2xl shadow-warm-sm bg-white dark:bg-neutral-900 " +
         className
       }
       style={style}
     >
       {submitted && !submissionError ? (
-        <div className="rounded bg-green-50 border border-green-300 p-4 mb-5 text-center">
-          <div className="text-green-700 text-lg font-semibold mb-2">
+        <div className="rounded bg-success-50 border border-success-300 p-4 mb-5 text-center">
+          <div className="text-success-700 text-lg font-semibold mb-2">
             Thank you for applying to volunteer!
           </div>
-          <div className="text-green-800">
+          <div className="text-success-800">
             We have received your application{volunteerId ? ` (ID: ${volunteerId})` : ""}.<br />
             Our team will review your information and contact you soon.
           </div>
@@ -141,23 +141,23 @@ const VolunteerForm = ({
           aria-label="Volunteer Application Form"
           noValidate
         >
-          <h2 className="text-2xl font-bold mb-4 text-primary-700 dark:text-primary-300">
+          <h2 className="text-2xl font-bold mb-4 text-brand-700 dark:text-brand-300">
             Volunteer Application
           </h2>
           <div className="mb-5">
             <label
               htmlFor="volunteer-name"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Full Name <span className="text-red-500"> *</span>
+              Full Name <span className="text-error-600"> *</span>
             </label>
             <input
               id="volunteer-name"
               name="name"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.name ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.name ? "border-error-400" : "border-neutral-300")
               }
               value={form.name}
               onChange={handleChange}
@@ -166,23 +166,23 @@ const VolunteerForm = ({
               autoComplete="name"
             />
             {errors.name && (
-              <div className="text-xs text-red-500 mt-1">{errors.name}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.name}</div>
             )}
           </div>
           <div className="mb-5">
             <label
               htmlFor="volunteer-email"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Email <span className="text-red-500"> *</span>
+              Email <span className="text-error-600"> *</span>
             </label>
             <input
               id="volunteer-email"
               name="email"
               type="email"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.email ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.email ? "border-error-400" : "border-neutral-300")
               }
               value={form.email}
               onChange={handleChange}
@@ -191,23 +191,23 @@ const VolunteerForm = ({
               autoComplete="email"
             />
             {errors.email && (
-              <div className="text-xs text-red-500 mt-1">{errors.email}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.email}</div>
             )}
           </div>
           <div className="mb-5">
             <label
               htmlFor="volunteer-phone"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Phone Number <span className="text-red-500"> *</span>
+              Phone Number <span className="text-error-600"> *</span>
             </label>
             <input
               id="volunteer-phone"
               name="phone"
               type="tel"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.phone ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.phone ? "border-error-400" : "border-neutral-300")
               }
               value={form.phone}
               onChange={handleChange}
@@ -217,23 +217,23 @@ const VolunteerForm = ({
               placeholder="+234..."
             />
             {errors.phone && (
-              <div className="text-xs text-red-500 mt-1">{errors.phone}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.phone}</div>
             )}
           </div>
           <div className="mb-5">
             <label
               htmlFor="volunteer-availability"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Availability <span className="text-red-500"> *</span>
+              Availability <span className="text-error-600"> *</span>
             </label>
             <input
               id="volunteer-availability"
               name="availability"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition " +
-                (errors.availability ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
+                (errors.availability ? "border-error-400" : "border-neutral-300")
               }
               value={form.availability}
               onChange={handleChange}
@@ -242,23 +242,23 @@ const VolunteerForm = ({
               placeholder="e.g., Weekdays, Weekends, 5hrs/week"
             />
             {errors.availability && (
-              <div className="text-xs text-red-500 mt-1">{errors.availability}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.availability}</div>
             )}
           </div>
           <div className="mb-5">
             <label
               htmlFor="volunteer-skills"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Skills & Experience <span className="text-red-500"> *</span>
+              Skills & Experience <span className="text-error-600"> *</span>
             </label>
             <textarea
               id="volunteer-skills"
               name="skills"
               rows={3}
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition resize-vertical " +
-                (errors.skills ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition resize-vertical " +
+                (errors.skills ? "border-error-400" : "border-neutral-300")
               }
               value={form.skills}
               onChange={handleChange}
@@ -267,23 +267,23 @@ const VolunteerForm = ({
               placeholder="What skills or experience can you offer?"
             />
             {errors.skills && (
-              <div className="text-xs text-red-500 mt-1">{errors.skills}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.skills}</div>
             )}
           </div>
           <div className="mb-5">
             <label
               htmlFor="volunteer-motivation"
-              className="block font-medium text-gray-800 dark:text-gray-200 mb-1"
+              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
             >
-              Why do you want to volunteer? <span className="text-red-500"> *</span>
+              Why do you want to volunteer? <span className="text-error-600"> *</span>
             </label>
             <textarea
               id="volunteer-motivation"
               name="motivation"
               rows={3}
               className={
-                "w-full px-3 py-2 border rounded bg-white dark:bg-gray-800 outline-none focus:ring-2 focus:ring-primary-500 transition resize-vertical " +
-                (errors.motivation ? "border-red-400" : "border-gray-300")
+                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition resize-vertical " +
+                (errors.motivation ? "border-error-400" : "border-neutral-300")
               }
               value={form.motivation}
               onChange={handleChange}
@@ -292,18 +292,18 @@ const VolunteerForm = ({
               placeholder="Share your motivation for volunteering with us"
             />
             {errors.motivation && (
-              <div className="text-xs text-red-500 mt-1">{errors.motivation}</div>
+              <div className="text-xs text-error-600 mt-1">{errors.motivation}</div>
             )}
           </div>
           {submissionError && (
-            <div className="mb-3 text-red-600 bg-red-50 border border-red-300 rounded p-2 text-xs">
+            <div className="mb-3 text-error-600 bg-error-50 border border-error-300 rounded p-2 text-xs">
               {submissionError}
             </div>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2 px-4 rounded bg-primary-600 hover:bg-primary-700 text-white font-semibold transition focus:ring-2 focus:ring-primary-500 disabled:opacity-70"
+            className="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition focus:ring-2 focus:ring-brand-500 disabled:opacity-70"
           >
             {submitting ? (
               <span>

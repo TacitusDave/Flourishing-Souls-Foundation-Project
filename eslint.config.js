@@ -23,7 +23,12 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // varsIgnorePattern already exempts capitalized names (e.g. destructured
+      // `{ icon: Icon }` used only as a JSX tag) from unused-var checks - this
+      // project has no eslint-plugin-react, so base no-unused-vars doesn't
+      // always see JSX tag usage as a reference. argsIgnorePattern extends the
+      // same exemption to destructured function parameters, not just top-level vars.
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]', argsIgnorePattern: '^[A-Z_]' }],
     },
   },
 ])

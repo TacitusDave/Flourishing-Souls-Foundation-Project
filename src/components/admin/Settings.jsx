@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../lib/supabase";
-import { Button, Modal, Notification } from "../common/ThemeProvider";
-import ThemeSwitcher from "../common/ThemeSwitcher";
+import Button from "../common/Button";
+import Modal from "../common/Modal";
+import Notification from "../common/Notification";
 
 // Utility for loading site settings
 async function fetchSettings() {
@@ -115,7 +116,7 @@ const Settings = () => {
       // Define default values (example values, update per real system requirements)
       const defaults = {
         org_name: "Flourishing Souls Foundation",
-        contact_email: "info@flourishingsouls.org",
+        contact_email: "support@flourishingsoulsfoundation.org",
         contact_phone: "",
         donation_goal: 1000000,
         theme: "system"
@@ -132,16 +133,16 @@ const Settings = () => {
 
   if (loading) {
     return (
-      <div className="p-6 text-gray-500 dark:text-gray-300">
+      <div className="p-6 text-neutral-500 dark:text-neutral-300">
         <span className="animate-spin mr-2">&#9696;</span>Loading settings...
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+    <div className="max-w-2xl mx-auto bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-6 space-y-6">
       <div className="flex justify-between items-center mb-3">
-        <h2 className="text-xl font-semibold text-primary">Admin Settings</h2>
+        <h2 className="text-xl font-semibold text-brand-600">Admin Settings</h2>
         {!editMode &&
           <Button size="sm" variant="ghost" onClick={handleEdit}>
             Edit
@@ -150,14 +151,22 @@ const Settings = () => {
       </div>
 
       {saveState.error && (
-        <Notification type="error" className="mb-2">
-          {saveState.error}
-        </Notification>
+        <Notification
+          id="settings-error"
+          type="error"
+          message={saveState.error}
+          className="mb-2"
+          onClose={() => setSaveState((s) => ({ ...s, error: null }))}
+        />
       )}
       {saveState.success && (
-        <Notification type="success" className="mb-2">
-          Settings updated successfully.
-        </Notification>
+        <Notification
+          id="settings-success"
+          type="success"
+          message="Settings updated successfully."
+          className="mb-2"
+          onClose={() => setSaveState((s) => ({ ...s, success: false }))}
+        />
       )}
 
       <form className="space-y-5" onSubmit={handleSubmit}>
@@ -215,12 +224,17 @@ const Settings = () => {
           />
         </div>
         <div>
-          <label className="font-medium block mb-1">Site Theme</label>
-          <ThemeSwitcher
+          <label className="font-medium block mb-1">Default Site Theme</label>
+          <select
             value={form.theme}
             disabled={!editMode}
-            onChange={handleThemeChange}
-          />
+            onChange={(e) => handleThemeChange(e.target.value)}
+            className="form-input w-full"
+          >
+            <option value="system">System</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
         </div>
         {/* Action buttons */}
         {editMode && (
@@ -240,10 +254,10 @@ const Settings = () => {
         )}
       </form>
 
-      <hr className="my-6 border-gray-200 dark:border-gray-700" />
+      <hr className="my-6 border-neutral-200 dark:border-neutral-700" />
 
       <div>
-        <span className="text-sm text-gray-500 dark:text-gray-400 block mb-2">Danger Zone</span>
+        <span className="text-sm text-neutral-500 dark:text-neutral-400 block mb-2">Danger Zone</span>
         <Button
           type="button"
           variant="danger"

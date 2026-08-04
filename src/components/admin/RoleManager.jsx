@@ -1,15 +1,9 @@
 import React, { useState } from "react";
-import { FaPlus, FaEdit, FaTrash, FaUser, FaSyncAlt } from "react-icons/fa";
-import { Modal, Button, Spinner } from "../common/ThemeProvider";
-import { notifySuccess, notifyError } from "../common/ThemeProvider";
-import {
-  createRole,
-  updateRole,
-  deleteRole,
-  assignRole as assignUserRole,
-  getRoles,
-  getAllUsers,
-} from "../../services/authService";
+import { FaPlus, FaEdit, FaTrash, FaUser, FaUserShield } from "react-icons/fa";
+import Modal from "../common/Modal";
+import Button from "../common/Button";
+import { useNotification } from "../common/NotificationProvider";
+import { createRole, updateRole, deleteRole } from "../../services/authService";
 
 /**
  * RoleManager: Manages role CRUD and user-role assignment.
@@ -35,6 +29,9 @@ const RoleManager = ({
   const [userRoleAssignments, setUserRoleAssignments] = useState({}); // {userId: selectedRoleId}
 
   const [loading, setLoading] = useState(false);
+  const { notify } = useNotification();
+  const notifySuccess = (message) => notify({ type: "success", message });
+  const notifyError = (message) => notify({ type: "error", message });
 
   // ────────────────────────────────────────────────────────────────
   // Role CRUD
@@ -152,7 +149,7 @@ const RoleManager = ({
       {/* Roles Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto border">
-          <thead className="bg-gray-100 dark:bg-gray-800">
+          <thead className="bg-neutral-100 dark:bg-neutral-800">
             <tr>
               <th className="p-2 text-left">Role</th>
               <th className="p-2 text-left">Description</th>
@@ -170,7 +167,7 @@ const RoleManager = ({
               roles.map((role) => (
                 <tr key={role.id} className="border-t">
                   <td className="p-2">{role.name}</td>
-                  <td className="p-2">{role.description || <em className="text-gray-400">—</em>}</td>
+                  <td className="p-2">{role.description || <em className="text-neutral-400">—</em>}</td>
                   <td className="p-2 text-right space-x-2">
                     <Button
                       variant="ghost"
@@ -285,7 +282,7 @@ const RoleManager = ({
         </h3>
         <div className="overflow-x-auto">
           <table className="min-w-full table-auto border">
-            <thead className="bg-gray-50 dark:bg-gray-900">
+            <thead className="bg-neutral-50 dark:bg-neutral-900">
               <tr>
                 <th className="p-2 text-left">User</th>
                 <th className="p-2 text-left">Email</th>
@@ -310,7 +307,7 @@ const RoleManager = ({
                         roles.find((r) =>
                           r.id === (user.roleId || user.role_id)
                         )?.name || (
-                          <span className="text-gray-400">None</span>
+                          <span className="text-neutral-400">None</span>
                         )
                       }
                     </td>

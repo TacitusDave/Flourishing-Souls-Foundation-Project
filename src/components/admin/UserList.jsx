@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { supabase } from "../../lib/supabase";
-import { Button, Modal, Spinner, Notification } from "../common/ThemeProvider";
+import Button from "../common/Button";
+import Modal from "../common/Modal";
+import Spinner from "../common/Spinner";
+import Notification from "../common/Notification";
 import { FaEdit, FaTrash, FaSync, FaUserShield, FaEye, FaSearch } from "react-icons/fa";
 
 /**
@@ -115,8 +118,8 @@ const UserList = () => {
             />
             <div>
               <div className="text-lg font-bold">{selectedUser.name}</div>
-              <div className="text-gray-600">{selectedUser.email}</div>
-              <div className="text-xs text-gray-500">
+              <div className="text-neutral-600">{selectedUser.email}</div>
+              <div className="text-xs text-neutral-500">
                 Joined: {new Date(selectedUser.created_at).toLocaleString()}
               </div>
             </div>
@@ -129,9 +132,9 @@ const UserList = () => {
             <div>
               <span className="font-semibold">Status: </span>
               {selectedUser.is_active ? (
-                <span className="text-green-600">Active</span>
+                <span className="text-success-600">Active</span>
               ) : (
-                <span className="text-red-600">Deactivated</span>
+                <span className="text-error-600">Deactivated</span>
               )}
             </div>
           </div>
@@ -145,9 +148,9 @@ const UserList = () => {
     );
 
   return (
-    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
+    <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-2">
-        <h2 className="text-xl font-bold text-primary mb-2 md:mb-0">All Users</h2>
+        <h2 className="text-xl font-bold text-brand-600 mb-2 md:mb-0">All Users</h2>
         <div className="flex gap-2">
           <div className="relative">
             <input
@@ -157,7 +160,7 @@ const UserList = () => {
               onChange={handleSearch}
               className="form-input pl-8 pr-3 py-2 text-sm rounded-md"
             />
-            <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400" />
+            <FaSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-neutral-400" />
           </div>
           <Button size="sm" variant="ghost" onClick={handleRefresh} disabled={refreshing || loading}>
             <FaSync className={`mr-1 inline ${refreshing && "animate-spin"}`} />
@@ -167,31 +170,29 @@ const UserList = () => {
       </div>
       {notify && (
         <Notification
+          id="userlist-notify"
           type={notify.type}
+          message={notify.message}
           onClose={() => setNotify(null)}
-        >
-          {notify.message}
-        </Notification>
+        />
       )}
       {error && (
-        <Notification type="error" onClose={() => setError(null)}>
-          {error}
-        </Notification>
+        <Notification id="userlist-error" type="error" message={error} onClose={() => setError(null)} />
       )}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-800">
+        <table className="min-w-full divide-y divide-neutral-200 dark:divide-neutral-700">
+          <thead className="bg-neutral-50 dark:bg-neutral-800">
             <tr>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Avatar</th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-              <th className="px-2 py-3 text-left text-xs font-medium text-gray-500 uppercase">Joined</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Avatar</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Name</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Email</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Role</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Status</th>
+              <th className="px-2 py-3 text-left text-xs font-medium text-neutral-500 uppercase">Joined</th>
               <th className="px-2 py-3"></th>
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-100 dark:divide-gray-800">
+          <tbody className="bg-white dark:bg-neutral-900 divide-y divide-neutral-100 dark:divide-neutral-800">
             {loading ? (
               <tr>
                 <td colSpan={7} className="py-8 text-center">
@@ -200,13 +201,13 @@ const UserList = () => {
               </tr>
             ) : users.length === 0 ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-gray-500">
+                <td colSpan={7} className="py-6 text-center text-neutral-500">
                   No users found.
                 </td>
               </tr>
             ) : (
               users.map(user => (
-                <tr key={user.id} className={user.is_active ? "" : "bg-red-50 dark:bg-red-900"}>
+                <tr key={user.id} className={user.is_active ? "" : "bg-error-50 dark:bg-error-900"}>
                   <td className="px-2 py-3">
                     <img
                       src={user.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}`}
@@ -223,22 +224,22 @@ const UserList = () => {
                   <td className="px-2 py-3">
                     <span className={`inline-flex items-center text-xs px-2 py-1 rounded-full ${
                       user.role === "admin"
-                        ? "bg-blue-100 text-blue-700"
+                        ? "bg-brand-100 text-brand-700"
                         : user.role === "moderator"
                         ? "bg-yellow-100 text-yellow-800"
-                        : "bg-gray-100 text-gray-800"
+                        : "bg-neutral-100 text-neutral-800"
                     }`}>
                       {user.role}
-                      {user.role === "admin" && <FaUserShield className="ml-1 text-blue-500" />}
+                      {user.role === "admin" && <FaUserShield className="ml-1 text-brand-500" />}
                     </span>
                   </td>
                   <td className="px-2 py-3">
                     {user.is_active ? (
-                      <span className="inline-block px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">
+                      <span className="inline-block px-2 py-1 text-xs bg-success-100 text-success-700 rounded-full">
                         Active
                       </span>
                     ) : (
-                      <span className="inline-block px-2 py-1 text-xs bg-red-100 text-red-700 rounded-full">
+                      <span className="inline-block px-2 py-1 text-xs bg-error-100 text-error-700 rounded-full">
                         Deactivated
                       </span>
                     )}

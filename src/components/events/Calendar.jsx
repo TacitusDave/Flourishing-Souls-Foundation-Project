@@ -1,6 +1,23 @@
 import React, { useEffect, useState, useMemo } from "react";
-import { Modal, Button, Notification } from "../common/ThemeProvider";
+import Modal from "../common/Modal";
+import Button from "../common/Button";
+import Notification from "../common/Notification";
 import { useEvents } from "../../hooks/useEvents";
+import { supabase } from "../../lib/supabase";
+
+const EVENT_MEDIA_BUCKET = "gallery-media";
+
+async function uploadEventCover(file) {
+  const ext = file.name.split(".").pop();
+  const path = `events/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  const { error: uploadError } = await supabase.storage.from(EVENT_MEDIA_BUCKET).upload(path, file, {
+    cacheControl: "3600",
+    upsert: false,
+  });
+  if (uploadError) throw uploadError;
+  const { data } = supabase.storage.from(EVENT_MEDIA_BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}
 
 // Utility: group events by YYYY-MM
 function groupEventsByMonth(events) {
@@ -61,8 +78,19 @@ const Calendar = () => {
     description: "",
     date: "",
     location: "",
+    image_url: "",
   });
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
+
+  const handleCoverChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCoverFile(file);
+    setCoverPreview(URL.createObjectURL(file));
+  };
 
   // Group events by YYYY-MM-DD for fast lookup
   const eventsByDay = useMemo(() => {
@@ -132,7 +160,10 @@ const Calendar = () => {
       description: "",
       date: dateStr,
       location: "",
+      image_url: "",
     });
+    setCoverFile(null);
+    setCoverPreview("");
     setActiveEvent(null);
   }
 
@@ -144,7 +175,10 @@ const Calendar = () => {
       description: event.description,
       date: event.date,
       location: event.location,
+      image_url: event.image_url || "",
     });
+    setCoverFile(null);
+    setCoverPreview(event.image_url || "");
   }
 
   async function handleEventSubmit(e) {
@@ -152,16 +186,24 @@ const Calendar = () => {
     setSubmitting(true);
     setNotification({ type: "", message: "" });
     try {
+      let payload = newEvent;
+      if (coverFile) {
+        setUploadingCover(true);
+        const image_url = await uploadEventCover(coverFile);
+        setUploadingCover(false);
+        payload = { ...newEvent, image_url };
+      }
+
       if (activeEvent) {
         // Update
-        await updateEvent({ ...activeEvent, ...newEvent });
+        await updateEvent({ ...activeEvent, ...payload });
         setNotification({
           type: "success",
           message: "Event updated successfully.",
         });
       } else {
         // Create
-        await createEvent(newEvent);
+        await createEvent(payload);
         setNotification({
           type: "success",
           message: "Event created successfully.",
@@ -170,6 +212,7 @@ const Calendar = () => {
       await refetchEvents();
       setEventModalOpen(false);
     } catch (err) {
+      setUploadingCover(false);
       setNotification({
         type: "error",
         message:
@@ -207,7 +250,7 @@ const Calendar = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-2 md:px-8">
       <div className="flex items-center justify-between mb-6 mt-4">
-        <h2 className="text-3xl font-bold text-primary">{monthLabel}</h2>
+        <h2 className="text-3xl font-bold text-brand-600">{monthLabel}</h2>
         <div>
           <Button variant="secondary" onClick={handlePrevMonth} className="mr-2" aria-label="Previous Month">
             &larr;
@@ -219,17 +262,18 @@ const Calendar = () => {
       </div>
       {notification.message && (
         <Notification
+          id="calendar-notification"
           type={notification.type}
           message={notification.message}
           onClose={() => setNotification({ type: "", message: "" })}
         />
       )}
-      <div className="overflow-x-auto bg-white dark:bg-gray-900 rounded-lg shadow-md">
+      <div className="overflow-x-auto bg-white dark:bg-neutral-900 rounded-lg shadow-md">
         <table className="w-full border-collapse">
           <thead>
             <tr>
               {dayNames.map((d) => (
-                <th key={d} className="p-3 text-center font-medium text-gray-600 dark:text-gray-300">
+                <th key={d} className="p-3 text-center font-medium text-neutral-600 dark:text-neutral-300">
                   {d}
                 </th>
               ))}
@@ -256,11 +300,11 @@ const Calendar = () => {
                   return (
                     <td
                       key={j}
-                      className={`h-20 w-1/7 border border-gray-100 dark:border-gray-800 text-center align-top relative group transition 
+                      className={`h-20 w-1/7 border border-neutral-100 dark:border-neutral-800 text-center align-top relative group transition 
                       ${
                         day
-                          ? "cursor-pointer hover:bg-primary-50 dark:hover:bg-gray-800"
-                          : "bg-gray-50 dark:bg-gray-900"
+                          ? "cursor-pointer hover:bg-brand-50 dark:hover:bg-neutral-800"
+                          : "bg-neutral-50 dark:bg-neutral-900"
                       }`}
                       onClick={() => handleDayClick(day)}
                     >
@@ -269,10 +313,10 @@ const Calendar = () => {
                           className={`flex items-center justify-center mt-2 mb-1 mx-auto rounded-full w-8 h-8
                             ${
                               isToday
-                                ? "bg-primary-600 text-white font-bold border-2 border-primary-600"
+                                ? "bg-brand-600 text-white font-bold border-2 border-brand-600"
                                 : hasEvents
-                                ? "bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200"
-                                : "text-gray-600 dark:text-gray-300"
+                                ? "bg-brand-100 dark:bg-brand-900 text-brand-800 dark:text-brand-200"
+                                : "text-neutral-600 dark:text-neutral-300"
                             }
                           `}
                           style={{ transition: "all 0.15s" }}
@@ -288,12 +332,12 @@ const Calendar = () => {
                             .map((event, idx) => (
                               <span
                                 key={event.id}
-                                className="inline-block h-2 w-2 rounded-full bg-primary-500 mr-1 mb-1"
+                                className="inline-block h-2 w-2 rounded-full bg-brand-500 mr-1 mb-1"
                                 title={event.title}
                               />
                             ))}
                           {eventsByDay[cellDateKey].length > 3 && (
-                            <span className="ml-1 text-xs text-primary-500 font-bold">
+                            <span className="ml-1 text-xs text-brand-500 font-bold">
                               +{eventsByDay[cellDateKey].length - 3}
                             </span>
                           )}
@@ -308,12 +352,14 @@ const Calendar = () => {
         </table>
       </div>
       {loading && (
-        <div className="mt-3 text-center text-gray-600">Loading calendar...</div>
+        <div className="mt-3 text-center text-neutral-600">Loading calendar...</div>
       )}
       {error && (
         <Notification
+          id="calendar-error"
           type="error"
-          message={error.message || "Could not load events."}
+          message={error || "Could not load events."}
+          onClose={() => {}}
         />
       )}
 
@@ -322,7 +368,7 @@ const Calendar = () => {
         <Modal open={modalOpen} onClose={closeModal} title={`Events on ${selectedDay.dateKey}`}>
           <div className="space-y-3">
             {selectedDay.events.length === 0 ? (
-              <div className="text-gray-400 text-center">No events for this day.</div>
+              <div className="text-neutral-400 text-center">No events for this day.</div>
             ) : (
               selectedDay.events.map((event) => (
                 <div
@@ -348,11 +394,11 @@ const Calendar = () => {
                       </Button>
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 mb-1">
+                  <div className="text-xs text-neutral-500 mb-1">
                     {event.location && <span>{event.location} &bull; </span>}
                     {event.description}
                   </div>
-                  <div className="text-xs text-gray-400">
+                  <div className="text-xs text-neutral-400">
                     {new Date(event.date).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -384,9 +430,9 @@ const Calendar = () => {
             <div>
               <label
                 htmlFor="event-title"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                className="block text-sm font-medium text-neutral-700 dark:text-neutral-200"
               >
-                Title<span className="text-red-500">*</span>
+                Title<span className="text-error-600">*</span>
               </label>
               <input
                 id="event-title"
@@ -403,7 +449,7 @@ const Calendar = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
                 Description
               </label>
               <textarea
@@ -423,9 +469,9 @@ const Calendar = () => {
             <div>
               <label
                 htmlFor="event-date"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                className="block text-sm font-medium text-neutral-700 dark:text-neutral-200"
               >
-                Date/Time<span className="text-red-500">*</span>
+                Date/Time<span className="text-error-600">*</span>
               </label>
               <input
                 id="event-date"
@@ -447,7 +493,7 @@ const Calendar = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200">
                 Location
               </label>
               <input
@@ -464,6 +510,27 @@ const Calendar = () => {
                 maxLength={120}
               />
             </div>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1">
+                Cover image / poster
+              </label>
+              {coverPreview && (
+                <img
+                  src={coverPreview}
+                  alt="Event cover preview"
+                  className="w-full h-32 object-cover rounded-xl mb-2 border border-neutral-200 dark:border-neutral-700"
+                />
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleCoverChange}
+                className="w-full text-sm text-neutral-600 dark:text-neutral-300 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:bg-brand-50 file:text-brand-700 dark:file:bg-brand-900/40 dark:file:text-brand-300 file:font-medium hover:file:bg-brand-100"
+              />
+              <p className="text-xs text-neutral-400 mt-1">
+                Used as the event's cover photo/poster in the events list and calendar.
+              </p>
+            </div>
             <div className="flex gap-2 justify-end mt-4">
               <Button
                 type="button"
@@ -475,8 +542,8 @@ const Calendar = () => {
               <Button
                 type="submit"
                 variant="primary"
-                loading={submitting}
-                disabled={submitting}
+                loading={submitting || uploadingCover}
+                disabled={submitting || uploadingCover}
               >
                 {activeEvent ? "Update" : "Create"}
               </Button>

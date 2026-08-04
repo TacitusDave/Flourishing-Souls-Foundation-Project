@@ -4,8 +4,10 @@ import UserList from "./UserList";
 import RoleManager from "./RoleManager";
 import Settings from "./Settings";
 import { getAllUsers, refreshUserData, addUser, getRoles, assignRole } from "../../services/authService";
-import { notifySuccess, notifyError } from "../common/ThemeProvider.jsx"; // Assumes Notification is exported here
-import { Spinner, Modal, Button } from "../common/ThemeProvider.jsx"; // Assumes these are in common components
+import { useNotification } from "../common/NotificationProvider";
+import Spinner from "../common/Spinner";
+import Modal from "../common/Modal";
+import Button from "../common/Button";
 import AdminAuthGuard from "./AdminAuthGuard";
 
 const ManagementPanel = () => {
@@ -15,6 +17,9 @@ const ManagementPanel = () => {
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const { notify } = useNotification();
+  const notifySuccess = (message) => notify({ type: "success", message });
+  const notifyError = (message) => notify({ type: "error", message });
 
   // Fetch users and roles on mount and when refreshed
   /**
@@ -85,10 +90,10 @@ const ManagementPanel = () => {
 
   return (
     <AdminAuthGuard>
-      <div className="bg-white rounded-lg shadow p-6 min-h-[500px]">
+      <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-6 min-h-[500px]">
         <div className="flex justify-between items-center mb-6 border-b pb-4">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <FaCogs className="text-primary" />
+          <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-100 flex items-center gap-2">
+            <FaCogs className="text-brand-600" />
             Management Panel
           </h2>
           <div className="flex gap-3">
@@ -104,7 +109,7 @@ const ManagementPanel = () => {
         <div className="flex space-x-4 border-b mb-6">
           <button
             className={`px-3 py-2 font-semibold flex items-center gap-1 border-b-2 transition ${
-              activeTab === "users" ? "text-primary border-primary" : "border-transparent text-gray-500 hover:text-primary"
+              activeTab === "users" ? "text-brand-600 border-brand-600" : "border-transparent text-neutral-500 hover:text-brand-600"
             }`}
             onClick={() => setActiveTab("users")}
           >
@@ -112,7 +117,7 @@ const ManagementPanel = () => {
           </button>
           <button
             className={`px-3 py-2 font-semibold flex items-center gap-1 border-b-2 transition ${
-              activeTab === "roles" ? "text-primary border-primary" : "border-transparent text-gray-500 hover:text-primary"
+              activeTab === "roles" ? "text-brand-600 border-brand-600" : "border-transparent text-neutral-500 hover:text-brand-600"
             }`}
             onClick={() => setActiveTab("roles")}
           >
@@ -120,7 +125,7 @@ const ManagementPanel = () => {
           </button>
           <button
             className={`px-3 py-2 font-semibold flex items-center gap-1 border-b-2 transition ${
-              activeTab === "settings" ? "text-primary border-primary" : "border-transparent text-gray-500 hover:text-primary"
+              activeTab === "settings" ? "text-brand-600 border-brand-600" : "border-transparent text-neutral-500 hover:text-brand-600"
             }`}
             onClick={() => setActiveTab("settings")}
           >

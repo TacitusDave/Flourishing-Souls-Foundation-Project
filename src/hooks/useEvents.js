@@ -19,7 +19,7 @@
  *   - event_registrations: { id, event_id, user_id, registered_at }
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNotification } from '../components/common/NotificationProvider';
 import { useAuth } from '../context';
 import { supabase } from '../lib/supabase';
@@ -35,10 +35,18 @@ function useEvents() {
   const [error, setError] = useState(null);
 
   const { notify: rawNotify } = useNotification();
-  const notify = {
-    success: (message) => rawNotify({ type: 'success', message }),
-    error: (message) => rawNotify({ type: 'error', message }),
-  };
+  // Stable identity across renders - rawNotify itself, must stay a
+  // useCallback in NotificationProvider.jsx (deps: []) - so this object
+  // is memoized against it. Every fetchEvents/useEffect chain below
+  // depends (transitively) on `notify` staying referentially stable,
+  // otherwise the fetch-on-mount effect re-fires every render.
+  const notify = useMemo(
+    () => ({
+      success: (message) => rawNotify({ type: 'success', message }),
+      error: (message) => rawNotify({ type: 'error', message }),
+    }),
+    [rawNotify]
+  );
   const { user } = useAuth();
 
   /**

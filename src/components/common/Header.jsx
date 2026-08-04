@@ -22,14 +22,19 @@ const logo = "/images/logo.svg";
  * - Provides accessible mobile menu
  */
 
-const navLinks = [
+const primaryLinks = [
   { label: "Home", path: "/" },
   { label: "Donate", path: "/donate" },
-  { label: "Volunteer", path: "/volunteer" },
-  { label: "Support", path: "/support" },
   { label: "Events", path: "/events" },
   { label: "Gallery", path: "/gallery" },
 ];
+
+const moreLinks = [
+  { label: "Volunteer", path: "/volunteer" },
+  { label: "Support", path: "/support" },
+];
+
+const navLinks = [...primaryLinks, ...moreLinks];
 
 const adminLinks = [
   { label: "Admin Dashboard", path: "/admin", icon: <FaUserLock /> },
@@ -41,11 +46,12 @@ const guestLinks = [
   { label: "Register", path: "/register", icon: <FaUserPlus /> },
 ];
 
-function Header({ className = "", mobileBreakpoint = "md" }) {
+function Header({ className = "" }) {
   const { user, isAdmin, signOut, loading } = useAuth();
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const handleNavToggle = () => setNavOpen((prev) => !prev);
 
@@ -60,7 +66,28 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
   React.useEffect(() => {
     setNavOpen(false);
     setUserMenuOpen(false);
+    setMoreOpen(false);
   }, [location.pathname]);
+
+  // Accessibility: close "More" dropdown on outside click or Escape
+  // (hover already handles the mouse case; this covers touch/keyboard)
+  React.useEffect(() => {
+    if (!moreOpen) return;
+
+    function handleClose(e) {
+      if (e.key === "Escape") setMoreOpen(false);
+      if (!e.target.closest(".header-more-dropdown") && !e.target.closest(".header-more-trigger")) {
+        setMoreOpen(false);
+      }
+    }
+
+    document.addEventListener("keydown", handleClose);
+    document.addEventListener("click", handleClose);
+    return () => {
+      document.removeEventListener("keydown", handleClose);
+      document.removeEventListener("click", handleClose);
+    };
+  }, [moreOpen]);
 
   // Accessibility: close user menu on outside click or Escape
   React.useEffect(() => {
@@ -107,7 +134,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
         </Link>
         {/* Hamburger for mobile */}
         <button
-          className={`ml-3 ${mobileBreakpoint}:hidden inline-flex items-center p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-500 text-neutral-700 dark:text-neutral-200`}
+          className={`ml-3 md:hidden inline-flex items-center p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-500 text-neutral-700 dark:text-neutral-200`}
           aria-label="Open navigation menu"
           aria-controls="header-nav"
           aria-expanded={navOpen}
@@ -118,11 +145,11 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
         </button>
         {/* Desktop nav */}
         <nav
-          className={`hidden ${mobileBreakpoint}:flex items-center gap-2 flex-1 ml-6`}
+          className={`hidden md:flex items-center gap-2 flex-1 ml-6`}
           aria-label="Site navigation"
         >
           <ul className="flex items-center gap-1">
-            {navLinks.map((link) => (
+            {primaryLinks.map((link) => (
               <li key={link.path}>
                 <Link
                   to={link.path}
@@ -138,6 +165,49 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
                 </Link>
               </li>
             ))}
+            <li
+              className="relative"
+              onMouseEnter={() => setMoreOpen(true)}
+              onMouseLeave={() => setMoreOpen(false)}
+            >
+              <button
+                type="button"
+                className={`header-more-trigger flex items-center gap-1 px-3 py-2 rounded-lg font-medium text-sm transition-colors ${
+                  moreLinks.some((l) => l.path === location.pathname)
+                    ? "bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300"
+                    : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-900 hover:text-neutral-900 dark:hover:text-white"
+                }`}
+                aria-haspopup="true"
+                aria-expanded={moreOpen}
+                onClick={() => setMoreOpen((o) => !o)}
+              >
+                Get Involved
+                <FaChevronDown className={`text-xs transition-transform duration-200 ${moreOpen ? "rotate-180" : ""}`} />
+              </button>
+              {moreOpen && (
+                <div
+                  className="header-more-dropdown absolute left-0 top-full pt-1 w-44 z-50"
+                  role="menu"
+                >
+                  <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 shadow-warm-lg rounded-xl overflow-hidden">
+                    {moreLinks.map((link) => (
+                      <Link
+                        key={link.path}
+                        to={link.path}
+                        role="menuitem"
+                        className={`block px-4 py-2.5 text-sm font-medium transition-colors ${
+                          location.pathname === link.path
+                            ? "bg-brand-50 dark:bg-brand-900/40 text-brand-700 dark:text-brand-300"
+                            : "text-neutral-700 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </li>
           </ul>
         </nav>
         {/* Spacer */}
@@ -145,7 +215,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
         {/* User menu or login/register */}
         <div className="flex items-center gap-2">
           {!loading && !user && (
-            <div className={`hidden ${mobileBreakpoint}:flex gap-2`}>
+            <div className={`hidden md:flex gap-2`}>
               {guestLinks.map((link) => (
                 <Link
                   key={link.path}
@@ -263,7 +333,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
           navOpen
             ? "block animate-fadeIn"
             : "hidden"
-        } ${mobileBreakpoint}:hidden bg-white dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-800 shadow-warm-lg absolute top-full left-0 right-0 z-40`}
+        } md:hidden bg-white dark:bg-neutral-950 border-t border-neutral-100 dark:border-neutral-800 shadow-warm-lg absolute top-full left-0 right-0 z-40`}
         aria-label="Mobile navigation"
         data-testid="headerMobileNavMenu"
       >

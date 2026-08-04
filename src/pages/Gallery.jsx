@@ -1,177 +1,141 @@
-import React from "react";
+import React, { useRef, useState } from "react";
+import { FiUpload, FiSearch } from "react-icons/fi";
 import { useGallery } from "../hooks/useGallery";
+import { useAuth } from "../context";
 import GalleryGrid from "../components/gallery/GalleryGrid";
-
-/**
- * Complex, production-ready Gallery page for real, live gallery data.
- * Assumes that useGallery hook implements real data fetching (e.g. from Supabase)
- * and exposes robust loading, error, refresh, filter, pagination, and upload mechanisms.
- * This component does not mock/simulate, operates entirely on actual user data.
- */
+import Button from "../components/common/Button";
+import Notification from "../components/common/Notification";
 
 const Gallery = () => {
-  // useGallery should provide: items, isLoading, error, refresh, filters, pagination, upload, delete, etc.
-  const {
-    items,
-    isLoading,
-    isUploading,
-    isDeleting,
-    error,
-    refresh,
-    addMedia,
-    deleteMedia,
-    filters,
-    setFilters,
-    search,
-    setSearch,
-    page,
-    pageSize,
-    totalPages,
-    nextPage,
-    prevPage,
-    setPage,
-    uploadingProgress,
-  } = useGallery();
+  const { items, loading, error, fetchGallery, searchGallery, uploadFile, deleteItem } = useGallery();
+  const { isAdmin } = useAuth();
 
-  // Upload handling
-  const handleUpload = async (event) => {
-    const files = event.target.files;
-    if (!files || !files.length) return;
-    await addMedia(files);
-  };
-
-  // Search & filter UI
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
-  };
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [search, setSearch] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
+  const [notice, setNotice] = useState(null);
+  const fileInputRef = useRef(null);
 
   const handleFilterChange = (e) => {
-    setFilters((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    const value = e.target.value;
+    setTypeFilter(value);
+    fetchGallery(value === "all" ? {} : { type: value });
   };
 
-  // Render helpers
-  const renderFilters = () => (
-    <div className="flex flex-col sm:flex-row gap-2 mb-4">
-      {/* Example: filter by media type */}
-      <select
-        name="type"
-        value={filters.type || ""}
-        onChange={handleFilterChange}
-        className="border px-2 py-1 rounded"
-      >
-        <option value="">All Types</option>
-        <option value="image">Images</option>
-        <option value="video">Videos</option>
-      </select>
-      {/* Example: more filters */}
-      {/* Add more select/inputs as required */}
-      <input
-        type="text"
-        className="border px-2 py-1 rounded"
-        placeholder="Search gallery…"
-        value={search || ""}
-        onChange={handleSearchChange}
-      />
-      <button
-        className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-        onClick={refresh}
-        disabled={isLoading}
-        title="Refresh gallery data"
-      >
-        Refresh
-      </button>
-    </div>
-  );
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (search.trim()) searchGallery(search.trim());
+    else fetchGallery();
+  };
 
-  const renderUpload = () => (
-    <div className="flex flex-row gap-2 items-center mb-4">
-      <label className="cursor-pointer flex items-center gap-2">
-        <span className="font-medium">Add Media</span>
-        <input
-          type="file"
-          multiple
-          accept="image/*,video/*"
-          className="hidden"
-          onChange={handleUpload}
-          disabled={isUploading}
-        />
-        <span className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
-          Upload
-        </span>
-      </label>
-      {isUploading && (
-        <div className="text-sm text-gray-500 flex items-center gap-2">
-          Uploading…
-          {uploadingProgress !== undefined && (
-            <span>({uploadingProgress}%)</span>
-          )}
-        </div>
-      )}
-    </div>
-  );
+  const handleUploadClick = () => fileInputRef.current?.click();
 
-  const renderPagination = () =>
-    totalPages > 1 && (
-      <div className="flex justify-center mt-4 gap-2">
-        <button
-          className="px-3 py-1 rounded border text-gray-800 hover:bg-gray-100"
-          onClick={prevPage}
-          disabled={page === 1 || isLoading}
-        >
-          Prev
-        </button>
-        {Array.from({ length: totalPages }).map((_, idx) => (
-          <button
-            key={idx}
-            onClick={() => setPage(idx + 1)}
-            className={`px-3 py-1 rounded border ${
-              idx + 1 === page
-                ? "bg-blue-600 text-white border-blue-600"
-                : "hover:bg-gray-100"
-            }`}
-            disabled={isLoading}
-          >
-            {idx + 1}
-          </button>
-        ))}
-        <button
-          className="px-3 py-1 rounded border text-gray-800 hover:bg-gray-100"
-          onClick={nextPage}
-          disabled={page === totalPages || isLoading}
-        >
-          Next
-        </button>
-      </div>
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setUploading(true);
+    const type = file.type.startsWith("video") ? "video" : "photo";
+    const result = await uploadFile(file, type, { title: file.name.replace(/\.[^.]+$/, "") });
+    setUploading(false);
+    setNotice(
+      result.success
+        ? { id: "upload-success", type: "success", message: "Media uploaded successfully." }
+        : { id: "upload-error", type: "error", message: result.error?.message || "Upload failed." }
     );
+  };
+
+  const handleDelete = async (item) => {
+    setDeletingId(item.id);
+    const result = await deleteItem(item.id);
+    setDeletingId(null);
+    if (!result.success) {
+      setNotice({ id: "delete-error", type: "error", message: result.error?.message || "Delete failed." });
+    }
+  };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6">Gallery</h1>
-      {renderFilters()}
-      {renderUpload()}
-      {error && (
-        <div className="text-red-600 mb-4 p-2 border border-red-400 bg-red-100 rounded">
-          {error.message || "An error occurred while fetching the gallery."}
+    <div>
+      <header className="max-w-3xl mx-auto text-center mb-10">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">
+          See the impact
+        </p>
+        <h1 className="mt-3 font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
+          Gallery
+        </h1>
+        <p className="mt-3 text-neutral-600 dark:text-neutral-400">
+          Photos and videos from our programs, events, and the communities we support.
+        </p>
+      </header>
+
+      {notice && (
+        <div className="max-w-3xl mx-auto mb-6">
+          <Notification {...notice} onClose={() => setNotice(null)} />
         </div>
       )}
-      {isLoading ? (
-        <div className="flex justify-center items-center py-10 text-xl text-gray-600">
-          Loading gallery…
+
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-6 max-w-6xl mx-auto">
+        <div className="flex gap-2">
+          <select
+            value={typeFilter}
+            onChange={handleFilterChange}
+            className="rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+          >
+            <option value="all">All media</option>
+            <option value="photo">Photos</option>
+            <option value="video">Videos</option>
+          </select>
+          <form onSubmit={handleSearchSubmit} className="flex">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search gallery..."
+              className="rounded-l-xl border border-r-0 border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+            />
+            <button
+              type="submit"
+              className="rounded-r-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 text-neutral-500 hover:text-brand-600"
+              aria-label="Search"
+            >
+              <FiSearch />
+            </button>
+          </form>
         </div>
-      ) : (
+        {isAdmin && (
+          <>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,video/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <Button variant="primary" onClick={handleUploadClick} loading={uploading} leftIcon={<FiUpload />}>
+              Upload media
+            </Button>
+          </>
+        )}
+      </div>
+
+      {error && (
+        <div className="max-w-6xl mx-auto mb-4 text-error-600 dark:text-error-400 text-center text-sm">
+          {typeof error === "string" ? error : error.message || "Failed to load gallery."}
+        </div>
+      )}
+
+      <div className="max-w-6xl mx-auto">
         <GalleryGrid
           items={items}
-          onDelete={deleteMedia}
-          isDeleting={isDeleting}
+          loading={loading}
+          canManage={isAdmin}
+          onDelete={handleDelete}
+          deletingId={deletingId}
         />
-      )}
-      {renderPagination()}
+      </div>
     </div>
   );
 };
 
 export default Gallery;
-

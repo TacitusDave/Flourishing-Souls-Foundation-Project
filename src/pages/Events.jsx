@@ -1,126 +1,115 @@
-
-import React, { Suspense, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllEvents } from "../lib/api";
+import React, { Suspense, useState, useCallback } from "react";
+import { FiGrid, FiCalendar } from "react-icons/fi";
+import { useEvents } from "../hooks/useEvents";
 import EventCard from "../components/events/EventCard";
-import Calendar from "../components/events/Calendar";
+
+const Calendar = React.lazy(() => import("../components/events/Calendar"));
 
 function Events() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const {
+    events,
+    loading,
+    error,
+    registerForEvent,
+    unregisterFromEvent,
+    isUserRegistered,
+  } = useEvents();
+  const [view, setView] = useState("list"); // "list" | "calendar"
+  const [pendingId, setPendingId] = useState(null);
 
-  // Calendar filter state (example: filter by date or category)
-  const [calendarDate, setCalendarDate] = useState(null);
+  const handleRegister = useCallback(
+    async (event) => {
+      setPendingId(event.id);
+      await registerForEvent(event.id);
+      setPendingId(null);
+    },
+    [registerForEvent]
+  );
 
-  useEffect(() => {
-    let isMounted = true;
-    setLoading(true);
-    setError(null);
-
-    // Real-time data fetch, no simulation
-    getAllEvents()
-      .then((data) => {
-        if (isMounted) {
-          setEvents(data);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError("Could not load events right now.");
-          setLoading(false);
-        }
-      });
-
-    // Optionally, listen to real-time updates if supported
-    // Example: supabase.channel.subscribe(...)
-    // Can implement a hook/useSubscription for real-time table changes
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  // Filter logic if using calendar
-  const filteredEvents = calendarDate
-    ? events.filter(evt =>
-        new Date(evt.date).toDateString() ===
-        new Date(calendarDate).toDateString()
-      )
-    : events;
+  const handleUnregister = useCallback(
+    async (event) => {
+      setPendingId(event.id);
+      await unregisterFromEvent(event.id);
+      setPendingId(null);
+    },
+    [unregisterFromEvent]
+  );
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 px-4 pb-16">
-      <header className="w-full max-w-4xl mx-auto py-8 flex flex-col items-center gap-2">
-        <h1 className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-300 tracking-tight">
+    <div>
+      <header className="max-w-4xl mx-auto text-center mb-10">
+        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">
+          Get involved
+        </p>
+        <h1 className="mt-3 font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
           Upcoming Events
         </h1>
-        <p className="text-md text-gray-500 dark:text-gray-300 text-center max-w-2xl">
-          Join us and make a difference! Here are all our real, upcoming, and past events, automatically updated in real time from our live database.
+        <p className="mt-3 text-neutral-600 dark:text-neutral-400">
+          Join us and make a difference — every event listed here is live, straight from
+          our database.
         </p>
-        <div className="mt-2">
-          <Link
-            to="/"
-            className="text-xs text-slate-400 hover:text-indigo-400 transition"
+        <div className="mt-6 inline-flex rounded-xl border border-neutral-200 dark:border-neutral-700 p-1 bg-white dark:bg-neutral-900">
+          <button
+            type="button"
+            onClick={() => setView("list")}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+              view === "list"
+                ? "bg-brand-600 text-white"
+                : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            }`}
           >
-            &laquo; Back to Home
-          </Link>
+            <FiGrid /> List
+          </button>
+          <button
+            type="button"
+            onClick={() => setView("calendar")}
+            className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition ${
+              view === "calendar"
+                ? "bg-brand-600 text-white"
+                : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+            }`}
+          >
+            <FiCalendar /> Calendar
+          </button>
         </div>
       </header>
 
-      <main className="w-full max-w-4xl mx-auto">
-        <section className="mb-8">
-          <Suspense fallback={<div>Loading calendar...</div>}>
-            <Calendar
-              events={events}
-              selectedDate={calendarDate}
-              onDateSelect={setCalendarDate}
-            />
-          </Suspense>
-        </section>
-
-        {loading ? (
-          <div className="w-full py-32 text-center text-lg text-gray-500 dark:text-gray-400">
-            Loading events...
-          </div>
-        ) : error ? (
-          <div className="w-full py-8 text-center text-red-500">{error}</div>
-        ) : filteredEvents.length === 0 ? (
-          <div className="w-full py-8 text-center text-gray-400">
-            No events found for the selected date or criteria.
-          </div>
-        ) : (
-          <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredEvents.map((event) => (
-              <EventCard key={event.id} event={event} />
-            ))}
-          </section>
-        )}
-
-        <div className="mt-8 text-xs text-gray-400 text-center">
-          Interested in hosting or suggesting an event?{" "}
-          <a
-            href="mailto:support@flourishingsoulsfoundation.org"
-            className="underline hover:text-indigo-600"
-          >
-            Contact us
-          </a>
-        </div>
-      </main>
-
-      <footer className="w-full mt-12 flex flex-col items-center">
-        <Link
-          to="/"
-          className="text-xs text-slate-400 hover:text-indigo-500 transition"
+      {view === "calendar" ? (
+        <Suspense
+          fallback={
+            <div className="text-center py-16 text-neutral-500 dark:text-neutral-400">
+              Loading calendar...
+            </div>
+          }
         >
-          &copy; {new Date().getFullYear()} Flourishing Souls Foundation
-        </Link>
-      </footer>
+          <Calendar />
+        </Suspense>
+      ) : loading ? (
+        <div className="py-24 text-center text-neutral-500 dark:text-neutral-400">
+          Loading events...
+        </div>
+      ) : error ? (
+        <div className="py-8 text-center text-error-600 dark:text-error-400">{error}</div>
+      ) : events.length === 0 ? (
+        <div className="py-24 text-center text-neutral-400">No events scheduled right now — check back soon.</div>
+      ) : (
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+          {events.map((event) => (
+            <EventCard
+              key={event.id}
+              event={event}
+              canRegister
+              userRegistered={isUserRegistered(event.id)}
+              registering={pendingId === event.id}
+              unregistering={pendingId === event.id}
+              onRegister={handleRegister}
+              onUnregister={handleUnregister}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
 export default Events;
-
-

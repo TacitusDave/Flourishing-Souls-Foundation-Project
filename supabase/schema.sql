@@ -126,6 +126,21 @@ create table if not exists gallery (
 );
 
 -- ============================================================
+-- SETTINGS
+-- Single-row table (admin org configuration). Seed one row after
+-- running this schema: insert into settings (org_name) values (...);
+-- ============================================================
+create table if not exists settings (
+  id uuid primary key default gen_random_uuid(),
+  org_name text not null default 'Flourishing Souls Foundation',
+  contact_email text,
+  contact_phone text,
+  donation_goal numeric,
+  theme text not null default 'system' check (theme in ('light', 'dark', 'system')),
+  updated_at timestamptz not null default now()
+);
+
+-- ============================================================
 -- ROW LEVEL SECURITY
 -- ============================================================
 alter table profiles enable row level security;
@@ -136,6 +151,7 @@ alter table event_registrations enable row level security;
 alter table volunteers enable row level security;
 alter table support_requests enable row level security;
 alter table gallery enable row level security;
+alter table settings enable row level security;
 
 -- helper: is the current JWT an admin? (checked against profiles.role)
 create or replace function is_admin()
@@ -225,4 +241,12 @@ create policy "gallery_select_all" on gallery for select using (true);
 
 drop policy if exists "gallery_admin_write" on gallery;
 create policy "gallery_admin_write" on gallery
+  for all using (is_admin()) with check (is_admin());
+
+-- settings: public read (site needs org name/contact/theme), admin write
+drop policy if exists "settings_select_all" on settings;
+create policy "settings_select_all" on settings for select using (true);
+
+drop policy if exists "settings_admin_write" on settings;
+create policy "settings_admin_write" on settings
   for all using (is_admin()) with check (is_admin());

@@ -13,11 +13,10 @@ const AdminAuthGuard = ({ children }) => {
   const location = useLocation();
 
   if (loading) {
-    // Optionally, put a spinner here
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-        <span className="ml-4 text-lg font-medium text-gray-700 dark:text-gray-200">
+      <div className="flex items-center justify-center h-screen bg-neutral-50 dark:bg-neutral-900">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600" />
+        <span className="ml-4 text-lg font-medium text-neutral-700 dark:text-neutral-200">
           Checking admin privileges...
         </span>
       </div>
@@ -32,9 +31,9 @@ const AdminAuthGuard = ({ children }) => {
   if (user.role !== "admin") {
     // Logged in, but not admin
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-red-50 dark:bg-gray-950">
-        <h2 className="text-3xl font-bold text-red-700 dark:text-red-400 mb-2">Access Denied</h2>
-        <p className="text-base text-gray-600 dark:text-gray-300">
+      <div className="flex flex-col items-center justify-center h-screen bg-error-50 dark:bg-neutral-950">
+        <h2 className="text-3xl font-display font-bold text-error-700 dark:text-error-400 mb-2">Access Denied</h2>
+        <p className="text-base text-neutral-600 dark:text-neutral-300">
           You do not have permission to view this admin section.
         </p>
       </div>
