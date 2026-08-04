@@ -319,7 +319,7 @@ const Calendar = () => {
 
       {/* Modal for day/event list */}
       {modalOpen && selectedDay && (
-        <Modal isOpen={modalOpen} onClose={closeModal} title={`Events on ${selectedDay.dateKey}`}>
+        <Modal open={modalOpen} onClose={closeModal} title={`Events on ${selectedDay.dateKey}`}>
           <div className="space-y-3">
             {selectedDay.events.length === 0 ? (
               <div className="text-gray-400 text-center">No events for this day.</div>
@@ -376,7 +376,7 @@ const Calendar = () => {
       {/* Event creation/edit modal */}
       {eventModalOpen && (
         <Modal
-          isOpen={eventModalOpen}
+          open={eventModalOpen}
           onClose={() => setEventModalOpen(false)}
           title={activeEvent ? "Edit Event" : "Create Event"}
         >

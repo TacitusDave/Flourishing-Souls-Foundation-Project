@@ -42,15 +42,15 @@ const footerNav = [
 
 function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-300">
+    <footer className="bg-neutral-950 text-neutral-300">
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr]">
           <div className="space-y-4">
             <Link to="/" className="inline-flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black text-slate-950 font-bold">FS</div>
-              <span className="text-xl font-semibold text-white">Flourishing Souls</span>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-600 text-white font-display font-bold">FS</div>
+              <span className="text-xl font-display font-semibold text-white">Flourishing Souls</span>
             </Link>
-            <p className="max-w-md text-sm leading-7 text-slate-400">
+            <p className="max-w-md text-sm leading-7 text-neutral-400">
               Built for mission-led organizations that need secure giving, volunteer coordination, and impact reporting.
             </p>
             <div className="flex flex-wrap gap-3">
@@ -60,7 +60,7 @@ function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-slate-700 bg-slate-900 text-slate-200 transition hover:border-indigo-500 hover:text-indigo-100"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-neutral-700 bg-neutral-900 text-neutral-200 transition hover:border-brand-500 hover:text-brand-100"
                   aria-label={link.name}
                 >
                   {link.icon}
@@ -70,8 +70,8 @@ function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Explore</p>
-            <ul className="mt-6 space-y-3 text-sm text-slate-300">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Explore</p>
+            <ul className="mt-6 space-y-3 text-sm text-neutral-300">
               {footerNav.map((item) => (
                 <li key={item.label}>
                   <Link to={item.href} className="transition hover:text-white">
@@ -83,8 +83,8 @@ function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-slate-400">Contact</p>
-            <div className="mt-6 space-y-3 text-sm text-slate-300">
+            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Contact</p>
+            <div className="mt-6 space-y-3 text-sm text-neutral-300">
               <p>support@flourishingsouls.org</p>
               <p>+234 123 456 789</p>
               <p>34 Freedom Way, Lagos, Nigeria</p>
@@ -92,14 +92,14 @@ function Footer() {
             <div className="mt-6">
               <Link
                 to="/donate"
-                className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-700"
+                className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-700"
               >
                 Donate now
               </Link>
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-slate-800 pt-6 text-center text-xs text-slate-500">
+        <div className="mt-12 border-t border-neutral-800 pt-6 text-center text-xs text-neutral-500">
           © {new Date().getFullYear()} Flourishing Souls Foundation. All rights reserved.
         </div>
       </div>

@@ -6,8 +6,6 @@ import ThemeProvider from "./components/common/ThemeProvider";
 import NotificationProvider from "./components/common/NotificationProvider";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import "./styles/tailwind.css";
-import "./styles/main.css";
-import "./styles/theme.css";
 
 function App() {
   return (

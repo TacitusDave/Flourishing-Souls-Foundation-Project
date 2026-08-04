@@ -22,18 +22,18 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 px-4">
-          <div className="max-w-xl w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-3xl shadow-xl p-8">
-            <h1 className="text-3xl font-bold text-indigo-700 dark:text-indigo-300 mb-4">
+        <div className="min-h-screen flex items-center justify-center bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 px-4">
+          <div className="max-w-xl w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-3xl shadow-warm-lg p-8">
+            <h1 className="text-3xl font-display font-bold text-brand-700 dark:text-brand-300 mb-4">
               Something went wrong
             </h1>
-            <p className="text-sm text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
+            <p className="text-sm text-neutral-600 dark:text-neutral-300 mb-6 leading-relaxed">
               An unexpected error occurred while loading the page. Please refresh the browser or try again later.
             </p>
             <button
               type="button"
               onClick={this.handleReset}
-              className="inline-flex items-center justify-center rounded-full bg-indigo-600 text-white px-5 py-2.5 text-sm font-semibold shadow hover:bg-indigo-700 transition"
+              className="inline-flex items-center justify-center rounded-full bg-brand-600 text-white px-5 py-2.5 text-sm font-semibold shadow hover:bg-brand-700 transition"
             >
               Try again
             </button>

@@ -7,7 +7,7 @@ import React, {
   Fragment,
 } from "react";
 import PropTypes from "prop-types";
-import clsx from "clsx";
+import clsx from "classnames";
 
 /**
  * useLockBodyScroll(lock: boolean)
@@ -192,7 +192,7 @@ const Modal = forwardRef(function Modal(
         {/* Overlay */}
         <div
           className={clsx(
-            "fixed inset-0 bg-black bg-opacity-40 transition-opacity duration-200",
+            "fixed inset-0 bg-neutral-900/50 backdrop-blur-sm transition-opacity duration-200",
             overlayClassName
           )}
           style={{ zIndex: 49 }}
@@ -203,7 +203,7 @@ const Modal = forwardRef(function Modal(
         {/* Modal Dialog */}
         <div
           className={clsx(
-            "relative z-50 bg-white rounded-lg shadow-xl flex flex-col w-full",
+            "relative z-50 bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-lg flex flex-col w-full",
             sizeClasses[size] || sizeClasses.md,
             "max-h-[90vh]",
             className
@@ -213,14 +213,14 @@ const Modal = forwardRef(function Modal(
           {(title || showClose) && (
             <div
               className={clsx(
-                "flex items-center justify-between px-6 py-4 border-b border-gray-100",
+                "flex items-center justify-between px-6 py-4 border-b border-neutral-100 dark:border-neutral-800",
                 headerClassName
               )}
             >
               {title && (
                 <h2
                   id={ariaLabelledby || `modal-title-${id || ""}`}
-                  className="text-lg font-semibold text-gray-900"
+                  className="text-lg font-semibold text-neutral-900 dark:text-neutral-100"
                 >
                   {title}
                 </h2>
@@ -228,13 +228,13 @@ const Modal = forwardRef(function Modal(
               {showClose && (
                 <button
                   type="button"
-                  className="ml-4 p-2 rounded hover:bg-gray-100 transition focus:outline-none"
+                  className="ml-4 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition focus:outline-none"
                   onClick={onClose}
                   aria-label="Close modal"
                   tabIndex={0}
                   data-testid="modal-close"
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-neutral-500 dark:text-neutral-400" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10 8.586l4.95-4.95a1 1 0 111.414 1.414L11.414 10l4.95 4.95a1 1 0 01-1.415 1.414L10 11.414l-4.95 4.95a1 1 0 01-1.415-1.414L8.586 10l-4.95-4.95A1 1 0 115.05 3.636L10 8.586z" clipRule="evenodd" />
                   </svg>
                 </button>
@@ -245,7 +245,7 @@ const Modal = forwardRef(function Modal(
           {/* Body */}
           <div
             className={clsx(
-              "px-6 py-4 overflow-y-auto flex-1",
+              "px-6 py-4 overflow-y-auto flex-1 text-neutral-800 dark:text-neutral-200",
               bodyClassName
             )}
           >
@@ -256,7 +256,7 @@ const Modal = forwardRef(function Modal(
           {(footer || (actions && Array.isArray(actions) && actions.length > 0)) && (
             <div
               className={clsx(
-                "flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50",
+                "flex items-center justify-end gap-3 px-6 py-4 border-t border-neutral-100 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50",
                 footerClassName
               )}
             >
@@ -274,10 +274,10 @@ const Modal = forwardRef(function Modal(
                     ...actionProps
                   } = action;
                   const btnClass = clsx(
-                    "px-4 py-2 rounded font-medium transition",
+                    "px-4 py-2 rounded-xl font-medium transition",
                     type === "primary"
-                      ? "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500"
-                      : "bg-white border text-gray-900 hover:bg-gray-100 focus:ring-gray-400"
+                      ? "bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500"
+                      : "bg-white dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-700 text-neutral-900 dark:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 focus:ring-neutral-400"
                   );
                   return (
                     <button

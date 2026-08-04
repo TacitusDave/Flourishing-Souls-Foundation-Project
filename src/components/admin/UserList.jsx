@@ -105,7 +105,7 @@ const UserList = () => {
   // Render user detail
   const renderUserDetail = () =>
     selectedUser && (
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} title="User Details">
+      <Modal open={showModal} onClose={() => setShowModal(false)} title="User Details">
         <div className="p-4">
           <div className="flex items-center mb-4">
             <img

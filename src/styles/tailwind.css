@@ -1,77 +1,105 @@
 /**
- * TailwindCSS entrypoint for Flourishing Souls Foundation (FSF)
- * Loads Tailwind's base (Preflight), components, and utilities layers.
- * No theme('...') or non-standard PostCSS allowed! See theme tokens in theme.css.
+ * Flourishing Souls Foundation — design system entrypoint (Tailwind CSS v4).
+ * Single source of truth for color, type, radius, and shadow tokens.
+ * No tailwind.config.js, no separate CSS-variable layer — this file is it.
  */
 
-/* --- TailwindCSS core (v4) --- */
 @import "tailwindcss";
 
-/* ================= FSF CUSTOM LAYERS (sync with theme.css) ================= */
+/* Dark mode is toggled by ThemeProvider.jsx setting data-theme="dark" on
+   <html> (not a .dark class) — point Tailwind's dark: variant at that. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* 1. Base: Font-stack and background using CSS variables from theme.css */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+
+  /* Brand ramp — "Amethyst". Warmer and more saturated than stock
+     indigo/violet so the app doesn't read as generic SaaS. */
+  --color-brand-50: #faf5ff;
+  --color-brand-100: #f3e8ff;
+  --color-brand-200: #e9d5ff;
+  --color-brand-300: #d8b4fe;
+  --color-brand-400: #c084fc;
+  --color-brand-500: #a855f7;
+  --color-brand-600: #7c3aed;
+  --color-brand-700: #6d28d9;
+  --color-brand-800: #5b21b6;
+  --color-brand-900: #4c1d95;
+  --color-brand-950: #2e1065;
+
+  /* Warm accent — "Marigold". Donation CTAs, impact highlights. */
+  --color-accent-50: #fffbeb;
+  --color-accent-100: #fef3c7;
+  --color-accent-200: #fde68a;
+  --color-accent-300: #fcd34d;
+  --color-accent-400: #fbbf24;
+  --color-accent-500: #f59e0b;
+  --color-accent-600: #d97706;
+  --color-accent-700: #b45309;
+  --color-accent-800: #92400e;
+  --color-accent-900: #78350f;
+
+  /* Warm neutrals — replaces the app's previous near-black slate-950
+     "SaaS dashboard" look with something closer to warm paper/stone. */
+  --color-neutral-50: #fafaf9;
+  --color-neutral-100: #f5f5f4;
+  --color-neutral-200: #e7e5e4;
+  --color-neutral-300: #d6d3d1;
+  --color-neutral-400: #a8a29e;
+  --color-neutral-500: #78716c;
+  --color-neutral-600: #57534e;
+  --color-neutral-700: #44403c;
+  --color-neutral-800: #292524;
+  --color-neutral-900: #1c1917;
+  --color-neutral-950: #0c0a09;
+
+  /* Status colors, pulled from the warm-neutral family so they don't clash */
+  --color-success-50: #f0fdf4;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-900: #14532d;
+  --color-warning-50: #fffbeb;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-900: #78350f;
+  --color-error-50: #fef2f2;
+  --color-error-500: #ef4444;
+  --color-error-600: #dc2626;
+  --color-error-900: #7f1d1d;
+
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+
+  --shadow-warm-sm: 0 1px 2px 0 rgb(28 25 23 / 0.06);
+  --shadow-warm-md: 0 4px 16px -2px rgb(124 58 237 / 0.10);
+  --shadow-warm-lg: 0 12px 32px -4px rgb(124 58 237 / 0.16);
+}
+
 @layer base {
   html {
-    font-family: 'Inter', system-ui, Arial, sans-serif;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    /* theme.css provides --fsf-bg, fallback to #fafbfc */
-    background-color: var(--fsf-bg, #fafbfc);
   }
-}
 
-/* 2. Focus outline matches theme accent (see --fsf-accent in theme.css) */
-@layer base {
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
   :focus-visible {
-    outline: 2px solid var(--fsf-accent, #f472b6);
+    outline: 2px solid var(--color-brand-500);
     outline-offset: 2px;
   }
-}
 
-/* 3. Smooth transitions for all common interactive elements */
-@layer base {
-  button,
-  a,
-  [role="button"],
-  input,
-  textarea,
-  select,
-  summary {
+  button, a, [role="button"], input, textarea, select, summary {
     transition-property: background-color, color, border-color, box-shadow, transform, opacity;
     transition-duration: 160ms;
     transition-timing-function: cubic-bezier(0.33, 1, 0.68, 1);
   }
 }
 
-/* 4. App-wide dark mode (class strategy, see theme.css for tokens) */
-@layer base {
-  html.dark {
-    background-color: var(--fsf-bg, #18192f);
-    color-scheme: dark;
-  }
-}
-
-/* 5. Utility color classes using the tokens from theme.css */
-@layer utilities {
-  .bg-fsf-primary    { background-color: var(--fsf-primary, #4338ca); }
-  .bg-fsf-accent     { background-color: var(--fsf-accent, #f472b6); }
-  .bg-fsf-error      { background-color: var(--fsf-error, #e11d48); }
-  .text-fsf-primary  { color: var(--fsf-primary, #4338ca); }
-  .text-fsf-accent   { color: var(--fsf-accent, #f472b6); }
-  .text-fsf-error    { color: var(--fsf-error, #e11d48); }
-  .border-fsf-primary { border-color: var(--fsf-primary, #4338ca); }
-  .border-fsf-accent { border-color: var(--fsf-accent, #f472b6); }
-  .border-fsf-error  { border-color: var(--fsf-error, #e11d48); }
-}
-
-/* 6. Responsive container helpers (ensure config has xl, lg!) */
-@layer components {
-  .container-xl { @apply mx-auto px-4 max-w-screen-xl; }
-  .container-lg { @apply mx-auto px-4 max-w-screen-lg; }
-}
-
-/* 7. Visually hidden utility for accessibility */
 @layer utilities {
   .sr-only {
     position: absolute !important;
@@ -85,39 +113,3 @@
     border: 0 !important;
   }
 }
-
-/* 8. Form input highlight/error states (use CSS vars, match theme.css) */
-@layer components {
-  .form-input:focus {
-    border-color: var(--fsf-accent, #f472b6);
-    box-shadow: 0 0 0 2px var(--fsf-accent, #f472b6);
-  }
-  .form-input.error {
-    border-color: var(--fsf-error, #e11d48);
-    background: var(--fsf-error-bg, #fef2f2);
-  }
-}
-
-/* 9. NProgress or loading bar (make sure bg-fsf-accent exists) */
-@layer components {
-  .nprogress-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 0.25rem;
-    z-index: 9999;
-    background-color: var(--fsf-accent, #f472b6);
-    transition-property: all;
-    transition-duration: 200ms;
-  }
-}
-
-/* 10. Plugins: place Tailwind plugin rules after this point as needed. */
-
-/* ==== Only use static or variable-based CSS here! theme('...') is NOT allowed. ==== */
-
-/* *******************************
-    After editing, rebuild your Tailwind CSS:
-      npx tailwindcss -i ./src/styles/tailwind.css -o ./dist/output.css --watch
-    Or just run your usual dev script (e.g. npm run dev)
-   ******************************* */

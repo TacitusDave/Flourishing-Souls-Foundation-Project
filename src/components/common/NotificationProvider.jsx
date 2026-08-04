@@ -196,82 +196,82 @@ function NotificationToast({ notification, onClose, prefersReducedMotion }) {
     info: {
       icon: (
         <svg
-          className="w-6 h-6 text-fsf-primary"
+          className="w-6 h-6 text-brand-600 dark:text-brand-400"
           role="img"
           aria-label="Info"
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle cx="12" cy="12" r="10" stroke="#6366f1" strokeWidth="2" />
-          <path d="M12 8v4m0 4h.01" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+          <path d="M12 8v4m0 4h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
         </svg>
       ),
-      bg: "bg-blue-50 dark:bg-blue-900",
-      text: "text-blue-800 dark:text-blue-200",
+      bg: "bg-brand-50 dark:bg-brand-900/40",
+      text: "text-brand-900 dark:text-brand-100",
     },
     success: {
       icon: (
         <svg
-          className="w-6 h-6 text-fsf-success"
+          className="w-6 h-6 text-success-600 dark:text-success-400"
           role="img"
           aria-label="Success"
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle cx="12" cy="12" r="10" stroke="#10b981" strokeWidth="2" />
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
           <path
             d="M16 10l-4.25 4L8 12.25"
-            stroke="#10b981"
+            stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
         </svg>
       ),
-      bg: "bg-green-50 dark:bg-green-900",
-      text: "text-green-800 dark:text-green-200",
+      bg: "bg-success-50 dark:bg-success-900/40",
+      text: "text-success-900 dark:text-success-100",
     },
     warning: {
       icon: (
         <svg
-          className="w-6 h-6 text-fsf-warning"
+          className="w-6 h-6 text-warning-600 dark:text-warning-400"
           role="img"
           aria-label="Warning"
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle cx="12" cy="12" r="10" stroke="#f59e42" strokeWidth="2" />
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
           <path
             d="M12 8v4m0 4h.01"
-            stroke="#eab308"
+            stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
           />
         </svg>
       ),
-      bg: "bg-yellow-50 dark:bg-yellow-900",
-      text: "text-yellow-800 dark:text-yellow-200",
+      bg: "bg-warning-50 dark:bg-warning-900/40",
+      text: "text-warning-900 dark:text-warning-100",
     },
     error: {
       icon: (
         <svg
-          className="w-6 h-6 text-fsf-error"
+          className="w-6 h-6 text-error-600 dark:text-error-400"
           role="img"
           aria-label="Error"
           fill="none"
           viewBox="0 0 24 24"
         >
-          <circle cx="12" cy="12" r="10" stroke="#ef4444" strokeWidth="2" />
+          <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
           <path
             d="M15 9l-6 6m0-6l6 6"
-            stroke="#ef4444"
+            stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
           />
         </svg>
       ),
-      bg: "bg-red-50 dark:bg-red-900",
-      text: "text-red-800 dark:text-red-200",
+      bg: "bg-error-50 dark:bg-error-900/40",
+      text: "text-error-900 dark:text-error-100",
     },
   };
 
@@ -279,7 +279,7 @@ function NotificationToast({ notification, onClose, prefersReducedMotion }) {
 
   return (
     <div
-      className={`pointer-events-auto flex gap-3 items-start rounded-lg border border-fsf-border shadow-lg px-4 py-3 min-w-0 max-w-full ${bg} ${text} ${
+      className={`pointer-events-auto flex gap-3 items-start rounded-xl border border-black/5 dark:border-white/10 shadow-warm-md px-4 py-3 min-w-0 max-w-full ${bg} ${text} ${
         prefersReducedMotion ? "" : "transition-all duration-500 ease-in"
       }`}
       role="alert"
@@ -296,7 +296,7 @@ function NotificationToast({ notification, onClose, prefersReducedMotion }) {
             {actions.map((act, i) => (
               <button
                 key={i}
-                className="inline-flex items-center px-2 py-1 rounded bg-fsf-primary text-white text-xs font-semibold hover:bg-fsf-primary-dark focus:outline-none focus:ring-2 focus:ring-fsf-primary"
+                className="inline-flex items-center px-2 py-1 rounded-lg bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500"
                 onClick={() => act.onClick && act.onClick()}
                 aria-label={act.label}
                 type="button"
@@ -308,12 +308,12 @@ function NotificationToast({ notification, onClose, prefersReducedMotion }) {
         )}
       </div>
       <button
-        className="ml-2 p-2 rounded hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-fsf-primary"
+        className="ml-2 p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-brand-500"
         onClick={onClose}
         aria-label="Dismiss notification"
         tabIndex={0}
       >
-        <svg viewBox="0 0 20 20" width="16" height="16" className="text-fsf-border" fill="none">
+        <svg viewBox="0 0 20 20" width="16" height="16" className="opacity-60" fill="none">
           <path d="M6 6l8 8M6 14L14 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
         </svg>
       </button>
