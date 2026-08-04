@@ -1,290 +1,141 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
-
-// Lazy loaded components for improved performance
-const EventList = React.lazy(() => import("../components/events/EventList"));
-const GalleryGrid = React.lazy(() => import("../components/gallery/GalleryGrid"));
+import { FiUsers, FiTrendingUp, FiShield, FiCheckCircle } from "react-icons/fi";
 
 export default function Home() {
-  const { user } = useAuth();
-
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
-      <header className="relative w-full overflow-hidden bg-gradient-to-tr from-indigo-600/90 via-indigo-700/80 to-sky-800 pb-16">
-        <div className="container mx-auto px-6 py-10 flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
-          <div className="flex-1 z-10">
-            <h1 className="text-white text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight drop-shadow-lg">
-              Flourishing Souls Foundation
-            </h1>
-            <p className="mt-5 text-lg text-indigo-100 font-medium max-w-xl drop-shadow">
-              Empowering lives, nurturing hope, and building thriving communities.
-            </p>
-            <nav className="mt-8 flex flex-wrap gap-4">
-              <Link
-                to="/donate"
-                className="inline-block px-6 py-3 rounded bg-indigo-50 hover:bg-white text-indigo-700 font-extrabold shadow transition focus:ring-2 ring-indigo-500"
-                aria-label="Donate to our Cause"
-              >
-                Donate Now
-              </Link>
-              <Link
-                to="/volunteer"
-                className="inline-block px-6 py-3 rounded bg-white/10 hover:bg-white/20 text-white font-semibold border border-indigo-100 shadow transition"
-                aria-label="Become a Volunteer"
-              >
-                Volunteer
-              </Link>
-              <Link
-                to="/events"
-                className="inline-block px-6 py-3 rounded bg-white/5 hover:bg-white/10 text-white font-semibold border border-indigo-100 shadow transition"
-                aria-label="Upcoming Events"
-              >
-                Events
-              </Link>
-            </nav>
-            {user ? (
-              <div className="mt-6 text-sm text-white/90 flex items-center gap-2 drop-shadow">
-                <span>
-                  Welcome back,{" "}
-                  <span className="font-bold">{user.name || user.email}</span>!
-                </span>
-                <Link
-                  to="/dashboard"
-                  className="underline hover:text-yellow-300"
-                >
-                  Dashboard
-                </Link>
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <header className="relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-indigo-600 via-gray-900 to-white-950 opacity-80" />
+        <div className="relative mx-auto max-w-7xl px-6 lg:px-8 py-20">
+          <div className="grid gap-16 lg:grid-cols-[1.2fr_0.8fr] items-center">
+            <section className="space-y-8">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-100">
+                Trusted by organizations building measurable community outcomes.
               </div>
-            ) : (
-              <div className="mt-6 text-sm text-white/80 flex gap-2">
-                <Link to="/login" className="underline hover:text-yellow-300">
-                  Sign In
-                </Link>
-                <span className="mx-0.5">|</span>
-                <Link to="/register" className="underline hover:text-indigo-200">
-                  Register
-                </Link>
+              <div className="max-w-3xl space-y-6">
+                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                  One platform for donations, volunteers, and mission operations.
+                </h1>
+                <p className="text-lg leading-8 text-slate-300">
+                  Flourishing Souls gives your team a polished, enterprise-style home for campaign management, secure giving, and community engagement.
+                </p>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <Link
+                    to="/donate"
+                    className="inline-flex items-center justify-center rounded-full bg-indigo-500 px-8 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-400"
+                  >
+                    Give now
+                  </Link>
+                  <Link
+                    to="/support"
+                    className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 py-3 text-sm font-semibold text-slate-100 transition hover:bg-white/10"
+                  >
+                    Explore the platform
+                  </Link>
+                </div>
               </div>
-            )}
-          </div>
-          <div className="flex-1 flex justify-center lg:justify-end relative z-0">
-            <img
-              src="/images/hero/impact-group.webp"
-              alt="Flourishing Souls - Hero Impact"
-              className="w-[370px] md:w-[420px] max-w-full h-auto rounded-2xl shadow-2xl ring-4 ring-white/30 dark:ring-indigo-500/30"
-              loading="eager"
-              width={420}
-              height={360}
-              onError={e => { e.target.src = "/images/logo.png"; }}
-            />
-            <div className="hidden md:block absolute -bottom-10 -right-8">
-              <img
-                src="/images/logo.png"
-                alt="Flourishing Souls Foundation Logo"
-                className="w-28 h-28 rounded-full border-4 border-white shadow-lg bg-white dark:bg-slate-700"
-                loading="lazy"
-                width={112}
-                height={112}
-              />
-            </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {[
+                  { metric: "120+", label: "Programs launched" },
+                  { metric: "18k", label: "People supported" },
+                  { metric: "9.8/10", label: "Partner trust score" },
+                  { metric: "100%", label: "Transparent reporting" },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-3xl border border-white/10 bg-white/5 p-5 text-center">
+                    <p className="text-2xl font-semibold text-white">{item.metric}</p>
+                    <p className="mt-2 text-sm text-slate-400">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+            <section className="rounded-[2rem] border border-white/10 bg-slate-900/95 p-8 shadow-2xl ring-1 ring-white/10">
+              <div className="space-y-6">
+                <div className="rounded-[1.75rem] bg-slate-950 p-7 text-white shadow-inner">
+                  <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">Operations view</p>
+                  <h2 className="mt-4 text-2xl font-semibold">Organization dashboards made simple</h2>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">
+                    Monitor donations, volunteer engagement, and campaign progress in a professional dashboard designed for teams.
+                  </p>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {[
+                    { icon: <FiTrendingUp className="h-5 w-5 text-indigo-400" />, title: "Performance metrics", text: "Track funding progress and community outcomes in real time." },
+                    { icon: <FiUsers className="h-5 w-5 text-indigo-400" />, title: "Volunteer coordination", text: "Keep applications, schedules, and roles organized." },
+                    { icon: <FiShield className="h-5 w-5 text-indigo-400" />, title: "Trusted security", text: "Operate with reliable data controls and safe payment flows." },
+                    { icon: <FiCheckCircle className="h-5 w-5 text-indigo-400" />, title: "Clear reporting", text: "Share concise impact summaries with donors and stakeholders." },
+                  ].map((item) => (
+                    <div key={item.title} className="rounded-3xl border border-white/10 bg-slate-950 p-5">
+                      <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-800 text-white">
+                        {item.icon}
+                      </div>
+                      <h3 className="mt-4 text-lg font-semibold text-white">{item.title}</h3>
+                      <p className="mt-2 text-sm leading-6 text-slate-400">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </header>
-      <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-10">
-        {/* Organizational Impact Section */}
-        <section className="mb-16 grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 text-center border border-gray-100 dark:border-slate-700">
-            <img
-              src="/images/illustrations/growth.svg"
-              alt=""
-              className="mx-auto mb-3 w-16 h-16"
-              width={64}
-              height={64}
-              loading="lazy"
-            />
-            <h2 className="font-bold text-lg text-indigo-600 mb-2">
-              Empowerment
-            </h2>
-            <p className="text-gray-700 dark:text-slate-300">
-              Supporting individuals to realize their full potential through education, mentorship, and financial aid.
-            </p>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 text-center border border-gray-100 dark:border-slate-700">
-            <img
-              src="/images/illustrations/community.svg"
-              alt=""
-              className="mx-auto mb-3 w-16 h-16"
-              width={64}
-              height={64}
-              loading="lazy"
-            />
-            <h2 className="font-bold text-lg text-indigo-600 mb-2">
-              Community Outreach
-            </h2>
-            <p className="text-gray-700 dark:text-slate-300">
-              We mobilize resources and join hands to uplift local communities through sustainable programs.
-            </p>
-          </div>
-          <div className="bg-white dark:bg-slate-800 rounded-xl shadow p-6 text-center border border-gray-100 dark:border-slate-700">
-            <img
-              src="/images/illustrations/aid.svg"
-              alt=""
-              className="mx-auto mb-3 w-16 h-16"
-              width={64}
-              height={64}
-              loading="lazy"
-            />
-            <h2 className="font-bold text-lg text-indigo-600 mb-2">
-              Real Impact
-            </h2>
-            <p className="text-gray-700 dark:text-slate-300">
-              Transparent, measurable, and timely interventions change lives for the better—no empty promises.
-            </p>
-          </div>
+      <main className="mx-auto max-w-7xl px-6 lg:px-8 pb-24">
+        <section className="grid gap-10 lg:grid-cols-3 mb-16">
+          <article className="rounded-[1.75rem] border border-white/10 bg-slate-900/95 p-8 shadow-xl">
+            <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">Program leadership</p>
+            <h2 className="mt-4 text-2xl font-semibold text-white">Launch initiatives faster</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-400">Create campaigns, manage volunteers, and track progress from one polished interface.</p>
+          </article>
+          <article className="rounded-[1.75rem] border border-white/10 bg-slate-900/95 p-8 shadow-xl">
+            <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">Community engagement</p>
+            <h2 className="mt-4 text-2xl font-semibold text-white">Keep supporters aligned</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-400">Share outcomes with donors and volunteers through transparent updates and impact stories.</p>
+          </article>
+          <article className="rounded-[1.75rem] border border-white/10 bg-slate-900/95 p-8 shadow-xl">
+            <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">Impact reporting</p>
+            <h2 className="mt-4 text-2xl font-semibold text-white">Evidence-based results</h2>
+            <p className="mt-4 text-sm leading-7 text-slate-400">Use data-backed summaries to build trust and improve funding decisions.</p>
+          </article>
         </section>
-        {/* Recent Events */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-bold mb-4 text-indigo-800 dark:text-indigo-200">
-            Recent & Upcoming Events
-          </h2>
-          <Suspense fallback={<div className="text-center py-6 text-indigo-300">Loading events…</div>}>
-            <EventList limit={4} showPast={false} />
-          </Suspense>
-          <div className="flex justify-end mt-2">
-            <Link
-              to="/events"
-              className="text-indigo-600 hover:underline text-sm font-medium"
-              aria-label="View all events"
-            >
-              View all events &rarr;
-            </Link>
-          </div>
-        </section>
-        {/* Highlight: Donate/Join/Support */}
-        <section className="my-14 rounded-xl bg-gradient-to-r from-indigo-50 via-indigo-100 to-slate-50 dark:bg-gradient-to-br dark:from-indigo-950/60 dark:via-indigo-900/30 dark:to-gray-900 p-8 flex flex-col sm:flex-row items-center gap-8 shadow-lg border border-indigo-50 dark:border-indigo-900/30">
-          <div className="flex-1 mb-6 sm:mb-0">
-            <h3 className="text-xl font-extrabold text-indigo-700 dark:text-indigo-200 mb-2">
-              Make a Real Difference Today
-            </h3>
-            <p className="text-gray-700 dark:text-indigo-100 mb-4">
-              100% of donations and volunteer work directly impact lives in need. Secure. Transparent. Immediate.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/donate"
-                className="bg-indigo-600 text-white px-6 py-2 rounded font-semibold shadow hover:bg-indigo-700 transition"
-                aria-label="Donate securely"
-              >
-                Donate Now
-              </Link>
-              <Link
-                to="/volunteer"
-                className="bg-white border border-indigo-500 text-indigo-700 px-6 py-2 rounded font-semibold shadow hover:bg-indigo-50 transition"
-                aria-label="Become Volunteer"
-              >
-                Join as Volunteer
-              </Link>
-              <Link
-                to="/support"
-                className="bg-white border border-gray-400 text-gray-700 px-6 py-2 rounded font-semibold shadow hover:bg-gray-50 transition"
-                aria-label="Get Support"
-              >
-                Get Support
-              </Link>
+        <section className="rounded-[2rem] bg-slate-900/95 border border-white/10 p-10 shadow-2xl mb-20">
+          <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] items-center">
+            <div>
+              <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">How it works</p>
+              <h2 className="mt-4 text-3xl font-semibold text-white">A structured process for mission delivery</h2>
+              <p className="mt-4 text-base leading-8 text-slate-400">Organize programs, engage volunteers, and report outcomes with confidence using a single coherent workflow.</p>
+            </div>
+            <div className="grid gap-4">
+              {[
+                { step: "01", title: "Plan campaigns", description: "Build structured initiatives with clear goals, schedules, and team assignments." },
+                { step: "02", title: "Activate volunteers", description: "Align volunteers with roles, communication, and support systems." },
+                { step: "03", title: "Show results", description: "Deliver impact summaries and transparent reporting to supporters." },
+              ].map((item) => (
+                <div key={item.step} className="rounded-3xl border border-white/10 bg-slate-950 p-6">
+                  <div className="flex items-center gap-3 text-slate-300">
+                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-indigo-500 text-white font-semibold">{item.step}</span>
+                    <h3 className="text-lg font-semibold text-white">{item.title}</h3>
+                  </div>
+                  <p className="mt-3 text-sm leading-6 text-slate-400">{item.description}</p>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="hidden lg:block flex-1">
-            <img
-              src="/images/illustrations/donate-support.svg"
-              alt="Donate and Support illustration"
-              className="max-w-xs w-full h-auto"
-              loading="lazy"
-              width={240}
-              height={200}
-            />
-          </div>
         </section>
-        {/* Recent Gallery */}
-        <section className="mb-20">
-          <h2 className="text-2xl font-bold mb-4 text-indigo-800 dark:text-indigo-200">
-            Gallery Highlights
-          </h2>
-          <Suspense fallback={<div className="text-center py-6 text-indigo-300">Loading gallery…</div>}>
-            <GalleryGrid limit={6} isHome={true} />
-          </Suspense>
-          <div className="flex justify-end mt-2">
-            <Link
-              to="/gallery"
-              className="text-indigo-600 hover:underline text-sm font-medium"
-              aria-label="View full gallery"
-            >
-              View full gallery &rarr;
-            </Link>
-          </div>
-        </section>
-        {/* Mission Statement Section */}
-        <section className="my-14 px-6 py-10 rounded-xl bg-white/80 dark:bg-slate-800/60 shadow border border-gray-100 dark:border-slate-800 text-center max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold mb-3 text-indigo-700 dark:text-indigo-200">
-            Our Mission
-          </h2>
-          <p className="text-lg text-gray-800 dark:text-slate-200">
-            To transform lives and communities through committed service, sustainable development, and transparent giving, ensuring every soul flourishes to their full potential.
-          </p>
-        </section>
-        {/* Partners and Supporters */}
-        <section className="mt-16 mb-4 px-2">
-          <h3 className="text-base text-slate-500 font-semibold text-center mb-2">Proudly Supported By</h3>
-          <div className="flex justify-center items-center flex-wrap gap-6">
-            <img
-              src="/images/brand-assets/paystack-logo.svg"
-              alt="Paystack"
-              className="h-8"
-              height={32}
-              loading="lazy"
-            />
-            <img
-              src="/images/brand-assets/supabase-logo.svg"
-              alt="Supabase"
-              className="h-8"
-              height={32}
-              loading="lazy"
-            />
-            {/* Add more logos as appropriate */}
+        <section className="rounded-[2rem] border border-white/10 bg-slate-900/90 p-10 shadow-2xl">
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-sm uppercase tracking-[0.35em] text-indigo-300">Trusted by impact teams</p>
+              <h2 className="mt-4 text-3xl font-semibold text-white">Built for organizations that care.</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="rounded-3xl border border-white/10 bg-slate-950 p-4 text-center text-sm text-slate-400">Community Care</div>
+              <div className="rounded-3xl border border-white/10 bg-slate-950 p-4 text-center text-sm text-slate-400">Youth Outreach</div>
+              <div className="rounded-3xl border border-white/10 bg-slate-950 p-4 text-center text-sm text-slate-400">Health Initiatives</div>
+              <div className="rounded-3xl border border-white/10 bg-slate-950 p-4 text-center text-sm text-slate-400">Volunteer Operations</div>
+            </div>
           </div>
         </section>
       </main>
-      <footer className="w-full mt-12 flex flex-col items-center border-t border-slate-200 dark:border-slate-700 pt-6 pb-8 bg-white/90 dark:bg-gray-900/90">
-        <Link
-          to="/"
-          className="text-xs text-slate-400 hover:text-indigo-500 transition"
-        >
-          &copy; {new Date().getFullYear()} Flourishing Souls Foundation
-        </Link>
-        <nav className="mt-2 flex flex-wrap gap-3 text-xs text-slate-400">
-          <Link to="/gallery" className="hover:text-indigo-500">
-            Gallery
-          </Link>
-          <Link to="/events" className="hover:text-indigo-500">
-            Events
-          </Link>
-          <Link to="/donate" className="hover:text-indigo-500">
-            Donate
-          </Link>
-          <Link to="/volunteer" className="hover:text-indigo-500">
-            Volunteer
-          </Link>
-          <Link to="/support" className="hover:text-indigo-500">
-            Support
-          </Link>
-          <a
-            href="mailto:support@flourishingsoulsfoundation.org"
-            className="hover:text-indigo-500"
-          >
-            Contact
-          </a>
-        </nav>
-      </footer>
     </div>
   );
 }

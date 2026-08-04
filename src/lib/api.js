@@ -9,8 +9,8 @@
  */
 
 // Note: All actual imports should be at the top-level of your entry file
-import supabase from './supabase'; // See: src/lib/supabase.js
-import { verifyPaystackTransaction } from './paystack'; // src/lib/paystack.js
+import { supabase } from './supabase'; // See: src/lib/supabase.js
+import { verifyTransaction } from './paystack'; // src/lib/paystack.js
 
 // ========== USERS & AUTH ==========
 
@@ -109,7 +109,7 @@ export async function getDonationsByUser(email) {
  * @returns {Promise<Object>} 
  */
 export async function verifyDonation(reference) {
-  return await verifyPaystackTransaction(reference);
+  return await verifyTransaction(reference);
 }
 
 // ========== EVENTS ==========
@@ -190,96 +190,8 @@ export async function getUserEventRegistrations(userId) {
 }
 
 // ========== GALLERY ==========
-
-/**
- * Fetch all gallery items.
- * @return {Promise<Array>}
- */
-export async function getGalleryItems() {
-  const { data, error } = await supabase
-    .from('gallery')
-    .select('*')
-    .order('created_at', { ascending: false });
-  if (error) throw new Error(error.message);
-  return data;
-}
-
-/**
- * Search gallery items by title/description.
- * @param {string} query
- * @returns {Promise<Array>}
- */
-export async function searchGallery(query) {
-  const { data, error } = await supabase
-    .from('gallery')
-    .select('*')
-    .ilike('title', `%${query}%`);
-  if (error) throw new Error(error.message);
-  // Optionally: search description, tags, etc. by expanding the query
-  return data;
-}
-
-/**
- * Upload a file (image/video) to Supabase storage and insert into gallery table.
- * @param {File} file
- * @param {Object} metadata
- * @param {string} metadata.title
- * @param {string} [metadata.description]
- * @returns {Promise<Object>} The new gallery item record
- */
-export async function uploadGalleryFile(file, { title, description }) {
-  // Upload file to storage
-  const fileExt = file.name.split('.').pop();
-  const filePath = `${Date.now()}_${Math.random().toString(36).substr(2, 8)}.${fileExt}`;
-  const { error: uploadError } = await supabase.storage
-    .from('gallery')
-    .upload(filePath, file, { cacheControl: '3600', upsert: false });
-
-  if (uploadError) throw new Error(uploadError.message);
-
-  // Get public URL
-  const { data: { publicUrl } } = supabase
-    .storage
-    .from('gallery')
-    .getPublicUrl(filePath);
-
-  // Insert gallery row
-  const { data, error } = await supabase
-    .from('gallery')
-    .insert([{ title, description, url: publicUrl, file_path: filePath }])
-    .select()
-    .single();
-  if (error) throw new Error(error.message);
-  return data;
-}
-
-/**
- * Delete a gallery item (removes row and deletes from storage).
- * @param {number|string} itemId
- * @returns {Promise<void>}
- */
-export async function deleteGalleryItem(itemId) {
-  // Get file path to delete from storage
-  const { data, error } = await supabase
-    .from('gallery')
-    .select('file_path')
-    .eq('id', itemId)
-    .single();
-  if (error) throw new Error(error.message);
-
-  const filePath = data.file_path;
-
-  // Delete DB entry
-  const { error: delError } = await supabase
-    .from('gallery')
-    .delete()
-    .eq('id', itemId);
-
-  if (delError) throw new Error(delError.message);
-
-  // Delete from storage in background (do not block)
-  supabase.storage.from('gallery').remove([filePath]);
-}
+// Gallery read/write lives in src/hooks/useGallery.js (single source of truth
+// for the gallery-media storage bucket + gallery table), not here.
 
 // ========== VOLUNTEERS ==========
 
@@ -320,7 +232,7 @@ export async function getAllVolunteers() {
  */
 export async function submitSupportRequest(req) {
   const { data, error } = await supabase
-    .from('support')
+    .from('support_requests')
     .insert([req])
     .select()
     .single();
@@ -334,7 +246,7 @@ export async function submitSupportRequest(req) {
  */
 export async function getAllSupportRequests() {
   const { data, error } = await supabase
-    .from('support')
+    .from('support_requests')
     .select('*')
     .order('created_at', { ascending: false });
   if (error) throw new Error(error.message);
@@ -354,7 +266,7 @@ export async function getDashboardStats() {
     supabase.from('donations').select('*', { count: 'exact', head: true }),
     supabase.from('events').select('*', { count: 'exact', head: true }),
     supabase.from('volunteers').select('*', { count: 'exact', head: true }),
-    supabase.from('support').select('*', { count: 'exact', head: true }),
+    supabase.from('support_requests').select('*', { count: 'exact', head: true }),
   ]);
   return { users, donations, events, volunteers, supports };
 }

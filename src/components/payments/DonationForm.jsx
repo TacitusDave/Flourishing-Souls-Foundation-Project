@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { PaystackButton } from "./PaystackButton";
-import { createDonation } from "../../services/paystackServices";
+import { saveDonation } from "../../lib/api";
 import Notification from "../common/Notification";
 import Receipt from "./Receipt";
 import SuccessScreen from "./SuccessScreen";
@@ -55,7 +55,7 @@ const DonationForm = ({
     // response: {reference, status} from Paystack
     setProcessing(true);
     try {
-      const donation = await createDonation({
+      const donation = await saveDonation({
         name,
         email,
         phone,
@@ -63,6 +63,9 @@ const DonationForm = ({
         reference: response.reference,
         status: response.status,
         organization,
+        metadata: response.metadata || {},
+        channel: "paystack",
+        paid_at: new Date().toISOString(),
       });
       setReceiptInfo(donation);
       setSuccessOpen(true);

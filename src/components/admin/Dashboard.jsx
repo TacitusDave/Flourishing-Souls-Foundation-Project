@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { supabase } from "../../lib/supabase";
 import ManagementPanel from "./ManagementPanel";
+import Settings from "./Settings";
 
 const Dashboard = () => {
   const [userCount, setUserCount] = useState(0);
@@ -28,7 +29,7 @@ const Dashboard = () => {
       try {
         // Users
         const { count: userCnt, error: userErr } = await supabase
-          .from("users")
+          .from("profiles")
           .select("*", { count: "exact", head: true });
         if (userErr) throw userErr;
         setUserCount(userCnt);

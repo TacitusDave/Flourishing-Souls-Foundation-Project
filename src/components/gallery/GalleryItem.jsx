@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../context";
 import { useGallery } from "../../hooks/useGallery";
 import { Button } from "../common/ThemeProvider";
 import Modal from "../common/Modal";

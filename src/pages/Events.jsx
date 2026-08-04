@@ -1,7 +1,7 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllEvents } from "../services/supabaseServices";
+import { getAllEvents } from "../lib/api";
 import EventCard from "../components/events/EventCard";
 import Calendar from "../components/events/Calendar";
 

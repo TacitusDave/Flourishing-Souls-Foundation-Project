@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../../lib/supabase";
 
 /**
  * SupportRequestForm
@@ -9,19 +9,8 @@ import { createClient } from "@supabase/supabase-js";
  * Handles full client-side validation, form state, and error handling.
  * Actually posts to Supabase backend if environment variables are properly configured.
  *
- * Expects:
- * - SUPABASE_URL, SUPABASE_ANON_KEY defined in env (or passed as props).
- * 
  * For real user data -- no simulations.
  */
-
-const DEFAULT_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.REACT_APP_SUPABASE_URL || "";
-const DEFAULT_SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.REACT_APP_SUPABASE_ANON_KEY || "";
-
-// Helper: Return a fresh Supabase client
-function getSupabaseClient(supabaseUrl, supabaseKey) {
-  return createClient(supabaseUrl, supabaseKey);
-}
 
 // Helper: Validate form fields
 function validateFields({ name, email, subject, message }) {
@@ -38,8 +27,6 @@ function validateFields({ name, email, subject, message }) {
 }
 
 const SupportRequestForm = ({
-  supabaseUrl = DEFAULT_SUPABASE_URL,
-  supabaseKey = DEFAULT_SUPABASE_KEY,
   onSuccess,
   onError,
   className = "",
@@ -58,7 +45,6 @@ const SupportRequestForm = ({
   const [submissionError, setSubmissionError] = useState("");
   const [requestId, setRequestId] = useState(null);
 
-  const supabase = getSupabaseClient(supabaseUrl, supabaseKey);
   const formRef = useRef();
 
   // Handle field change
@@ -263,8 +249,6 @@ const SupportRequestForm = ({
 };
 
 SupportRequestForm.propTypes = {
-  supabaseUrl: PropTypes.string,
-  supabaseKey: PropTypes.string,
   onSuccess: PropTypes.func,
   onError: PropTypes.func,
   className: PropTypes.string,

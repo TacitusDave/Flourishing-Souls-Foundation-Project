@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../../context";
 import {
   FaBars,
   FaUserCircle,
@@ -11,7 +12,7 @@ import {
   FaUserPlus,
 } from "react-icons/fa";
 const logo = "/images/logo.svg";
-import useAuth from "../../hooks/useAuth";
+
 
 /**
  * Complex, production-ready Header component.
@@ -41,7 +42,7 @@ const guestLinks = [
 ];
 
 function Header({ className = "", mobileBreakpoint = "md" }) {
-  const { user, isAdmin, logout, loading } = useAuth();
+  const { user, isAdmin, signOut, loading } = useAuth();
   const location = useLocation();
   const [navOpen, setNavOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -52,7 +53,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
 
   const handleLogout = async () => {
     setUserMenuOpen(false);
-    await logout();
+    await signOut();
   };
 
   // Close dropdown on navigation
@@ -85,7 +86,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
 
   return (
     <header
-      className={`w-full bg-white shadow-sm border-b border-gray-100 z-50 relative ${className}`}
+      className={`w-full bg-transparent shadow-xl border-b border-slate-800 z-50 relative ${className}`}
       data-testid="site-header"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-8 flex items-center h-16">
@@ -100,13 +101,13 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
             alt="Flourishing Souls Foundation Logo"
             className="w-10 h-10 rounded"
           />
-          <span className="font-bold text-xl text-primary-800 whitespace-nowrap">
+          <span className="font-bold text-xl text-white whitespace-nowrap">
             Flourishing Souls
           </span>
         </Link>
         {/* Hamburger for mobile */}
         <button
-          className={`ml-3 ${mobileBreakpoint}:hidden inline-flex items-center p-2 rounded-md hover:bg-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-400`}
+          className={`ml-3 ${mobileBreakpoint}:hidden inline-flex items-center p-2 rounded-md hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-200`}
           aria-label="Open navigation menu"
           aria-controls="header-nav"
           aria-expanded={navOpen}
@@ -127,8 +128,8 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
                   to={link.path}
                   className={`px-3 py-2 rounded-lg font-medium text-sm transition-colors ${
                     location.pathname === link.path
-                      ? "bg-primary-100 text-primary-800"
-                      : "text-gray-700 hover:bg-gray-100"
+                      ? "bg-indigo-500/15 text-white"
+                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
                   }`}
                   tabIndex={0}
                   aria-current={location.pathname === link.path ? "page" : undefined}
@@ -149,7 +150,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className="flex items-center px-3 py-2 text-primary-600 hover:bg-primary-50 rounded-lg font-medium text-sm gap-2 transition-colors"
+                  className="flex items-center px-3 py-2 text-slate-200 hover:bg-slate-900 rounded-lg font-medium text-sm gap-2 transition-colors"
                 >
                   {link.icon}
                   <span>{link.label}</span>
@@ -162,7 +163,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
               {/* User menu button */}
               <button
                 type="button"
-                className="header-user-trigger flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-400"
+                className="header-user-trigger flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-200"
                 aria-haspopup="true"
                 aria-expanded={userMenuOpen}
                 onClick={handleUserMenuToggle}
@@ -262,7 +263,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
           navOpen
             ? "block animate-fadeIn"
             : "hidden"
-        } ${mobileBreakpoint}:hidden bg-white border-t border-gray-100 shadow-lg absolute top-full left-0 right-0 z-40`}
+        } ${mobileBreakpoint}:hidden bg-slate-950 border-t border-slate-800 shadow-xl absolute top-full left-0 right-0 z-40`}
         aria-label="Mobile navigation"
         data-testid="headerMobileNavMenu"
       >
@@ -273,8 +274,8 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
                 to={link.path}
                 className={`block px-3 py-3 rounded-lg font-medium text-base transition-colors ${
                   location.pathname === link.path
-                    ? "bg-primary-100 text-primary-800"
-                    : "hover:bg-gray-100 text-gray-800"
+                    ? "bg-indigo-500/15 text-white"
+                    : "hover:bg-slate-900 text-slate-200"
                 }`}
                 aria-current={location.pathname === link.path ? "page" : undefined}
               >
@@ -288,7 +289,7 @@ function Header({ className = "", mobileBreakpoint = "md" }) {
                 <li key={link.path}>
                   <Link
                     to={link.path}
-                    className="flex items-center gap-2 px-3 py-3 text-primary-600 hover:bg-primary-50 rounded-lg font-medium text-base transition-colors"
+                    className="flex items-center gap-2 px-3 py-3 text-slate-200 hover:bg-slate-900 rounded-lg font-medium text-base transition-colors"
                   >
                     {link.icon}
                     <span>{link.label}</span>

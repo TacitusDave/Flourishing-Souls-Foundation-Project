@@ -2,8 +2,8 @@ import React, { Suspense, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 // These common components should be updated with actual paths if moved
-import Header from "../layout/Header";
-import Footer from "../layout/Footer";
+import Header from "./Header";
+import Footer from "./Footer";
 import Notification from "./Notification";
 import ThemeSwitcher from "./ThemeSwitcher";
 
@@ -24,11 +24,8 @@ const ScrollToTop = () => {
 
 const Layout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-900 transition-colors duration-300 dark:bg-gray-900 dark:text-gray-50">
-      {/* Accessibility & UX Helpers */}
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 transition-colors duration-300">
       <ScrollToTop />
-
-      {/* Global Announcements / Notifications */}
       <Notification />
 
       {/* Site Header / Navigation */}
@@ -36,12 +33,12 @@ const Layout = ({ children }) => {
 
       {/* Page Content */}
       <main
-        className="flex-1 max-w-screen-2xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-8"
+        className="flex-1 max-w-screen-2xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-10"
         aria-live="polite"
         tabIndex={-1}
         id="main-content"
       >
-        <Suspense fallback={<div className="text-center py-16">Loading...</div>}>
+        <Suspense fallback={<div className="text-center py-16 text-slate-300">Loading...</div>}>
           {/* Outlet is for React Router; children for direct usage */}
           {children ? children : <Outlet />}
         </Suspense>

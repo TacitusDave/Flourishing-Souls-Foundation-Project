@@ -24,7 +24,7 @@ const UserList = () => {
     setError(null);
     try {
       let query = supabase
-        .from("users")
+        .from("profiles")
         .select("id, email, name, created_at, role, avatar_url, is_active");
       if (search) {
         query = query.ilike("name", `%${search}%`);
@@ -48,7 +48,7 @@ const UserList = () => {
       .channel("users-list-changes")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "users" },
+        { event: "*", schema: "public", table: "profiles" },
         payload => {
           fetchUsers();
         }
@@ -81,9 +81,9 @@ const UserList = () => {
       // 1. Remove from users table (if soft-delete, just update is_active)
       // 2. Optionally, call Supabase Admin API to remove user from Auth
       
-      // Soft delete in users table
+      // Soft delete in profiles table
       const { error: updateError } = await supabase
-        .from("users")
+        .from("profiles")
         .update({ is_active: false })
         .eq("id", userId);
       if (updateError) throw updateError;

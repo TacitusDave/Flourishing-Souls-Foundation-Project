@@ -20,14 +20,9 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { useNotification } from '../context/NotificationContext';
-import { useAuth } from '../context/AuthContext';
-import { getSupabaseClient } from '../lib/supabase';
-
-/* Environment variables are required for Supabase */
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_KEY;
-const supabase = getSupabaseClient(SUPABASE_URL, SUPABASE_KEY);
+import { useNotification } from '../components/common/NotificationProvider';
+import { useAuth } from '../context';
+import { supabase } from '../lib/supabase';
 
 const EVENTS_TABLE = 'events';
 const REGISTRATIONS_TABLE = 'event_registrations';
@@ -39,8 +34,12 @@ function useEvents() {
   const [registrations, setRegistrations] = useState([]);
   const [error, setError] = useState(null);
 
-  const notify = useNotification?.();
-  const { user } = useAuth?.() || {};
+  const { notify: rawNotify } = useNotification();
+  const notify = {
+    success: (message) => rawNotify({ type: 'success', message }),
+    error: (message) => rawNotify({ type: 'error', message }),
+  };
+  const { user } = useAuth();
 
   /**
    * Fetch all events (public API)

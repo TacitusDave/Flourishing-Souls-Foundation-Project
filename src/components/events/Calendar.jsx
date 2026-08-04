@@ -42,7 +42,7 @@ const Calendar = () => {
     events,
     loading,
     error,
-    refetch: refetchEvents,
+    fetchEvents: refetchEvents,
     createEvent,
     updateEvent,
     deleteEvent,
