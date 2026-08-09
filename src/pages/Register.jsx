@@ -124,18 +124,18 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-brand-50 from-20% to-accent-100 dark:from-neutral-900 dark:to-brand-950 flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-md bg-white/90 dark:bg-neutral-900/95 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg p-7 mt-10">
+    <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col justify-center items-center p-4">
+      <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl shadow-warm-md p-7 mt-10">
         <div className="flex flex-col items-center mb-6">
           <img
             src="/images/logo.svg"
             alt="Flourishing Souls Foundation"
-            className="w-16 h-16 rounded-full mb-2"
-            width={64}
-            height={64}
+            className="w-14 h-14 mb-2"
+            width={56}
+            height={56}
             loading="lazy"
           />
-          <h1 className="text-2xl font-extrabold text-brand-600 dark:text-brand-300 mb-1">
+          <h1 className="font-display text-2xl text-neutral-900 dark:text-white mb-1">
             Create your account
           </h1>
           <div className="text-sm text-neutral-600 dark:text-neutral-300">

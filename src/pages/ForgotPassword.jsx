@@ -37,7 +37,7 @@ export default function ForgotPassword() {
       <Helmet>
         <title>Forgot Password | Flourishing Souls Foundation</title>
       </Helmet>
-      <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-warm-md p-8">
         <h1 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">
           Reset your password
         </h1>

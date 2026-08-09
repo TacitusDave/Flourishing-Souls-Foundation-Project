@@ -45,9 +45,9 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-neutral-100 dark:bg-neutral-900 px-3">
-      <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-xl shadow-2xl p-8 border border-neutral-200 dark:border-neutral-700">
-        <h2 className="font-semibold text-2xl mb-5 text-brand-700 dark:text-brand-100 text-center">
+    <div className="min-h-screen flex flex-col justify-center items-center bg-neutral-50 dark:bg-neutral-950 px-3">
+      <div className="w-full max-w-md bg-white dark:bg-neutral-800 rounded-2xl shadow-warm-md p-8 border border-neutral-200 dark:border-neutral-700">
+        <h2 className="font-display text-2xl text-neutral-900 dark:text-white text-center">
           Set a New Password
         </h2>
         <form onSubmit={handleSubmit} className="space-y-5" autoComplete="off">

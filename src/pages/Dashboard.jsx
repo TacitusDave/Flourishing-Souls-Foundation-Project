@@ -182,8 +182,8 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-r from-brand-50 to-accent-50 dark:from-brand-900/20 dark:to-accent-900/20 rounded-2xl shadow-warm-sm p-8">
-        <h2 className="font-display text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-6">
+      <div className="border border-neutral-100 dark:border-neutral-800 rounded-2xl p-8">
+        <h2 className="font-display text-2xl text-neutral-900 dark:text-white mb-6">
           Quick Actions
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -191,7 +191,7 @@ function Dashboard() {
             <Link
               key={to}
               to={to}
-              className="block p-4 bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm hover:shadow-warm-md transition text-center"
+              className="block p-4 border border-neutral-100 dark:border-neutral-800 rounded-2xl hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-warm-sm transition text-center"
             >
               <Icon className={`text-3xl mx-auto mb-2 ${color}`} />
               <span className="font-semibold text-neutral-800 dark:text-neutral-100">{label}</span>

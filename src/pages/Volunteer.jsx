@@ -43,12 +43,12 @@ export default function Volunteer() {
           )}
         </div>
       </div>
-      <aside className="rounded-3xl bg-gradient-to-br from-brand-700 to-brand-950 p-8 text-white shadow-warm-lg h-fit">
-        <h2 className="font-display text-xl font-bold">Why volunteer?</h2>
-        <ul className="mt-6 space-y-4 text-sm leading-7">
+      <aside className="rounded-3xl bg-neutral-900 dark:bg-neutral-900 border border-neutral-800 p-8 text-white h-fit">
+        <h2 className="font-display text-xl">Why volunteer?</h2>
+        <ul className="mt-6 space-y-4 text-sm leading-7 text-neutral-300">
           {REASONS.map((reason, i) => (
             <li key={reason} className="flex gap-3">
-              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-brand-700 font-display font-semibold">
+              <span className="mt-0.5 inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-white font-display text-sm">
                 {i + 1}
               </span>
               {reason}

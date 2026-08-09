@@ -142,13 +142,13 @@ const EventCard = ({
 
   return (
     <div
-      className={`bg-white dark:bg-neutral-800 rounded-lg shadow-lg overflow-hidden flex flex-col transition-all hover:shadow-2xl ${className}`}
+      className={`bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col transition-all hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-warm-sm ${className}`}
       aria-live="polite"
     >
       {renderCover()}
       <div className="flex flex-1 flex-col p-4">
         <header>
-          <h3 className="text-lg font-extrabold mb-1 text-brand-700 dark:text-brand-300 line-clamp-2">
+          <h3 className="font-display text-lg text-neutral-900 dark:text-white line-clamp-2">
             {event.title}
           </h3>
           <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-300 mb-2">
@@ -260,7 +260,7 @@ const EventCard = ({
       {/* Confirm/Register/Unregister Modal */}
       <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
         <div className="p-4">
-          <h2 className="text-lg font-bold mb-3">
+          <h2 className="font-display text-lg text-neutral-900 dark:text-white mb-3">
             {userRegistered ? "Unregister from Event" : isFull && isWaitlist ? "Join Waitlist" : "Register for Event"}
           </h2>
           <p className="mb-4">

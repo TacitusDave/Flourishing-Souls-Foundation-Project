@@ -53,36 +53,40 @@ const STEPS = [
 export default function Home() {
   return (
     <div>
-      {/* Hero - full-bleed edge-to-edge; animated gradient stands in for the
-          video/photo background to be dropped in later (same markup, just
-          swap this div for a <video>/<img> layer). */}
-      <section className="full-bleed relative overflow-hidden -mt-6 sm:-mt-10 min-h-[85vh] flex items-center px-4 sm:px-6 bg-gradient-to-br from-brand-700 via-brand-600 to-accent-500 hero-animated-gradient text-white">
+      {/* Hero - white canvas, one precise purple accent, no gradient wash.
+          .full-bleed still breaks this out to the true viewport edge; the
+          hero-animated-gradient badge behind the headline is the one place
+          motion/color earns its keep until real photography replaces it. */}
+      <section className="full-bleed relative overflow-hidden -mt-6 sm:-mt-10 px-4 sm:px-6 border-b border-neutral-100 dark:border-neutral-900">
         <div
           aria-hidden="true"
-          className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_20%_20%,white,transparent_35%),radial-gradient(circle_at_80%_60%,white,transparent_30%)]"
+          className="hero-animated-gradient absolute -top-40 left-1/2 -translate-x-1/2 h-[36rem] w-[56rem] rounded-full opacity-[0.15] blur-3xl [background:radial-gradient(closest-side,var(--color-brand-500),transparent)]"
         />
-        <div className="relative mx-auto max-w-4xl text-center space-y-8 py-16">
-          <div className="inline-flex items-center gap-2 rounded-full bg-white/15 border border-white/25 px-4 py-1.5 text-sm font-medium backdrop-blur-sm">
+        <div className="relative mx-auto max-w-3xl text-center py-24 sm:py-32">
+          <div className="inline-flex items-center gap-2 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900 px-4 py-1.5 text-xs font-medium text-neutral-600 dark:text-neutral-300">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
             Empowering lives, nurturing hope, building thriving communities
           </div>
-          <h1 className="font-display text-4xl sm:text-6xl font-semibold leading-[1.1] tracking-tight">
-            Every child deserves a chance to flourish.
+          <h1 className="mt-6 font-display text-5xl sm:text-7xl leading-[1.05] text-neutral-900 dark:text-white">
+            Every child deserves
+            <br />
+            a chance to <span className="text-brand-600">flourish.</span>
           </h1>
-          <p className="mx-auto max-w-2xl text-lg leading-8 text-white/90">
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-neutral-500 dark:text-neutral-400">
             Flourishing Souls Foundation supports orphan care, education, healthcare, and
             community upliftment — with full transparency into where every donation and
             every volunteer hour goes.
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
             <Link
               to="/donate"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-white text-brand-700 px-8 py-3.5 text-sm font-semibold shadow-warm-lg transition hover:bg-accent-50"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 text-white px-7 py-3 text-sm font-semibold shadow-warm-md transition hover:bg-brand-700"
             >
               Donate now <FiArrowRight />
             </Link>
             <Link
               to="/volunteer"
-              className="inline-flex items-center justify-center rounded-full border border-white/40 px-8 py-3.5 text-sm font-semibold transition hover:bg-white/10"
+              className="inline-flex items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 px-7 py-3 text-sm font-semibold text-neutral-800 dark:text-neutral-100 transition hover:border-neutral-300 dark:hover:border-neutral-600 hover:bg-neutral-50 dark:hover:bg-neutral-900"
             >
               Volunteer with us
             </Link>
@@ -91,28 +95,26 @@ export default function Home() {
       </section>
 
       {/* Mission pillars */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-3xl text-center mb-14">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">
+      <section className="py-20 sm:py-28">
+        <div className="mx-auto max-w-2xl text-center mb-14">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
             What we do
           </p>
-          <h2 className="mt-3 font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
-            Four ways we show up for our community
+          <h2 className="mt-3 font-display text-3xl sm:text-4xl text-neutral-900 dark:text-white">
+            Four ways we show up
           </h2>
         </div>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-px sm:grid-cols-2 lg:grid-cols-4 bg-neutral-100 dark:bg-neutral-800 border border-neutral-100 dark:border-neutral-800 rounded-2xl overflow-hidden">
           {PILLARS.map(({ icon: Icon, title, text }) => (
             <div
               key={title}
-              className="rounded-2xl border border-neutral-100 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-warm-sm transition hover:shadow-warm-md hover:-translate-y-0.5"
+              className="bg-white dark:bg-neutral-950 p-7 transition hover:bg-neutral-50 dark:hover:bg-neutral-900"
             >
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400">
-                <Icon className="h-6 w-6" />
-              </div>
-              <h3 className="mt-4 font-display text-lg font-semibold text-neutral-900 dark:text-white">
+              <Icon className="h-5 w-5 text-brand-600" strokeWidth={2} />
+              <h3 className="mt-4 font-display text-base text-neutral-900 dark:text-white">
                 {title}
               </h3>
-              <p className="mt-2 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+              <p className="mt-2 text-sm leading-6 text-neutral-500 dark:text-neutral-400">
                 {text}
               </p>
             </div>
@@ -121,16 +123,16 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="py-16 sm:py-24 rounded-3xl bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 px-6 sm:px-10">
+      <section className="py-20 sm:py-28 border-t border-neutral-100 dark:border-neutral-900">
         <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] items-center">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-600">
               How it works
             </p>
-            <h2 className="mt-3 font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
+            <h2 className="mt-3 font-display text-3xl sm:text-4xl text-neutral-900 dark:text-white">
               Simple to give, easy to trust.
             </h2>
-            <p className="mt-4 text-base leading-8 text-neutral-600 dark:text-neutral-400">
+            <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
               No black box. Every donation, volunteer hour, and support request moves
               through the same platform administrators use to run our programs day to day.
             </p>
@@ -138,27 +140,27 @@ export default function Home() {
               {["Secure payments via Paystack", "Real-time impact dashboard", "Transparent donation records"].map(
                 (item) => (
                   <li key={item} className="flex items-center gap-3 text-sm text-neutral-700 dark:text-neutral-300">
-                    <FiCheckCircle className="h-5 w-5 text-success-600 shrink-0" />
+                    <FiCheckCircle className="h-4 w-4 text-brand-600 shrink-0" />
                     {item}
                   </li>
                 )
               )}
             </ul>
           </div>
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {STEPS.map((item) => (
               <div
                 key={item.step}
-                className="flex gap-4 rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 p-6 shadow-warm-sm"
+                className="flex gap-4 rounded-xl border border-neutral-100 dark:border-neutral-800 p-6"
               >
-                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-600 text-white font-display font-semibold">
+                <span className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-sm font-semibold">
                   {item.step}
                 </span>
                 <div>
-                  <h3 className="font-display text-lg font-semibold text-neutral-900 dark:text-white">
+                  <h3 className="font-display text-base text-neutral-900 dark:text-white">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm leading-6 text-neutral-600 dark:text-neutral-400">
+                  <p className="mt-1 text-sm leading-6 text-neutral-500 dark:text-neutral-400">
                     {item.description}
                   </p>
                 </div>
@@ -169,25 +171,25 @@ export default function Home() {
       </section>
 
       {/* Closing CTA */}
-      <section className="py-16 sm:py-24 text-center">
-        <div className="mx-auto max-w-2xl">
-          <h2 className="font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
+      <section className="py-20 sm:py-28 border-t border-neutral-100 dark:border-neutral-900 text-center">
+        <div className="mx-auto max-w-xl">
+          <h2 className="font-display text-3xl sm:text-4xl text-neutral-900 dark:text-white">
             Ready to be part of it?
           </h2>
-          <p className="mt-4 text-base leading-8 text-neutral-600 dark:text-neutral-400">
+          <p className="mt-4 text-base leading-7 text-neutral-500 dark:text-neutral-400">
             Whether it's a one-time gift, a recurring commitment, or your time as a
             volunteer — every bit of support reaches someone who needs it.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
             <Link
               to="/donate"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 text-white px-8 py-3.5 text-sm font-semibold shadow-warm-md transition hover:bg-brand-700"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 text-white px-7 py-3 text-sm font-semibold shadow-warm-md transition hover:bg-brand-700"
             >
               Give now <FiArrowRight />
             </Link>
             <Link
               to="/support"
-              className="inline-flex items-center justify-center rounded-full border border-neutral-300 dark:border-neutral-700 px-8 py-3.5 text-sm font-semibold text-neutral-700 dark:text-neutral-200 transition hover:bg-neutral-100 dark:hover:bg-neutral-800"
+              className="inline-flex items-center justify-center rounded-full border border-neutral-200 dark:border-neutral-700 px-7 py-3 text-sm font-semibold text-neutral-800 dark:text-neutral-100 transition hover:bg-neutral-50 dark:hover:bg-neutral-900"
             >
               Request support
             </Link>

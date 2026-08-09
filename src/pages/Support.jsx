@@ -36,8 +36,8 @@ const Support = () => {
         <SupportRequestForm />
       </div>
 
-      <div className="mt-10 bg-brand-50 dark:bg-neutral-900/60 border border-brand-100 dark:border-neutral-800 rounded-2xl p-6">
-        <h2 className="font-display font-semibold text-lg text-brand-800 dark:text-brand-200 mb-4">
+      <div className="mt-10 bg-white dark:bg-neutral-900/60 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-6">
+        <h2 className="font-display text-lg text-neutral-900 dark:text-white mb-4">
           Frequently Asked Questions
         </h2>
         <ul className="space-y-4 text-sm text-neutral-700 dark:text-neutral-300">
