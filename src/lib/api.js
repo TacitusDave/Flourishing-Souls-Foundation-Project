@@ -8,9 +8,7 @@
  * No stubs, mocks or simulations — all requests are real and effect persistent data.
  */
 
-// Note: All actual imports should be at the top-level of your entry file
 import { supabase } from './supabase'; // See: src/lib/supabase.js
-import { verifyTransaction } from './paystack'; // src/lib/paystack.js
 
 // ========== USERS & AUTH ==========
 
@@ -58,22 +56,11 @@ export async function updateUserRole(userId, newRole) {
 }
 
 // ========== DONATIONS & PAYMENTS ==========
-
-/**
- * Save a donation to Supabase after verified payment.
- * @param {Object} donation
- * @returns {Promise<Object>}
- */
-export async function saveDonation(donation) {
-  // Should be called only after transaction is confirmed
-  const { data, error } = await supabase
-    .from('donations')
-    .insert([donation])
-    .select()
-    .single();
-  if (error) throw new Error(error.message);
-  return data;
-}
+// Writing a donation row happens server-side only, via the paystack-verify
+// and paystack-webhook Edge Functions (supabase/functions/) using the
+// service-role key. There is no client insert policy on `donations` (see
+// supabase/schema.sql) and no insert helper here on purpose - a browser
+// reporting "this donation succeeded" is not something this app trusts.
 
 /**
  * Fetch all donations (admin only).
@@ -101,15 +88,6 @@ export async function getDonationsByUser(email) {
     .order('created_at', { ascending: false });
   if (error) throw new Error(error.message);
   return data;
-}
-
-/**
- * Verify a Paystack transaction (via backend or direct HTTP).
- * @param {string} reference 
- * @returns {Promise<Object>} 
- */
-export async function verifyDonation(reference) {
-  return await verifyTransaction(reference);
 }
 
 // ========== EVENTS ==========

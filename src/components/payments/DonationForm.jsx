@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import PropTypes from "prop-types";
 import { PaystackButton } from "./PaystackButton";
-import { saveDonation } from "../../lib/api";
+import { supabase } from "../../lib/supabase";
 import Notification from "../common/Notification";
 import Modal from "../common/Modal";
 import Receipt from "./Receipt";
@@ -17,7 +17,6 @@ const DonationForm = ({
   onError,
 }) => {
   const [amount, setAmount] = useState("");
-  const [displayAmount, setDisplayAmount] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -60,25 +59,22 @@ const DonationForm = ({
 
   const onAmountChange = (val) => {
     setAmount(val);
-    setDisplayAmount(Number(val).toLocaleString());
   };
 
   const handlePaystackSuccess = async (response) => {
-    // response: {reference, status} from Paystack
+    // The Paystack popup reporting "success" is a client-side claim, not
+    // proof - paystack-verify re-checks the reference against Paystack's
+    // API server-side and is the only thing allowed to write the donations
+    // row (see supabase/schema.sql: no client insert policy on donations).
     setProcessing(true);
     try {
-      const donation = await saveDonation({
-        name,
-        email,
-        phone,
-        amount: Number(amount),
-        reference: response.reference,
-        status: response.status,
-        organization,
-        metadata: response.metadata || {},
-        channel: "paystack",
-        paid_at: new Date().toISOString(),
+      const { data, error } = await supabase.functions.invoke("paystack-verify", {
+        body: { reference: response.reference },
       });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      const donation = data.donation;
       setReceiptInfo(donation);
       setSuccessOpen(true);
       setNotification({
@@ -90,7 +86,6 @@ const DonationForm = ({
       setName("");
       setEmail("");
       setPhone("");
-      setDisplayAmount("");
     } catch (e) {
       setNotification({
         type: "error",
