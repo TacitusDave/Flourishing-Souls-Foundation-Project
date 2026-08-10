@@ -269,10 +269,10 @@ const VideoPlayer = ({
             tabIndex={-1}
           >
             {/* Progress background */}
-            <div className="bg-gray-700/50 h-2 w-full rounded">
+            <div className="bg-neutral-700/50 h-2 w-full rounded">
               {/* Buffered */}
               <div
-                className="absolute top-0 left-0 h-2 rounded bg-gray-400/70"
+                className="absolute top-0 left-0 h-2 rounded bg-neutral-400/70"
                 style={{
                   width: `${(buffered / duration) * 100 || 0}%`,
                   zIndex: 1,
@@ -282,7 +282,7 @@ const VideoPlayer = ({
               />
               {/* Played */}
               <div
-                className="absolute top-0 left-0 h-2 bg-primary-500 rounded"
+                className="absolute top-0 left-0 h-2 bg-brand-500 rounded"
                 style={{
                   width: `${(currentTime / duration) * 100 || 0}%`,
                   zIndex: 2,
@@ -301,7 +301,7 @@ const VideoPlayer = ({
                 }}
                 aria-hidden="true"
               >
-                <div className="w-4 h-4 rounded-full bg-primary-500 border-2 border-white shadow"></div>
+                <div className="w-4 h-4 rounded-full bg-brand-500 border-2 border-white shadow"></div>
               </div>
             </div>
           </div>
@@ -371,7 +371,7 @@ const VideoPlayer = ({
                 value={isMuted ? 0 : volume}
                 onChange={(e) => handleVolume(parseFloat(e.target.value))}
                 aria-label="Adjust volume"
-                className="w-[70px] accent-primary-500"
+                className="w-[70px] accent-brand-500"
               />
             </div>
             {/* Fullscreen */}

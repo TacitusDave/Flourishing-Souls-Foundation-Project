@@ -59,14 +59,14 @@ const PhotoViewer = ({
               "0 4px 32px 0 rgba(0,0,0,0.24), 0 1.5px 3px 0 rgba(30,41,59,0.18)",
             ...style,
           }}
-          className="block bg-gray-200 dark:bg-gray-700"
+          className="block bg-neutral-200 dark:bg-neutral-700"
           loading={loading}
           draggable={false}
           data-testid="photo-viewer-image"
         />
         {caption && (
           <div
-            className="mt-4 px-2 py-1 text-center text-base text-gray-700 dark:text-gray-100 bg-slate-50/80 dark:bg-slate-900/80 rounded shadow max-w-[90vw] max-h-36 overflow-y-auto"
+            className="mt-4 px-2 py-1 text-center text-base text-neutral-700 dark:text-neutral-100 bg-neutral-50/80 dark:bg-neutral-900/80 rounded-lg shadow-warm-sm max-w-[90vw] max-h-36 overflow-y-auto"
             data-testid="photo-viewer-caption"
             title={caption}
             aria-label="Photo caption"

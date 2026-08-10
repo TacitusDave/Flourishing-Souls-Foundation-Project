@@ -17,13 +17,13 @@ const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Admin = lazy(() => import("../pages/Admin"));
 const NotFound = lazy(() => import("../pages/NotFound"));
 
-function RequireAuth({ children, requiredRole }) {
+export function RequireAuth({ children, requiredRole }) {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950">
-        <span className="text-indigo-600 dark:text-indigo-300 text-lg animate-pulse">
+      <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-950">
+        <span className="text-brand-600 dark:text-brand-300 text-lg animate-pulse">
           Checking access...
         </span>
       </div>
@@ -44,8 +44,8 @@ function RequireAuth({ children, requiredRole }) {
 const AppRouter = () => (
   <Suspense
     fallback={
-      <div className="flex items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950">
-        <span className="text-indigo-600 dark:text-indigo-300 text-lg animate-pulse">
+      <div className="flex items-center justify-center min-h-screen bg-neutral-50 dark:bg-neutral-950">
+        <span className="text-brand-600 dark:text-brand-300 text-lg animate-pulse">
           Loading application...
         </span>
       </div>
