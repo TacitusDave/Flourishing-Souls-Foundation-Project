@@ -20,7 +20,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useNotification } from '../components/common/NotificationProvider';
+import { useNotification } from '../components/common/notificationContext';
 import { useAuth } from '../context';
 import { supabase } from '../lib/supabase';
 

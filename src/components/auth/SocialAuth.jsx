@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../../lib/supabase";
 
 // PRODUCTION SocialAuth BUTTONS:
@@ -79,7 +78,6 @@ const PROVIDERS = [
 const SocialAuth = ({ redirectTo = "/" }) => {
   const [loadingProvider, setLoadingProvider] = useState(null);
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
   // Handle social login by calling Supabase OAuth
   const handleSocialSignIn = async (providerKey) => {

@@ -35,12 +35,16 @@ const EventCard = ({
   const [modalOpen, setModalOpen] = React.useState(false);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
 
-  // Helper functions
-  const status = event?.date
-    ? new Date(event.date).getTime() > Date.now()
-      ? "upcoming"
-      : "past"
-    : "draft";
+  // Status depends on the current time, which isn't safe to read during
+  // render (React purity rule) - resolve it in an effect instead.
+  const [status, setStatus] = React.useState("draft");
+  React.useEffect(() => {
+    if (!event?.date) {
+      setStatus("draft");
+      return;
+    }
+    setStatus(new Date(event.date).getTime() > Date.now() ? "upcoming" : "past");
+  }, [event?.date]);
   const isFull = spotsLeft !== undefined && spotsLeft <= 0;
   const isLive = status === "upcoming" && !isFull;
 

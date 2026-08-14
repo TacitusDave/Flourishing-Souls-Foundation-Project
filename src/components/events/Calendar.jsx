@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import Notification from "../common/Notification";
@@ -17,18 +17,6 @@ async function uploadEventCover(file) {
   if (uploadError) throw uploadError;
   const { data } = supabase.storage.from(EVENT_MEDIA_BUCKET).getPublicUrl(path);
   return data.publicUrl;
-}
-
-// Utility: group events by YYYY-MM
-function groupEventsByMonth(events) {
-  const grouped = {};
-  events.forEach((event) => {
-    const date = new Date(event.date);
-    const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-    if (!grouped[key]) grouped[key] = [];
-    grouped[key].push(event);
-  });
-  return grouped;
 }
 
 // Utility: get days in month + start day offset
@@ -241,8 +229,6 @@ const Calendar = () => {
     }
   }
 
-  // Highlight today's date
-  const todayKey = new Date().toISOString().split("T")[0];
   const isTodayInMonth =
     currentDate.getFullYear() === new Date().getFullYear() &&
     currentDate.getMonth() === new Date().getMonth();
@@ -329,7 +315,7 @@ const Calendar = () => {
                         <div className="flex flex-wrap justify-center mt-1 px-1">
                           {eventsByDay[cellDateKey]
                             .slice(0, 3)
-                            .map((event, idx) => (
+                            .map((event) => (
                               <span
                                 key={event.id}
                                 className="inline-block h-2 w-2 rounded-full bg-brand-500 mr-1 mb-1"

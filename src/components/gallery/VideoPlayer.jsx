@@ -82,43 +82,6 @@ const VideoPlayer = ({
     }
   }, [isPlaying, src]);
 
-  // Listen for keyboard events for accessibility
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      switch (e.code) {
-        case "Space":
-        case "KeyK":
-          togglePlay();
-          e.preventDefault();
-          break;
-        case "ArrowRight":
-          seekBy(5);
-          break;
-        case "ArrowLeft":
-          seekBy(-5);
-          break;
-        case "ArrowUp":
-          handleVolume(Math.min(1, volume + 0.1));
-          break;
-        case "ArrowDown":
-          handleVolume(Math.max(0, volume - 0.1));
-          break;
-        case "KeyM":
-          setIsMuted((m) => !m);
-          break;
-        case "KeyF":
-          fullscreenToggle();
-          break;
-        default:
-          break;
-      }
-    };
-    containerRef.current?.addEventListener("keydown", handleKeyDown);
-
-    return () => containerRef.current?.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line
-  }, [volume, isPlaying, isMuted, isFullscreen, duration, currentTime]);
-
   // API: Seek
   const seekBy = (offset) => {
     if (!videoRef.current) return;
@@ -164,6 +127,43 @@ const VideoPlayer = ({
       document.exitFullscreen();
     }
   };
+
+  // Listen for keyboard events for accessibility
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      switch (e.code) {
+        case "Space":
+        case "KeyK":
+          togglePlay();
+          e.preventDefault();
+          break;
+        case "ArrowRight":
+          seekBy(5);
+          break;
+        case "ArrowLeft":
+          seekBy(-5);
+          break;
+        case "ArrowUp":
+          handleVolume(Math.min(1, volume + 0.1));
+          break;
+        case "ArrowDown":
+          handleVolume(Math.max(0, volume - 0.1));
+          break;
+        case "KeyM":
+          setIsMuted((m) => !m);
+          break;
+        case "KeyF":
+          fullscreenToggle();
+          break;
+        default:
+          break;
+      }
+    };
+    containerRef.current?.addEventListener("keydown", handleKeyDown);
+
+    return () => containerRef.current?.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [volume, isPlaying, isMuted, isFullscreen, duration, currentTime]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {

@@ -52,7 +52,7 @@ const UserList = () => {
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "profiles" },
-        payload => {
+        () => {
           fetchUsers();
         }
       )
@@ -60,7 +60,6 @@ const UserList = () => {
     return () => {
       supabase.removeChannel(userChannel);
     };
-    // eslint-disable-next-line
   }, [fetchUsers]);
 
   // Search handler

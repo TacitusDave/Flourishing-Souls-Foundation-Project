@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaPlus, FaEdit, FaTrash, FaUser, FaUserShield } from "react-icons/fa";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
-import { useNotification } from "../common/NotificationProvider";
+import { useNotification } from "../common/notificationContext";
 import { createRole, updateRole, deleteRole } from "../../services/authService";
 
 /**

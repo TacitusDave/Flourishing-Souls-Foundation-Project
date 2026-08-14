@@ -4,7 +4,7 @@ import UserList from "./UserList";
 import RoleManager from "./RoleManager";
 import Settings from "./Settings";
 import { getAllUsers, refreshUserData, addUser, getRoles, assignRole } from "../../services/authService";
-import { useNotification } from "../common/NotificationProvider";
+import { useNotification } from "../common/notificationContext";
 import Spinner from "../common/Spinner";
 import Modal from "../common/Modal";
 import Button from "../common/Button";

@@ -6,25 +6,16 @@
  */
 
 import React, {
-  createContext,
-  useContext,
   useRef,
   useCallback,
   useState,
   useEffect,
 } from "react";
+import { NotificationContext, NotificationTypes } from "./notificationContext";
 
 // Notification types and severity
 const DEFAULT_DURATION = 5000; // default 5s
 const MAX_STACK = 5;
-
-export const NotificationTypes = {
-  INFO: "info",
-  SUCCESS: "success",
-  WARNING: "warning",
-  ERROR: "error",
-  // Extend as needed (e.g., "progress")
-};
 
 // Notification shape
 let notificationId = 0;
@@ -45,21 +36,6 @@ function createNotification({
     duration,
     ts: Date.now(),
   };
-}
-
-// Context
-const NotificationContext = createContext({
-  notify: () => {},
-  close: () => {},
-  closeAll: () => {},
-  // Notifications data
-  notifications: [],
-});
-
-export { NotificationContext };
-
-export function useNotification() {
-  return useContext(NotificationContext);
 }
 
 // Provider

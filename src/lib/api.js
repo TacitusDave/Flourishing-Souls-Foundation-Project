@@ -258,7 +258,6 @@ export async function getDashboardStats() {
  */
 export function handleApiError(err, context = 'API') {
   // Send to external logging e.g., Sentry if available
-  // eslint-disable-next-line no-console
   console.error(`[${context}]`, err);
   throw err;
 }

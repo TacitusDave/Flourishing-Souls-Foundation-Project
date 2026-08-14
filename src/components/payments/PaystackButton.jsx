@@ -134,7 +134,6 @@ const PaystackButton = ({
       if (typeof onFailure === "function") {
         onFailure(err);
       } else {
-        // eslint-disable-next-line no-console
         console.error("[PaystackButton]", err);
         if (window && window.alert) {
           window.alert(

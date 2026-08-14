@@ -8,10 +8,7 @@
  */
 
 import { useContext } from "react";
-
-// Note: For real-time hook interop, always import ThemeContext from provider.
-// Avoid code duplication: source of truth is ./ThemeProvider.jsx in /common.
-import { ThemeContext } from "../components/common/ThemeProvider.jsx";
+import { ThemeContext } from "../components/common/themeContext.js";
 
 /**
  * useTheme - React hook for consuming and updating the app/user theme preference.

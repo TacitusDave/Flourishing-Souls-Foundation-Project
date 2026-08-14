@@ -93,7 +93,6 @@ function Notification({
       if (onClose) onClose(id);
     }, duration);
     return () => clearTimeout(timerRef.current);
-    // eslint-disable-next-line
   }, [id, duration, type, onClose]);
 
   // Accessibility: Close on ESC and focus close btn on mount
@@ -106,7 +105,6 @@ function Notification({
     document.addEventListener("keydown", handleKey);
     if (closeBtnRef.current) closeBtnRef.current.focus();
     return () => document.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line
   }, [id, onClose]);
 
   const { icon, bg, border, text } = TYPE_CONF[type] || TYPE_CONF.info;

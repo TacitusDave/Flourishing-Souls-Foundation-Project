@@ -1,12 +1,12 @@
 /**
  * ThemeProvider.jsx
- * Complex, production-ready Theme Context + Provider for real-time user theme preference.
- * This component manages theme (light/dark/system) state, persists it across sessions,
- * automatically updates on system preference and user toggle, and syncs to localStorage for cross-tab.
- * Use this to wrap your app in App.jsx or main.jsx.
+ * Theme context provider for light/dark/system preference. Persists to
+ * localStorage, syncs across tabs, and follows the OS preference when set
+ * to "system". Wrap the app in this once, in App.jsx.
  */
 
-import React, { createContext, useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { ThemeContext } from "./themeContext";
 
 // Utility: Detect system preference
 function getSystemTheme() {
@@ -18,19 +18,6 @@ function getSystemTheme() {
 const THEMES = ["light", "dark", "system"];
 const LOCAL_STORAGE_KEY = "fsf-theme-preference";
 
-// Context
-export const ThemeContext = createContext({
-  theme: "system", // user-set: 'light'|'dark'|'system'
-  resolvedTheme: "light", // resolved: 'light'|'dark'
-  setTheme: () => {},
-  loading: true
-});
-
-/**
- * ThemeProvider: provides current theme, auto-persisted, auto-detected, cross-tab & system aware.
- * @param children
- * @returns {JSX.Element}
- */
 function ThemeProvider({ children }) {
   const [theme, setThemeState] = useState("system");
   const [resolvedTheme, setResolvedTheme] = useState(getSystemTheme());
@@ -68,7 +55,6 @@ function ThemeProvider({ children }) {
 
     // Defer setState to avoid cascading renders (schedule after paint)
     setTimeout(() => setLoading(false), 0);
-    // eslint-disable-next-line
   }, []);
 
   // Watch system theme changes only if 'system' is selected
@@ -131,57 +117,5 @@ function ThemeProvider({ children }) {
     </ThemeContext.Provider>
   );
 }
-
-// useContext is intentionally not imported, which resolves the 'defined but never used' lint error.
-
-/*
-// Uncomment below if needed elsewhere in the project:
-
-/ **
- * useTheme: React hook for reading and changing user/app theme in real time.
- * @returns {{theme, resolvedTheme, setTheme, loading}}
- * /
-import { useContext } from "react";
-function useTheme() {
-  return useContext(ThemeContext);
-}
-*/
-
-// ThemeSwitcher IS NOT EXPORTED HERE: To resolve duplicated export error
-
-// Also export core atomic/common UI elements (to serve as a true barrel as in the README structure)
-// If you see an import error for Layout, create 'layout.jsx' (or 'layout/index.jsx') in: src/components/common/
-// Example path: src/components/common/layout.jsx
-import Layout from "./Layout";
-import Button from "./Button";
-import Modal from "./Modal";
-import Notification from "./Notification";
-import Spinner from "./Spinner";
-
-export function notifySuccess(message) {
-  console.log(message);
-}
-
-export function notifyError(message) {
-  console.error(message);
-}
-
-// Recommended file location for these shared atomic UI components:
-// Place 'Button.jsx', 'Modal.jsx', and 'Notification.jsx' in: src/components/common/
-// For Layout, create a file in: src/components/common/Layout.jsx
-
-/**
- * Export all relevant shared/common components
- * - ThemeProvider, and atomic UI
- * - ThemeSwitcher and useTheme are not exported here; export from the unique location only
- */
-export {
-  ThemeProvider,
-  Layout,
-  Button,
-  Modal,
-  Notification,
-  Spinner,
-};
 
 export default ThemeProvider;

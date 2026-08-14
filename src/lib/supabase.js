@@ -25,8 +25,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 const getEnv = (name, viteName) => {
-  if (typeof process !== 'undefined' && process.env && process.env[name]) {
-    return process.env[name];
+  if (typeof globalThis.process !== 'undefined' && globalThis.process.env && globalThis.process.env[name]) {
+    return globalThis.process.env[name];
   }
   if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env[viteName]) {
     return import.meta.env[viteName];
@@ -246,7 +246,6 @@ export async function deleteFileFromStorage(bucket, path) {
  */
 export function handleSupabaseError(error, context = "Supabase") {
   // Send to external logger if available
-  // eslint-disable-next-line no-console
   console.error(`[${context}]`, error);
   throw error;
 }
