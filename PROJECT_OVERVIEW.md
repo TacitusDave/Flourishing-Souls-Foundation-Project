@@ -37,10 +37,13 @@ events.
 **Community members** submit support requests, browse events, and view the
 impact gallery.
 
-**Administrators** get a real-time dashboard (users, donations, events),
-manage user roles, and track support requests. (Volunteer and support-request
-management views exist in the codebase but aren't wired into the admin panel
-yet - see the "Known gaps" section below.)
+**Administrators** unlock the panel at `/admin` with a passcode
+(`VITE_ADMIN_PASSCODE`) and get an overview of donations, events, volunteers,
+and messages, plus full management of events, gallery, support requests, and
+site settings - see [ADMIN_SETUP.md](ADMIN_SETUP.md). The panel's data layer
+(`src/lib/adminStore.js`) targets the live Supabase project when reachable and
+a seeded local store when it isn't, so the admin area works today and flips to
+the real database automatically once Supabase is restored.
 
 ---
 
@@ -72,19 +75,21 @@ independent of whether the client-side call ever fires.
 **Volunteer / support request:** Form → Supabase table insert directly (no
 payment involved, so no server-side verification step is needed).
 
-**Registration & login:** Supabase Auth handles email/password and Google
-OAuth. A `profiles` row is created alongside the auth user; `profiles.role`
-(`member` or `admin`) gates access to `/dashboard` and `/admin`.
+**Registration & login:** donors never need accounts. Supabase Auth handles
+staff email/password and Google OAuth when the backend is reachable; a
+`profiles` row is created alongside the auth user and `profiles.role`
+(`member` or `admin`) gates `/dashboard`. The admin panel is additionally
+gated by its own passcode (see [ADMIN_SETUP.md](ADMIN_SETUP.md)).
 
 ## Known gaps
 
 Being direct about what's still incomplete, rather than claiming otherwise:
 
-- The admin panel has no tab for managing volunteer applications or support
-  requests, even though the list-view components for both exist in
-  `src/components/volunteer/VolunteerList.jsx` and
-  `src/components/support/SupportList.jsx`. They're currently unreachable -
-  nothing routes to them.
+- The admin panel's Messages tab now covers support requests and volunteer
+  applications. The standalone list components
+  (`src/components/volunteer/VolunteerList.jsx`,
+  `src/components/support/SupportList.jsx`) remain unreachable - nothing
+  routes to them.
 - No test coverage beyond the targeted regression tests in
   `src/**/*.test.{js,jsx}` (see README - this guards against specific bugs
   found during a full rebuild, it's not a comprehensive suite).

@@ -23,9 +23,21 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNotification } from '../components/common/notificationContext';
 import { useAuth } from '../context';
 import { supabase } from '../lib/supabase';
+import { listEvents as listEventsFromStore, probeBackend } from '../lib/adminStore';
 
 const EVENTS_TABLE = 'events';
 const REGISTRATIONS_TABLE = 'event_registrations';
+
+// Map raw network/Supabase error text to donor-friendly copy. The
+// technical detail stays in `error` state (shown in the page's styled
+// error panel); toasts get the human version.
+function friendlyError(message) {
+  if (!message) return 'Something went wrong. Please try again.';
+  if (/failed to fetch|networkerror|load failed/i.test(message)) {
+    return "We can't reach our servers right now. Please check your connection and try again.";
+  }
+  return message;
+}
 
 function useEvents() {
   const [events, setEvents] = useState([]);
@@ -43,7 +55,7 @@ function useEvents() {
   const notify = useMemo(
     () => ({
       success: (message) => rawNotify({ type: 'success', message }),
-      error: (message) => rawNotify({ type: 'error', message }),
+      error: (message) => rawNotify({ type: 'error', message: friendlyError(message) }),
     }),
     [rawNotify]
   );
@@ -57,6 +69,16 @@ function useEvents() {
     setError(null);
 
     try {
+      // Probe once per page load: if the backend is known to be unreachable,
+      // read the local store directly instead of firing doomed requests.
+      const mode = await probeBackend();
+      if (mode === 'local') {
+        const fallback = await listEventsFromStore();
+        setEvents(fallback || []);
+        setError(null);
+        return fallback || [];
+      }
+
       const { data, error } = await supabase
         .from(EVENTS_TABLE)
         .select('*')
@@ -69,9 +91,23 @@ function useEvents() {
       setEvents(data || []);
       return data || [];
     } catch (err) {
-      setError(err.message || 'Failed to fetch events');
-      notify?.error?.(err.message || 'Failed to fetch events');
-      return [];
+      // Network-level failure (backend unreachable): fall back silently to
+      // the same local store the admin panel writes to, so the public
+      // Events page keeps working — and shows events an admin created in
+      // demo mode. Only real backend errors surface as error UI.
+      try {
+        const fallback = await listEventsFromStore();
+        if (Array.isArray(fallback) && fallback.length >= 0 && !err?.message?.match(/failed to fetch|networkerror/i)) {
+          throw err; // backend responded with a real error — surface it
+        }
+        setEvents(fallback || []);
+        setError(null);
+        return fallback || [];
+      } catch {
+        setError(err.message || 'Failed to fetch events');
+        notify?.error?.(err.message || 'Failed to fetch events');
+        return [];
+      }
     } finally {
       setLoading(false);
     }

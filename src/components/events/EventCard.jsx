@@ -113,12 +113,12 @@ const EventCard = ({
   const renderCover = () => (
     <div className="relative">
       {!coverLoaded && !coverError && (
-        <div className="animate-pulse h-44 bg-neutral-200 dark:bg-neutral-700 rounded-t-lg" />
+        <div className="animate-pulse h-44 bg-neutral-100 dark:bg-neutral-800 rounded-none" />
       )}
       <img
-        src={coverError ? "/images/logo.svg" : event.image_url}
+        src={coverError ? "/images/brand-assets/fsf-icon.png" : event.image_url}
         alt={imgAlt}
-        className={`h-44 w-full object-cover rounded-t-lg transition-opacity duration-700 ${
+        className={`h-44 w-full object-cover transition-opacity duration-700 ${
           coverLoaded ? "opacity-100" : "opacity-0"
         }`}
         style={{ display: coverLoaded ? "block" : "none" }}
@@ -126,18 +126,24 @@ const EventCard = ({
         onLoad={() => setCoverLoaded(true)}
         onError={() => setCoverError(true)}
       />
+      {/* Bottom gradient for badge legibility */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent"
+      />
       {isLive && (
-        <span className="absolute top-3 left-3 bg-success-600 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 dark:bg-neutral-900/90 backdrop-blur px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-success-700 dark:text-success-400 shadow-warm-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-success-500" />
           Upcoming
         </span>
       )}
       {status === "past" && (
-        <span className="absolute top-3 left-3 bg-neutral-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 left-3 inline-flex items-center rounded-full bg-white/90 dark:bg-neutral-900/90 backdrop-blur px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-500 shadow-warm-sm">
           Past
         </span>
       )}
       {isWaitlist && isFull && (
-        <span className="absolute top-3 right-3 bg-warning-500 text-white text-xxs px-2 py-1 rounded uppercase font-bold tracking-wider shadow">
+        <span className="absolute top-3 right-3 inline-flex items-center rounded-full bg-warning-500 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-white shadow-warm-sm">
           Waitlist
         </span>
       )}
@@ -146,17 +152,17 @@ const EventCard = ({
 
   return (
     <div
-      className={`bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl overflow-hidden flex flex-col transition-all hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-warm-sm ${className}`}
+      className={`hover-lift bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl overflow-hidden flex flex-col ${className}`}
       aria-live="polite"
     >
       {renderCover()}
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-5">
         <header>
-          <h3 className="font-display text-lg text-neutral-900 dark:text-white line-clamp-2">
+          <h3 className="font-display text-lg leading-snug text-neutral-900 dark:text-white line-clamp-2">
             {event.title}
           </h3>
-          <div className="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-300 mb-2">
-            <CalendarIcon className="w-4 h-4 mr-1 text-brand-400" />
+          <div className="mt-2 flex items-center gap-2 text-xs font-medium text-neutral-500 dark:text-neutral-300">
+            <CalendarIcon className="w-4 h-4 text-brand-500" />
             <span>{formattedDate}</span>
           </div>
         </header>
@@ -169,17 +175,14 @@ const EventCard = ({
           </div>
         )}
 
-        <div className="mb-2 flex items-center gap-4 flex-wrap text-xs">
-          <div className="flex items-center gap-1 font-medium text-neutral-700 dark:text-neutral-200">
-            <MapPinIcon className="w-4 h-4 mr-1" />
+        <div className="mb-3 flex items-center gap-3 flex-wrap text-xs">
+          <div className="flex items-center gap-1.5 font-medium text-neutral-700 dark:text-neutral-200">
+            <MapPinIcon className="w-4 h-4 text-neutral-400" />
             <span>{locationDisplay}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <span className="text-neutral-400">·</span>
-            <span className="uppercase py-0.5 px-1.5 rounded-full bg-neutral-100 dark:bg-neutral-700 text-brand-600 dark:text-brand-400 font-semibold text-xxs tracking-wider">
-              {eventType}
-            </span>
-          </div>
+          <span className="uppercase py-1 px-2 rounded-full bg-brand-50 dark:bg-brand-950/60 text-brand-700 dark:text-brand-300 font-semibold text-[11px] tracking-wider">
+            {eventType}
+          </span>
         </div>
 
         {attendeeCount !== undefined && (
@@ -213,7 +216,7 @@ const EventCard = ({
         <div className="mt-auto flex flex-col gap-2">
           <button
             type="button"
-            className="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold inline-block text-left"
+            className="link-underline text-xs text-brand-600 dark:text-brand-400 font-semibold inline-block text-left w-fit"
             aria-label={`View more details about ${event.title}`}
             onClick={() => setDetailsOpen(true)}
           >
@@ -317,7 +320,7 @@ const EventCard = ({
           </header>
           <img
             className="w-full h-52 object-cover mb-3 rounded"
-            src={coverError ? "/images/logo.svg" : event.image_url}
+            src={coverError ? "/images/brand-assets/fsf-icon.png" : event.image_url}
             alt={imgAlt}
             loading="lazy"
             onLoad={() => setCoverLoaded(true)}

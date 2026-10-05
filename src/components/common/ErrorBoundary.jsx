@@ -1,4 +1,5 @@
 import React from "react";
+import { captureError } from "../../lib/monitoring";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
-    // In production, this should be sent to a monitoring service.
+    // Reported to Sentry when configured; always logged locally as a fallback.
+    captureError(error, { componentStack: info?.componentStack });
     console.error("Uncaught error in ErrorBoundary:", error, info);
   }
 

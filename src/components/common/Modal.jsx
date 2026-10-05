@@ -6,6 +6,7 @@ import React, {
   useImperativeHandle,
   Fragment,
 } from "react";
+import { createPortal } from "react-dom";
 import PropTypes from "prop-types";
 import clsx from "classnames";
 
@@ -173,7 +174,12 @@ const Modal = forwardRef(function Modal(
 
   if (!open) return null;
 
-  return (
+  // Portal to <body>: a modal rendered inside an ancestor with a transform,
+  // filter, or will-change (gallery tiles use hover transforms, cards use
+  // reveal animations) would have its `fixed` positioning hijacked — the
+  // overlay gets clipped into that ancestor's box instead of covering the
+  // viewport. Portalling escapes every such containing block.
+  return createPortal(
     <Fragment>
       <div
         aria-modal="true"
@@ -301,7 +307,8 @@ const Modal = forwardRef(function Modal(
           )}
         </div>
       </div>
-    </Fragment>
+    </Fragment>,
+    document.body
   );
 });
 

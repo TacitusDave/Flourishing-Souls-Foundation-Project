@@ -5,9 +5,18 @@ import { AuthProvider } from "./context";
 import ThemeProvider from "./components/common/ThemeProvider";
 import NotificationProvider from "./components/common/NotificationProvider";
 import ErrorBoundary from "./components/common/ErrorBoundary";
+import useScrollbarFade from "./hooks/useScrollbarFade";
+import { initSentry, initAnalytics } from "./lib/monitoring";
 import "./styles/tailwind.css";
 
+// Activate Sentry + GA4 when their env vars are present (no-ops otherwise).
+initSentry();
+initAnalytics();
+
 function App() {
+  // Thin scrollbar that fades out while the page is idle.
+  useScrollbarFade();
+
   return (
     <ThemeProvider>
       <NotificationProvider>

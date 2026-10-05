@@ -6,79 +6,117 @@
 
 @import "tailwindcss";
 
-/* Dark mode is toggled by ThemeProvider.jsx setting data-theme="dark" on
-   <html> (not a .dark class) — point Tailwind's dark: variant at that. */
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+/* The site is light-only: ThemeProvider always sets data-theme="light".
+   The dark: variant is still *defined* (hundreds of dark: utilities exist
+   across the app and must compile) but pointed at an attribute value that
+   never occurs, so none of them can activate. Later cleanup phases delete
+   the dead classes file by file; if dark mode ever returns, restore
+   [data-theme="dark"] here and in ThemeProvider. */
+@custom-variant dark (&:where([data-theme="dark-disabled"], [data-theme="dark-disabled"] *));
 
 @theme {
-  /* One typeface, used with weight/tracking for hierarchy - not a serif
-     pairing. This is the Stripe/Apple/Linear move: it reads as precise
-     and engineered rather than "warm editorial." */
+  /* One typeface family pairing, matched to the reference site: Jost
+     (light geometric sans, a free Brandon Grotesque stand-in) carries
+     display headlines; Inter does all UI/body work (close to the
+     reference's Helvetica/Wix Madefor body). Hierarchy comes from
+     LIGHT weights and generous sizes, never heavy strokes. */
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Jost", "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand ramp — "Amethyst". The one color that carries the whole site:
-     sometimes dominant (a full button, a bold underline), often just a
-     precise one-pixel accent against neutral. Never a decorative wash. */
-  --color-brand-50: #faf5ff;
-  --color-brand-100: #f3e8ff;
-  --color-brand-200: #e9d5ff;
-  --color-brand-300: #d8b4fe;
-  --color-brand-400: #c084fc;
-  --color-brand-500: #a855f7;
-  --color-brand-600: #7c3aed;
-  --color-brand-700: #6d28d9;
-  --color-brand-800: #5b21b6;
-  --color-brand-900: #4c1d95;
-  --color-brand-950: #2e1065;
+  /* Brand ramp — "Sage". Lifted from the reference site's exact theme
+     (#8DA86D action color; #E1EBD5 / #BCC9AB / #5E6E4B / #37422B from its
+     color ramp). The one color that carries the whole site: buttons, links,
+     eyebrows, active states. Quiet, natural, calm. */
+  --color-brand-50: #f5f8f0;
+  --color-brand-100: #e1ebd5;
+  --color-brand-200: #d0dfbe;
+  --color-brand-300: #bcc9ab;
+  --color-brand-400: #a5b98c;
+  --color-brand-500: #8da86d;
+  --color-brand-600: #75935a;
+  --color-brand-700: #5e6e4b;
+  --color-brand-800: #4a5739;
+  --color-brand-900: #37422b;
+  --color-brand-950: #232a1b;
 
-  /* Minor accent, used sparingly (a tag, a highlight) - not a hero partner. */
-  --color-accent-50: #fffbeb;
-  --color-accent-100: #fef3c7;
-  --color-accent-200: #fde68a;
-  --color-accent-300: #fcd34d;
-  --color-accent-400: #fbbf24;
-  --color-accent-500: #f59e0b;
-  --color-accent-600: #d97706;
-  --color-accent-700: #b45309;
-  --color-accent-800: #92400e;
-  --color-accent-900: #78350f;
+  /* Minor accent — the reference's cream/sand ramp. Used sparingly (soft
+     section washes, tags, highlights): the warmth behind the sage. */
+  --color-accent-50: #fefaee;
+  --color-accent-100: #fcf1d4;
+  --color-accent-200: #f7e7be;
+  --color-accent-300: #e3cd94;
+  --color-accent-400: #b9a87c;
+  --color-accent-500: #8f8264;
+  --color-accent-600: #766b50;
+  --color-accent-700: #5e5743;
+  --color-accent-800: #4a4536;
+  --color-accent-900: #37332a;
+  --color-accent-950: #221f1a;
 
-  /* True neutrals (not warm stone) - the crisp white/near-black canvas
-     that lets a single accent color do all the work. */
+  /* Neutrals — the reference site's exact grey system: #F5F5F5 secondary
+     surfaces, #E8E6E6 hairline borders, #8A8A8A secondary text, #383838
+     primary text. Cool, quiet, and totally flat — no warm cast. */
   --color-neutral-50: #fafafa;
-  --color-neutral-100: #f4f4f5;
-  --color-neutral-200: #e4e4e7;
-  --color-neutral-300: #d4d4d8;
-  --color-neutral-400: #a1a1aa;
-  --color-neutral-500: #71717a;
-  --color-neutral-600: #52525b;
-  --color-neutral-700: #3f3f46;
-  --color-neutral-800: #27272a;
-  --color-neutral-900: #18181b;
-  --color-neutral-950: #09090b;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e8e6e6;
+  --color-neutral-300: #d6d4d2;
+  --color-neutral-400: #b0b0b0;
+  --color-neutral-500: #8a8a8a;
+  --color-neutral-600: #646464;
+  --color-neutral-700: #565656;
+  --color-neutral-800: #454545;
+  --color-neutral-900: #383838;
+  --color-neutral-950: #212121;
 
+  /* Status ramps are complete (50–950) so every shade class used across
+     the app resolves to a real token — partial ramps silently dropped
+     utilities in Tailwind v4 (e.g. border-error-200 didn't exist). */
   --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-200: #bbf7d0;
+  --color-success-300: #86efac;
+  --color-success-400: #4ade80;
   --color-success-500: #22c55e;
   --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
   --color-success-900: #14532d;
+  --color-success-950: #052e16;
   --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-200: #fde68a;
+  --color-warning-300: #fcd34d;
+  --color-warning-400: #fbbf24;
   --color-warning-500: #f59e0b;
   --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+  --color-warning-800: #92400e;
   --color-warning-900: #78350f;
+  --color-warning-950: #451a03;
   --color-error-50: #fef2f2;
+  --color-error-100: #fee2e2;
+  --color-error-200: #fecaca;
+  --color-error-300: #fca5a5;
+  --color-error-400: #f87171;
   --color-error-500: #ef4444;
   --color-error-600: #dc2626;
+  --color-error-700: #b91c1c;
+  --color-error-800: #991b1b;
   --color-error-900: #7f1d1d;
+  --color-error-950: #450a0a;
 
-  --radius-lg: 0.625rem;
-  --radius-xl: 0.875rem;
-  --radius-2xl: 1.125rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1.125rem;
+  --radius-2xl: 1.5rem;
 
   /* Crisp and shallow - definition comes from a 1px border first,
      shadow second. No color-tinted "glow" shadows. */
   --shadow-warm-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
-  --shadow-warm-md: 0 2px 8px -2px rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-  --shadow-warm-lg: 0 8px 24px -4px rgb(0 0 0 / 0.10), 0 2px 6px -2px rgb(0 0 0 / 0.06);
+  --shadow-warm-md: 0 2px 8px -2px rgb(0 0 0 / 0.07), 0 1px 3px -1px rgb(0 0 0 / 0.05);
+  --shadow-warm-lg: 0 8px 24px -4px rgb(0 0 0 / 0.08), 0 2px 6px -2px rgb(0 0 0 / 0.04);
+
+  /* Motion curve shared by page reveal animations. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
@@ -86,16 +124,39 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Firefox: thin, theme-aware scrollbar (fades with .sb-idle below) */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(0 0 0 / 0.3) transparent;
+  }
+
+  html[data-theme="dark-disabled"] {
+    scrollbar-color: rgb(255 255 255 / 0.3) transparent;
+  }
+
+  /* Idle page: thumb fades out entirely so the gutter reads as empty.
+     .sb-idle is toggled by useScrollbarFade (see src/hooks). */
+  html.sb-idle {
+    scrollbar-color: transparent transparent;
   }
 
   h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+
+  h1 {
+    font-weight: 300;
+  }
+
+  h4, h5, h6 {
     font-family: var(--font-sans);
-    letter-spacing: -0.02em;
+    letter-spacing: -0.01em;
     font-weight: 600;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-brand-500);
+    outline: 2px solid var(--color-brand-600);
     outline-offset: 2px;
   }
 
@@ -148,4 +209,255 @@
   .hero-animated-gradient {
     animation: none;
   }
+}
+
+/* ------------------------------------------------------------------
+   Shared section eyebrow: small-caps label that opens each section.
+   One consistent, premium-across-the-site device.
+   ------------------------------------------------------------------ */
+@layer components {
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-brand-600);
+  }
+
+  .eyebrow::before {
+    content: "";
+    display: inline-block;
+    height: 1px;
+    width: 1.75rem;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .eyebrow--center::after {
+    content: "";
+    display: inline-block;
+    height: 1px;
+    width: 1.75rem;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  /* Card surface: border first, soft shadow, gentle lift on hover. */
+  .surface-card {
+    background: var(--color-white, #fff);
+    border: 1px solid var(--color-neutral-100);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-warm-sm);
+  }
+
+  :where([data-theme="dark"]) .surface-card {
+    background: var(--color-neutral-900);
+    border-color: var(--color-neutral-800);
+  }
+
+  .hover-lift {
+    transition:
+      transform 240ms var(--ease-out-expo),
+      box-shadow 240ms var(--ease-out-expo),
+      border-color 160ms ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-warm-lg);
+  }
+
+  /* Text link with an animated underline (used for in-copy links). */
+  .link-underline {
+    position: relative;
+  }
+
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 240ms var(--ease-out-expo);
+  }
+
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Page-reveal animation: sections rise gently on first paint.
+   Applied via .reveal (all pages) - respects reduced motion.
+   ------------------------------------------------------------------ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal {
+  animation: rise-in 0.7s var(--ease-out-expo) both;
+}
+
+.reveal-delay-1 { animation-delay: 90ms; }
+.reveal-delay-2 { animation-delay: 180ms; }
+.reveal-delay-3 { animation-delay: 270ms; }
+.reveal-delay-4 { animation-delay: 360ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .hover-lift {
+    animation: none;
+    transition: none;
+  }
+
+  .hover-lift:hover {
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Hero headline word reveal — every word enters through its own
+   overflow mask: rises up, un-blurs, settles in place. Outgoing lines
+   mirror the motion (rise up and away, blur out) in reverse order, so
+   a slide change reads as one continuous upward roll.
+
+   Timing contract (keep in sync with Home.jsx):
+     step = 55ms per word   → --word-step + STEP_MS
+     in   = 640ms           → --word-in-ms
+     out  = 320ms           → --word-out-ms
+   ------------------------------------------------------------------ */
+@keyframes word-in {
+  from {
+    opacity: 0;
+    transform: translateY(105%);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes word-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-105%);
+    filter: blur(4px);
+  }
+}
+
+.word-reveal {
+  --word-step: 55ms;
+  --word-in-ms: 640ms;
+  --word-out-ms: 320ms;
+}
+
+/* Outer <span> clips; inner <span> moves. padding-bottom keeps
+descenders (g, y, p) visible inside the mask. */
+.word-reveal .word-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.word-reveal .word-in {
+  display: inline-block;
+  animation: word-in var(--word-in-ms) var(--ease-out-expo) both;
+  animation-delay: calc(var(--word-index) * var(--word-step));
+  will-change: transform, opacity, filter;
+}
+
+.word-reveal .word-out {
+  display: inline-block;
+  animation: word-out var(--word-out-ms) cubic-bezier(0.5, 0, 0.75, 0.2) both;
+  animation-delay: calc(
+    (var(--word-count) - 1 - var(--word-index)) * var(--word-step)
+  );
+  will-change: transform, opacity, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word-reveal .word-in,
+  .word-reveal .word-out {
+    animation: none;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Scrollbar — thin, theme-aware, and fades out while the page is idle.
+   Chromium/Safari use the ::-webkit-scrollbar rules below; Firefox uses
+   scrollbar-width/scrollbar-color set in the base layer above. The
+   `sb-idle` class on <html> (toggled by useScrollbarFade) is what makes
+   the thumb disappear when nothing is scrolling, so the gutter reads as
+   empty space; it returns on scroll, or when the pointer hovers the
+   gutter. Applies to the page and inner scroll areas alike.
+   ------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track,
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(0 0 0 / 0.3);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: content-box;
+  transition: background-color 250ms ease-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0 0 0 / 0.55);
+}
+
+[data-theme="dark-disabled"] ::-webkit-scrollbar-thumb {
+  background-color: rgb(255 255 255 / 0.3);
+}
+
+[data-theme="dark-disabled"] ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(255 255 255 / 0.55);
+}
+
+/* Idle: hide the thumb on the page scrollbar and any inner scroll areas */
+html.sb-idle::-webkit-scrollbar-thumb,
+html.sb-idle ::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+/* ...but bring it straight back when the pointer rests over it */
+html.sb-idle::-webkit-scrollbar-thumb:hover,
+html.sb-idle ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0 0 0 / 0.55);
+}
+
+html.sb-idle[data-theme="dark-disabled"]::-webkit-scrollbar-thumb:hover,
+html.sb-idle[data-theme="dark-disabled"] ::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(255 255 255 / 0.55);
 }

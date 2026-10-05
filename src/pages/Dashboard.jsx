@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Link } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import SEO from "../components/common/SEO";
 import { useAuth } from "../context";
 import { supabase } from "../lib/supabase";
-import { FaUser, FaDonate, FaHandsHelping, FaCalendarAlt, FaHeart } from "react-icons/fa";
+import {
+  FaDonate,
+  FaHandsHelping,
+  FaCalendarAlt,
+  FaHeart,
+  FaArrowRight,
+} from "react-icons/fa";
 
 /**
  * User Dashboard - personal hub for authenticated users.
@@ -61,9 +67,9 @@ function Dashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-600" />
+        <span className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-600" />
         <span className="ml-4 text-lg font-medium text-neutral-700 dark:text-neutral-200">
-          Loading dashboard...
+          Loading dashboard…
         </span>
       </div>
     );
@@ -73,131 +79,148 @@ function Dashboard() {
     return <Navigate to="/login" replace />;
   }
 
+  const firstName =
+    user?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
+
   const STATS = [
     {
-      label: "Total Donations",
+      label: "Total donated",
       icon: FaDonate,
-      value: `₦${totalDonated.toLocaleString()}`,
+      value: dashboardLoading ? "…" : `₦${totalDonated.toLocaleString()}`,
       sub: `${donationCount} donation${donationCount !== 1 ? "s" : ""}`,
-      accent: "success",
+      chip: "bg-success-50 dark:bg-success-950/50 text-success-600 dark:text-success-400",
     },
     {
-      label: "Volunteer Hours",
+      label: "Volunteer hours",
       icon: FaHandsHelping,
-      value: dashboardLoading ? "..." : volunteerHours,
+      value: dashboardLoading ? "…" : volunteerHours,
       sub: "hours contributed",
-      accent: "brand",
+      chip: "bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400",
     },
     {
-      label: "Events",
+      label: "Events attended",
       icon: FaCalendarAlt,
-      value: dashboardLoading ? "..." : eventRegistrations,
-      sub: "registered",
-      accent: "accent",
+      value: dashboardLoading ? "…" : eventRegistrations,
+      sub: "registrations",
+      chip: "bg-accent-50 dark:bg-accent-950/50 text-accent-600 dark:text-accent-400",
     },
     {
-      label: "Your Impact",
+      label: "Your impact",
       icon: FaHeart,
-      value: donationCount + eventRegistrations + (volunteerHours ? 1 : 0),
+      value: dashboardLoading ? "…" : donationCount + eventRegistrations + (volunteerHours ? 1 : 0),
       sub: "contributions",
-      accent: "error",
+      chip: "bg-error-50 dark:bg-error-950/50 text-error-600 dark:text-error-400",
     },
   ];
 
-  const ACCENT_CLASSES = {
-    success: { border: "border-success-500", icon: "text-success-600", value: "text-success-600" },
-    brand: { border: "border-brand-500", icon: "text-brand-600", value: "text-brand-600" },
-    accent: { border: "border-accent-500", icon: "text-accent-600", value: "text-accent-600" },
-    error: { border: "border-error-500", icon: "text-error-600", value: "text-error-600" },
-  };
-
   const QUICK_ACTIONS = [
-    { to: "/donate", icon: FaDonate, label: "Make Donation", color: "text-success-600" },
-    { to: "/volunteer", icon: FaHandsHelping, label: "Join Volunteer", color: "text-brand-600" },
-    { to: "/events", icon: FaCalendarAlt, label: "View Events", color: "text-accent-600" },
+    { to: "/donate", icon: FaDonate, label: "Make a donation", hint: "Every gift reaches a program" },
+    { to: "/volunteer", icon: FaHandsHelping, label: "Join as a volunteer", hint: "Lend your hours and skills" },
+    { to: "/events", icon: FaCalendarAlt, label: "View events", hint: "See what's coming up" },
   ];
 
   return (
-    <div>
-      <Helmet>
-        <title>Dashboard | Flourishing Souls Foundation</title>
-        <meta name="description" content="Your personal dashboard and activity" />
-      </Helmet>
+    <div className="pb-16">
+      <SEO path="/dashboard" title="Dashboard" noIndex />
 
-      <header className="mb-8">
-        <h1 className="font-display text-3xl font-semibold text-neutral-900 dark:text-white">
-          Welcome back, {user?.full_name?.split(" ")[0] || user?.email}
-        </h1>
-        <p className="mt-2 text-neutral-600 dark:text-neutral-400">Here's your activity summary</p>
+      <header className="reveal mb-10 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="eyebrow">Your hub</p>
+          <h1 className="mt-2 font-display text-4xl text-neutral-900 dark:text-white">
+            Welcome back, {firstName}
+          </h1>
+          <p className="mt-2 text-neutral-500 dark:text-neutral-400">
+            Here's your activity across donations, volunteering, and events.
+          </p>
+        </div>
       </header>
 
       {error && (
-        <div className="mb-6 p-4 bg-error-50 dark:bg-error-900/30 text-error-700 dark:text-error-200 rounded-2xl">
+        <div className="mb-8 rounded-2xl border border-error-200 dark:border-error-900 bg-error-50 dark:bg-error-950/40 px-5 py-4 text-sm text-error-700 dark:text-error-300">
           {error}
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        {STATS.map(({ label, icon: Icon, value, sub, accent }) => (
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {STATS.map(({ label, icon: Icon, value, sub, chip }) => (
           <div
             key={label}
-            className={`bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-6 border-l-4 ${ACCENT_CLASSES[accent].border}`}
+            className="surface-card hover-lift p-6"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-neutral-700 dark:text-neutral-200">{label}</h3>
-              <Icon className={`text-2xl ${ACCENT_CLASSES[accent].icon}`} />
+            <div className="flex items-start justify-between">
+              <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${chip}`}>
+                <Icon className="h-4.5 w-4.5" />
+              </span>
             </div>
-            <div className={`text-3xl font-display font-bold ${ACCENT_CLASSES[accent].value}`}>{value}</div>
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">{sub}</p>
+            <div className="mt-5 font-display text-3xl text-neutral-900 dark:text-white">
+              {value}
+            </div>
+            <div className="mt-1 flex items-baseline justify-between gap-2">
+              <p className="text-sm font-medium text-neutral-700 dark:text-neutral-200">{label}</p>
+              <p className="whitespace-nowrap text-xs text-neutral-400">{sub}</p>
+            </div>
           </div>
         ))}
       </div>
 
-      <div className="bg-white dark:bg-neutral-900 rounded-2xl shadow-warm-sm p-8 mb-10">
-        <h2 className="font-display text-2xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 flex items-center">
-          <FaUser className="mr-3 text-brand-600" />
-          Profile Information
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[
-            ["Full Name", user?.full_name || "Not set"],
-            ["Email", user?.email],
-            ["Phone", user?.phone || "Not set"],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">{label}</label>
-              <p className="text-lg text-neutral-900 dark:text-neutral-100 bg-neutral-50 dark:bg-neutral-800 p-3 rounded-xl">
-                {value}
+      <div className="mt-10 grid gap-6 lg:grid-cols-[1.1fr_0.9fr] items-start">
+        {/* Profile panel */}
+        <section className="surface-card p-8">
+          <h2 className="font-display text-xl text-neutral-900 dark:text-white">
+            Profile information
+          </h2>
+          <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {[
+              ["Full name", user?.full_name || "Not set"],
+              ["Email", user?.email],
+              ["Phone", user?.phone || "Not set"],
+            ].map(([label, value]) => (
+              <div key={label}>
+                <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+                  {label}
+                </p>
+                <p className="mt-1.5 rounded-xl bg-neutral-50 dark:bg-neutral-800/60 px-4 py-2.5 text-neutral-900 dark:text-neutral-100">
+                  {value}
+                </p>
+              </div>
+            ))}
+            <div>
+              <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+                Account status
+              </p>
+              <p className="mt-1.5 inline-flex items-center gap-2 rounded-xl bg-success-50 dark:bg-success-950/40 px-4 py-2.5 font-medium text-success-700 dark:text-success-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-success-500" />
+                Active
               </p>
             </div>
-          ))}
-          <div>
-            <label className="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
-              Account Status
-            </label>
-            <p className="text-lg text-success-700 dark:text-success-400 bg-success-50 dark:bg-success-900/20 p-3 rounded-xl font-semibold">
-              Active
-            </p>
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="border border-neutral-100 dark:border-neutral-800 rounded-2xl p-8">
-        <h2 className="font-display text-2xl text-neutral-900 dark:text-white mb-6">
-          Quick Actions
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {QUICK_ACTIONS.map(({ to, icon: Icon, label, color }) => (
-            <Link
-              key={to}
-              to={to}
-              className="block p-4 border border-neutral-100 dark:border-neutral-800 rounded-2xl hover:border-neutral-300 dark:hover:border-neutral-600 hover:shadow-warm-sm transition text-center"
-            >
-              <Icon className={`text-3xl mx-auto mb-2 ${color}`} />
-              <span className="font-semibold text-neutral-800 dark:text-neutral-100">{label}</span>
-            </Link>
-          ))}
-        </div>
+        {/* Quick actions */}
+        <section className="surface-card p-8">
+          <h2 className="font-display text-xl text-neutral-900 dark:text-white">
+            Quick actions
+          </h2>
+          <div className="mt-6 space-y-3">
+            {QUICK_ACTIONS.map(({ to, icon: Icon, label, hint }) => (
+              <Link
+                key={to}
+                to={to}
+                className="group flex items-center gap-4 rounded-2xl border border-neutral-100 dark:border-neutral-800 p-4 transition hover:border-brand-200 dark:hover:border-brand-800 hover:bg-brand-50/40 dark:hover:bg-brand-950/30"
+              >
+                <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-50 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400">
+                  <Icon className="h-4.5 w-4.5" />
+                </span>
+                <span className="flex-1">
+                  <span className="block font-medium text-neutral-900 dark:text-neutral-100">{label}</span>
+                  <span className="block text-xs text-neutral-400">{hint}</span>
+                </span>
+                <FaArrowRight className="h-4 w-4 text-neutral-300 transition group-hover:translate-x-0.5 group-hover:text-brand-500" />
+              </Link>
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

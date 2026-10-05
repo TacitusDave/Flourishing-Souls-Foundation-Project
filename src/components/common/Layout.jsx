@@ -4,7 +4,6 @@ import { Outlet, useLocation } from "react-router-dom";
 // These common components should be updated with actual paths if moved
 import Header from "./Header";
 import Footer from "./Footer";
-import ThemeSwitcher from "./ThemeSwitcher";
 
 // For accessibility and focus management
 const ScrollToTop = () => {
@@ -21,7 +20,13 @@ const ScrollToTop = () => {
  * Properly manages Suspense, error boundaries, and accessibility.
  */
 
+// Pages that intentionally end without the site footer.
+const FOOTERLESS_PATHS = [/^\/events(\/|$)/, /^\/gallery(\/|$)/, /^\/admin(\/|$)/];
+
 const Layout = ({ children }) => {
+  const { pathname } = useLocation();
+  const showFooter = !FOOTERLESS_PATHS.some((re) => re.test(pathname));
+
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors duration-300">
       <ScrollToTop />
@@ -42,13 +47,8 @@ const Layout = ({ children }) => {
         </Suspense>
       </main>
 
-      {/* Theme Switcher, floating so it doesn't disrupt page flow */}
-      <div className="fixed bottom-4 right-4 z-40">
-        <ThemeSwitcher />
-      </div>
-
-      {/* Site Footer */}
-      <Footer />
+      {/* Site Footer — hidden on Events, Gallery, and Admin by design */}
+      {showFooter && <Footer />}
     </div>
   );
 };

@@ -18,7 +18,7 @@ const GalleryItem = ({ item, canManage = false, onDelete, deleting = false }) =>
   };
 
   return (
-    <div className="gallery-item relative group rounded-2xl overflow-hidden shadow-warm-sm bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
+    <div className="gallery-item hover-lift relative group overflow-hidden rounded-2xl bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
       <div
         className="aspect-square cursor-pointer transition-transform duration-150 hover:scale-[1.02]"
         onClick={() => setPreviewOpen(true)}
@@ -46,7 +46,7 @@ const GalleryItem = ({ item, canManage = false, onDelete, deleting = false }) =>
           />
         )}
       </div>
-      <div className="flex flex-col gap-1 px-3 pt-3 pb-2 min-h-[56px]">
+      <div className="flex flex-col gap-1 px-3.5 pt-3 pb-3 min-h-[56px]">
         {item.title && (
           <p className="text-sm font-medium text-neutral-800 dark:text-neutral-100 break-words">
             {item.title}

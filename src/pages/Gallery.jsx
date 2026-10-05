@@ -5,6 +5,7 @@ import { useAuth } from "../context";
 import GalleryGrid from "../components/gallery/GalleryGrid";
 import Button from "../components/common/Button";
 import Notification from "../components/common/Notification";
+import SEO from "../components/common/SEO";
 
 const Gallery = () => {
   const { items, loading, error, fetchGallery, searchGallery, uploadFile, deleteItem } = useGallery();
@@ -56,53 +57,69 @@ const Gallery = () => {
   };
 
   return (
-    <div>
-      <header className="max-w-3xl mx-auto text-center mb-10">
-        <p className="text-sm font-semibold uppercase tracking-[0.3em] text-brand-600 dark:text-brand-400">
-          See the impact
-        </p>
-        <h1 className="mt-3 font-display text-3xl sm:text-4xl font-semibold text-neutral-900 dark:text-white">
+    <div className="pb-16">
+      <SEO
+        path="/gallery"
+        title="Gallery"
+        description="Photos and videos from Flourishing Souls Foundation programs, events, and the communities we support."
+      />
+      <header className="reveal mx-auto max-w-3xl text-center mb-10">
+        <p className="eyebrow eyebrow--center">See the impact</p>
+        <h1 className="mt-3 font-display text-4xl sm:text-5xl text-neutral-900 dark:text-white">
           Gallery
         </h1>
-        <p className="mt-3 text-neutral-600 dark:text-neutral-400">
+        <p className="mx-auto mt-4 max-w-xl text-lg leading-8 text-neutral-500 dark:text-neutral-400">
           Photos and videos from our programs, events, and the communities we support.
         </p>
       </header>
 
       {notice && (
-        <div className="max-w-3xl mx-auto mb-6">
+        <div className="mx-auto mb-6 max-w-6xl">
           <Notification {...notice} onClose={() => setNotice(null)} />
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-6 max-w-6xl mx-auto">
-        <div className="flex gap-2">
-          <select
-            value={typeFilter}
-            onChange={handleFilterChange}
-            className="rounded-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
-          >
-            <option value="all">All media</option>
-            <option value="photo">Photos</option>
-            <option value="video">Videos</option>
-          </select>
-          <form onSubmit={handleSearchSubmit} className="flex">
+      {/* Toolbar: filter + search + admin upload */}
+      <div className="mx-auto mb-8 flex max-w-6xl flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
+        <div className="flex flex-wrap gap-2">
+          {/* Segmented media-type filter */}
+          <div className="inline-flex rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 p-1 shadow-warm-sm">
+            {[
+              { value: "all", label: "All" },
+              { value: "photo", label: "Photos" },
+              { value: "video", label: "Videos" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => {
+                  // Reuse the same data path as the old select control.
+                  handleFilterChange({ target: { value: opt.value } });
+                }}
+                aria-pressed={typeFilter === opt.value}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
+                  typeFilter === opt.value
+                    ? "bg-brand-600 text-white shadow-warm-sm"
+                    : "text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white"
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+
+          <form onSubmit={handleSearchSubmit} className="relative flex-1 sm:w-64 sm:flex-none">
+            <FiSearch className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search gallery..."
-              className="rounded-l-xl border border-r-0 border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 py-2 text-sm focus:ring-2 focus:ring-brand-500 outline-none"
+              placeholder="Search gallery…"
+              className="w-full rounded-full border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 py-2 pl-10 pr-4 text-sm shadow-warm-sm outline-none transition focus:border-brand-400 focus:ring-2 focus:ring-brand-500/30"
             />
-            <button
-              type="submit"
-              className="rounded-r-xl border border-neutral-300 dark:border-neutral-700 bg-white dark:bg-neutral-800 px-3 text-neutral-500 hover:text-brand-600"
-              aria-label="Search"
-            >
-              <FiSearch />
-            </button>
           </form>
         </div>
+
         {isAdmin && (
           <>
             <input
@@ -120,12 +137,12 @@ const Gallery = () => {
       </div>
 
       {error && (
-        <div className="max-w-6xl mx-auto mb-4 text-error-600 dark:text-error-400 text-center text-sm">
+        <div className="mx-auto mb-4 max-w-6xl rounded-2xl border border-error-200 dark:border-error-900 bg-error-50 dark:bg-error-950/40 p-5 text-center text-sm text-error-700 dark:text-error-300">
           {typeof error === "string" ? error : error.message || "Failed to load gallery."}
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto">
+      <div className="mx-auto max-w-6xl">
         <GalleryGrid
           items={items}
           loading={loading}

@@ -1,5 +1,10 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "../lib/supabase";
+import { listGallery as listGalleryFromStore, probeBackend } from "../lib/adminStore";
+
+// Network-level failures (backend unreachable) get the local-store
+// fallback; real API errors still surface to the UI.
+const isNetworkError = (e) => /failed to fetch|networkerror|load failed/i.test(e?.message || "");
 
 /**
  * useGallery
@@ -66,6 +71,17 @@ function useGallery() {
       if (fetchError) throw fetchError;
       setItems(data || []);
     } catch (e) {
+      // Backend unreachable: fall back to the same local store the admin
+      // panel writes to, applying the type filter locally.
+      if (isNetworkError(e)) {
+        try {
+          const local = await listGalleryFromStore();
+          setItems(opts?.type ? local.filter((i) => i.type === opts.type) : local);
+          return;
+        } catch {
+          /* fall through to surfacing the original error */
+        }
+      }
       setError(e);
     } finally {
       setLoading(false);
@@ -87,6 +103,23 @@ function useGallery() {
       if (fetchError) throw fetchError;
       setItems(data || []);
     } catch (e) {
+      // Offline: search the local store instead (same behaviour, in-memory).
+      if (isNetworkError(e)) {
+        try {
+          const local = await listGalleryFromStore();
+          const q = queryStr.toLowerCase();
+          setItems(
+            local.filter(
+              (i) =>
+                (i.title || "").toLowerCase().includes(q) ||
+                (i.description || "").toLowerCase().includes(q)
+            )
+          );
+          return;
+        } catch {
+          /* fall through */
+        }
+      }
       setError(e);
     } finally {
       setLoading(false);
@@ -212,7 +245,16 @@ function useGallery() {
     if (subscriptionRef.current || typeof supabase.channel !== "function") {
       return;
     }
-    const channel = supabase
+    // Only open the realtime socket when the backend is actually reachable —
+    // otherwise it retries endlessly against a dead host (console noise).
+    let cancelled = false;
+    probeBackend().then((mode) => {
+      if (cancelled || mode !== "live" || subscriptionRef.current) return;
+      subscribeRealtime();
+    });
+
+    function subscribeRealtime() {
+      const channel = supabase
       .channel("realtime:gallery")
       .on(
         "postgres_changes",
@@ -241,8 +283,10 @@ function useGallery() {
           subscriptionRef.current = channel;
         }
       });
+    }
 
     return () => {
+      cancelled = true;
       if (subscriptionRef.current) {
         supabase.removeChannel(subscriptionRef.current);
         subscriptionRef.current = null;

@@ -136,9 +136,45 @@ create table if not exists settings (
   contact_email text,
   contact_phone text,
   donation_goal numeric,
+  -- Quick-pick amounts on the donation form (array of naira numbers)
+  donation_presets jsonb not null default '[1000,2500,5000,10000]'::jsonb,
+  -- Impact tiers shown on the homepage and Donate page:
+  -- [{ amount: number, tag: string, text: string }]
+  donation_tiers jsonb not null default
+    '[{"amount":5000,"tag":"School supplies","text":"Books, uniform, and materials for one child for a full term."},{"amount":25000,"tag":"Medical outreach","text":"Sponsors a community health screening day for a dozen families."},{"amount":100000,"tag":"A year of care","text":"Funds shelter, meals, and schooling for one child for a year."}]'::jsonb,
   theme text not null default 'system' check (theme in ('light', 'dark', 'system')),
   updated_at timestamptz not null default now()
 );
+
+-- Columns added after the table existed (safe to re-run)
+alter table settings add column if not exists donation_presets jsonb not null default '[1000,2500,5000,10000]'::jsonb;
+alter table settings add column if not exists donation_tiers jsonb not null default
+  '[{"amount":5000,"tag":"School supplies","text":"Books, uniform, and materials for one child for a full term."},{"amount":25000,"tag":"Medical outreach","text":"Sponsors a community health screening day for a dozen families."},{"amount":100000,"tag":"A year of care","text":"Funds shelter, meals, and schooling for one child for a year."}]'::jsonb;
+
+-- ============================================================
+-- STORAGE
+-- One public bucket serves gallery photos/videos and event media.
+-- (The app reads URLs from the `gallery`/`events` tables, so client
+-- code only needs the public URL — uploads are admin-only via RLS.)
+-- ============================================================
+insert into storage.buckets (id, name, public)
+values ('gallery-media', 'gallery-media', true)
+on conflict (id) do nothing;
+
+-- Public read of media files
+create policy "gallery_media_public_read" on storage.objects
+  for select using (bucket_id = 'gallery-media');
+
+-- Authenticated users may upload (the public pages call this only behind
+-- the isAdmin gate; the DB check is the real enforcement)
+create policy "gallery_media_auth_upload" on storage.objects
+  for insert to authenticated with check (bucket_id = 'gallery-media');
+
+create policy "gallery_media_auth_update" on storage.objects
+  for update to authenticated using (bucket_id = 'gallery-media');
+
+create policy "gallery_media_auth_delete" on storage.objects
+  for delete to authenticated using (bucket_id = 'gallery-media');
 
 -- ============================================================
 -- ROW LEVEL SECURITY

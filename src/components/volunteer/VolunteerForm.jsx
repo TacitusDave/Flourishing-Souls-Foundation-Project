@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { supabase } from "../../lib/supabase";
+import { trackEvent } from "../../lib/monitoring";
 
 /**
  * Helper: Validate volunteer form fields
@@ -94,6 +95,7 @@ const VolunteerForm = ({
       } else {
         setSubmitted(true);
         setVolunteerId(data?.[0]?.id || null);
+        trackEvent("volunteer_submit");
         if (onSuccess) onSuccess(data?.[0]);
         if (hideAfterSubmit) setTimeout(() => setSubmitted(false), 7000);
         setForm({
@@ -119,17 +121,17 @@ const VolunteerForm = ({
   return (
     <div
       className={
-        "max-w-xl w-full mx-auto px-4 py-8 rounded-2xl shadow-warm-sm bg-white dark:bg-neutral-900 " +
+        "w-full px-0 py-0 " +
         className
       }
       style={style}
     >
       {submitted && !submissionError ? (
-        <div className="rounded bg-success-50 border border-success-300 p-4 mb-5 text-center">
-          <div className="text-success-700 text-lg font-semibold mb-2">
+        <div className="rounded-2xl border border-success-200 dark:border-success-900 bg-success-50 dark:bg-success-950/40 p-6 text-center">
+          <div className="font-display text-lg font-semibold text-success-700 dark:text-success-300">
             Thank you for applying to volunteer!
           </div>
-          <div className="text-success-800">
+          <div className="mt-2 text-sm text-success-800 dark:text-success-200/80">
             We have received your application{volunteerId ? ` (ID: ${volunteerId})` : ""}.<br />
             Our team will review your information and contact you soon.
           </div>
@@ -140,24 +142,22 @@ const VolunteerForm = ({
           onSubmit={handleSubmit}
           aria-label="Volunteer Application Form"
           noValidate
+          className="space-y-5"
         >
-          <h2 className="text-2xl font-bold mb-4 text-brand-700 dark:text-brand-300">
-            Volunteer Application
-          </h2>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-name"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Full Name <span className="text-error-600"> *</span>
+              Full name <span className="text-error-600">*</span>
             </label>
             <input
               id="volunteer-name"
               name="name"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
-                (errors.name ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition " +
+                (errors.name ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.name}
               onChange={handleChange}
@@ -169,20 +169,20 @@ const VolunteerForm = ({
               <div className="text-xs text-error-600 mt-1">{errors.name}</div>
             )}
           </div>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-email"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Email <span className="text-error-600"> *</span>
+              Email <span className="text-error-600">*</span>
             </label>
             <input
               id="volunteer-email"
               name="email"
               type="email"
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
-                (errors.email ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition " +
+                (errors.email ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.email}
               onChange={handleChange}
@@ -194,20 +194,20 @@ const VolunteerForm = ({
               <div className="text-xs text-error-600 mt-1">{errors.email}</div>
             )}
           </div>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-phone"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Phone Number <span className="text-error-600"> *</span>
+              Phone number <span className="text-error-600">*</span>
             </label>
             <input
               id="volunteer-phone"
               name="phone"
               type="tel"
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
-                (errors.phone ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition " +
+                (errors.phone ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.phone}
               onChange={handleChange}
@@ -220,20 +220,20 @@ const VolunteerForm = ({
               <div className="text-xs text-error-600 mt-1">{errors.phone}</div>
             )}
           </div>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-availability"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Availability <span className="text-error-600"> *</span>
+              Availability <span className="text-error-600">*</span>
             </label>
             <input
               id="volunteer-availability"
               name="availability"
               type="text"
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition " +
-                (errors.availability ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition " +
+                (errors.availability ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.availability}
               onChange={handleChange}
@@ -245,20 +245,20 @@ const VolunteerForm = ({
               <div className="text-xs text-error-600 mt-1">{errors.availability}</div>
             )}
           </div>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-skills"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Skills & Experience <span className="text-error-600"> *</span>
+              Skills &amp; experience <span className="text-error-600">*</span>
             </label>
             <textarea
               id="volunteer-skills"
               name="skills"
               rows={3}
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition resize-vertical " +
-                (errors.skills ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition resize-y " +
+                (errors.skills ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.skills}
               onChange={handleChange}
@@ -270,20 +270,20 @@ const VolunteerForm = ({
               <div className="text-xs text-error-600 mt-1">{errors.skills}</div>
             )}
           </div>
-          <div className="mb-5">
+          <div>
             <label
               htmlFor="volunteer-motivation"
-              className="block font-medium text-neutral-800 dark:text-neutral-200 mb-1"
+              className="block text-sm font-medium text-neutral-700 dark:text-neutral-200 mb-1.5"
             >
-              Why do you want to volunteer? <span className="text-error-600"> *</span>
+              Why do you want to volunteer? <span className="text-error-600">*</span>
             </label>
             <textarea
               id="volunteer-motivation"
               name="motivation"
               rows={3}
               className={
-                "w-full px-3 py-2 border rounded-xl bg-white dark:bg-neutral-800 outline-none focus:ring-2 focus:ring-brand-500 transition resize-vertical " +
-                (errors.motivation ? "border-error-400" : "border-neutral-300")
+                "w-full rounded-xl border bg-white dark:bg-neutral-800 px-3.5 py-2.5 outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-400 transition resize-y " +
+                (errors.motivation ? "border-error-400" : "border-neutral-200 dark:border-neutral-700")
               }
               value={form.motivation}
               onChange={handleChange}
@@ -296,22 +296,22 @@ const VolunteerForm = ({
             )}
           </div>
           {submissionError && (
-            <div className="mb-3 text-error-600 bg-error-50 border border-error-300 rounded p-2 text-xs">
+            <div className="text-sm text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-950/40 border border-error-200 dark:border-error-900 rounded-xl p-3">
               {submissionError}
             </div>
           )}
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition focus:ring-2 focus:ring-brand-500 disabled:opacity-70"
+            className="w-full rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold px-4 py-3 transition shadow-warm-md focus:ring-2 focus:ring-brand-500 disabled:opacity-70"
           >
             {submitting ? (
-              <span>
-                <span className="inline-block animate-spin mr-2">&#9696;</span>
-                Submitting...
+              <span className="inline-flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                Submitting…
               </span>
             ) : (
-              "Submit Application"
+              "Submit application"
             )}
           </button>
         </form>

@@ -88,6 +88,15 @@ const SuccessScreen = ({
           <span className="font-semibold">{orgName}</span>.
         </div>
 
+        <div className="mb-4 flex items-center justify-center gap-2 text-[11px] text-neutral-400 dark:text-neutral-500">
+          <img
+            src="/images/brand-assets/paystack.svg"
+            alt="Paystack"
+            className="h-3.5 w-auto"
+          />
+          <span>Verified payment processed via Paystack</span>
+        </div>
+
         <div className="flex flex-col sm:flex-row gap-2 justify-center mt-3">
           {onViewReceipt && receipt && (
             <button

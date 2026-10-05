@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { FaSignInAlt } from "react-icons/fa";
 
 const SOCIAL_LINKS = [
   {
@@ -42,40 +43,68 @@ const footerNav = [
 
 function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-white via-neutral-800 to-neutral-950 dark:from-neutral-950 dark:via-neutral-950 dark:to-neutral-950 text-neutral-300 transition-colors duration-500">
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_1fr_1fr]">
-          <div className="space-y-4">
+    <footer className="relative overflow-hidden border-t border-neutral-100 bg-neutral-50">
+      {/* Footer background image */}
+      <div
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-100"
+        style={{
+          backgroundImage: `url(/images/brand-assets/footer-texture.png)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      />
+      <div className="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr] lg:gap-12">
+          <div className="space-y-5">
             <Link to="/" className="inline-flex items-center gap-3">
-              <img src="/images/logo.svg" alt="" className="h-10 w-10" />
-              <span className="text-xl font-display font-semibold text-white">Flourishing Souls</span>
+              <Link
+                to="/admin"
+                className="text-neutral-400 hover:text-brand-600 transition-colors"
+                title="Staff login"
+              >
+                <FaSignInAlt className="h-5 w-5"
+              /></Link>
+              <img
+                src="/images/brand-assets/fsf-icon.png"
+                alt=""
+                className="h-10 w-10"
+              />
+              <span className="font-display text-xl text-neutral-900">
+                Flourishing Souls Foundation
+              </span>
             </Link>
-            <p className="max-w-md text-sm leading-7 text-neutral-400">
-              Supporting orphan care, education, healthcare, and community upliftment —
-              with full transparency into every donation and every volunteer hour.
+            <p className="max-w-md text-sm leading-7 text-neutral-600">
+              Supporting orphan care, education, healthcare, and community
+              upliftment — with full transparency into every donation and every
+              volunteer hour.
             </p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-3 pt-1">
               {SOCIAL_LINKS.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-neutral-700 bg-neutral-900 text-neutral-200 transition hover:border-brand-500 hover:text-brand-100"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white/80 text-neutral-500 transition hover:-translate-y-0.5 hover:border-brand-500 hover:text-brand-600"
                   aria-label={link.name}
                 >
-                  {link.icon}
+                  <span className="[&_svg]:h-4 [&_svg]:w-4">{link.icon}</span>
                 </a>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Explore</p>
-            <ul className="mt-6 space-y-3 text-sm text-neutral-300">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-neutral-400">
+              Explore
+            </p>
+            <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3 text-sm text-neutral-600 sm:grid-cols-1">
               {footerNav.map((item) => (
                 <li key={item.label}>
-                  <Link to={item.href} className="transition hover:text-white">
+                  <Link
+                    to={item.href}
+                    className="link-underline inline-block transition hover:text-brand-700"
+                  >
                     {item.label}
                   </Link>
                 </li>
@@ -84,27 +113,41 @@ function Footer() {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-neutral-400">Contact</p>
-            <div className="mt-6 space-y-3 text-sm text-neutral-300">
-              <a href="mailto:support@flourishingsoulsfoundation.org" className="block hover:text-white transition">
-                support@flourishingsoulsfoundation.org
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-neutral-400">
+              Contact
+            </p>
+            <div className="mt-6 space-y-3 text-sm text-neutral-600">
+              <a
+                href="mailto:flourishingsoulsfoundation@gmail.com"
+                className="link-underline inline-block break-all transition hover:text-brand-700"
+              >
+                flourishingsoulsfoundation@gmail.com
               </a>
-              <Link to="/support" className="block hover:text-white transition">
+              <Link
+                to="/support"
+                className="link-underline block transition hover:text-brand-700"
+              >
                 Submit a support request &rarr;
               </Link>
             </div>
-            <div className="mt-6">
+            <div className="mt-7">
               <Link
                 to="/donate"
-                className="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/20 transition hover:bg-brand-700"
+                className="group inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-6 py-3 text-sm font-semibold text-white shadow-warm-md transition hover:bg-brand-700"
               >
                 Donate now
               </Link>
             </div>
           </div>
         </div>
-        <div className="mt-12 border-t border-neutral-800 pt-6 text-center text-xs text-neutral-500">
-          © {new Date().getFullYear()} Flourishing Souls Foundation. All rights reserved.
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-neutral-200/60 pt-7 text-xs text-neutral-500 sm:flex-row">
+          <p className="text-center sm:text-left">
+            © {new Date().getFullYear()} Flourishing Souls Foundation. All
+            rights reserved.
+          </p>
+          <p className="flex items-center gap-1.5">
+            Empowering lives, nurturing hope
+          </p>
         </div>
       </div>
     </footer>
@@ -112,4 +155,3 @@ function Footer() {
 }
 
 export default Footer;
-      

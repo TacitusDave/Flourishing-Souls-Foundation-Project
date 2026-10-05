@@ -8,32 +8,24 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { ThemeContext } from "./themeContext";
 
-// Utility: Detect system preference
-function getSystemTheme() {
-  if (typeof window === "undefined" || !window.matchMedia) return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-// All supported themes
-const THEMES = ["light", "dark", "system"];
+// The site is light-only by design decision (mirroring the calm, minimal
+// reference site). The theme machinery is kept intact so a dark theme can
+// be reintroduced later without rebuilding the token layer — but every
+// theme resolution now clamps to "light".
+const THEMES = ["light"];
 const LOCAL_STORAGE_KEY = "fsf-theme-preference";
 
 function ThemeProvider({ children }) {
-  const [theme, setThemeState] = useState("system");
-  const [resolvedTheme, setResolvedTheme] = useState(getSystemTheme());
+  const [theme, setThemeState] = useState("light");
   const [loading, setLoading] = useState(true);
 
-  // Document theme toggling logic
-  function applyTheme(userTheme, sysTheme) {
-    const real = userTheme === "system" ? (sysTheme || getSystemTheme()) : userTheme;
+  // Document theme toggling logic — clamped to light (light-only site).
+  function applyTheme() {
+    const real = "light";
     document.documentElement.setAttribute("data-theme", real);
 
-    // Optionally: adjust background-color immediately for non-FOUC
-    if (real === "dark") {
-      document.documentElement.style.backgroundColor = "#18192f";
-    } else {
-      document.documentElement.style.backgroundColor = "#fbfbff";
-    }
+    // Adjust background-color immediately for non-FOUC
+    document.documentElement.style.backgroundColor = "#ffffff";
   }
 
   // Sync theme from localStorage at mount
@@ -49,35 +41,17 @@ function ThemeProvider({ children }) {
       setTimeout(() => setThemeState(stored), 0);
     }
 
-    // Set initial theme on documentElement
-    const initial = stored && THEMES.includes(stored) ? stored : "system";
+    // Set initial theme on documentElement (light-only site)
+    const initial = stored && THEMES.includes(stored) ? stored : "light";
     applyTheme(initial);
 
     // Defer setState to avoid cascading renders (schedule after paint)
     setTimeout(() => setLoading(false), 0);
   }, []);
 
-  // Watch system theme changes only if 'system' is selected
+  // Light-only: re-assert the light theme whenever `theme` changes.
   useEffect(() => {
-    if (theme !== "system") {
-      // Avoid calling setResolvedTheme synchronously in the effect to prevent cascading renders.
-      // Instead, we can defer it with setTimeout to schedule after paint.
-      setTimeout(() => setResolvedTheme(theme), 0);
-      applyTheme(theme);
-      return;
-    }
-    // system = dynamic detection
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const sys = getSystemTheme();
-      setResolvedTheme(sys);
-      applyTheme("system", sys);
-    };
-    mq.addEventListener("change", handler);
-    handler(); // initialize
-    return () => {
-      mq.removeEventListener("change", handler);
-    };
+    applyTheme();
   }, [theme]);
 
   // Cross-tab localStorage sync
@@ -106,7 +80,7 @@ function ThemeProvider({ children }) {
   // Context value
   const ctxVal = {
     theme,
-    resolvedTheme: theme === "system" ? resolvedTheme : theme,
+    resolvedTheme: "light",
     setTheme,
     loading,
   };

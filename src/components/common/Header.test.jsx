@@ -32,8 +32,9 @@ describe('Header logout', () => {
   it('calls signOut (not a nonexistent `logout`) when Logout is clicked', async () => {
     renderHeader();
 
-    fireEvent.click(screen.getByTestId('headerUserMenuBtn'));
-    const logoutBtn = await screen.findByTestId('headerLogoutBtn');
+    const profileBtn = await screen.findByTestId('headerMobileProfile');
+    fireEvent.click(profileBtn);
+    const logoutBtn = await screen.findByTestId('headerMobileLogout');
     fireEvent.click(logoutBtn);
 
     expect(signOut).toHaveBeenCalledTimes(1);

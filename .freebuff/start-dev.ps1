@@ -1,0 +1,2 @@
+$p = Start-Process -FilePath 'npm.cmd' -ArgumentList 'run','dev','--','--host','127.0.0.1' -WorkingDirectory 'C:\Users\david\Desktop\Projects\Flourishing-Souls-Foundation-Project' -RedirectStandardOutput 'C:\Users\david\Desktop\Projects\Flourishing-Souls-Foundation-Project\.freebuff\preview-111d7dd9-0dc9-489e-b791-c3eaf45bd207.log' -RedirectStandardError 'C:\Users\david\Desktop\Projects\Flourishing-Souls-Foundation-Project\.freebuff\preview-111d7dd9-0dc9-489e-b791-c3eaf45bd207.log.err' -WindowStyle Hidden -PassThru
+Write-Output $p.Id

@@ -72,7 +72,7 @@ const Receipt = ({
           <body>
             <div class="receipt">
               <div class="header">
-                <img src="/images/logo.svg" alt="logo" class="logo" />
+                <img src="/images/brand-assets/fsf-icon.png" alt="logo" class="logo" />
                 <div>
                   <div style="font-size:1.09em;font-weight:600">${organization || receiptOrg || ""}</div>
                   <div style="font-size:0.92em;color:#94a3b8">Official Donation Receipt</div>
@@ -128,7 +128,7 @@ const Receipt = ({
       {/* Header */}
       <div className="flex items-center gap-3 mb-2">
         <img
-          src="/images/logo.svg"
+          src="/images/brand-assets/fsf-icon.png"
           alt="Flourishing Souls Foundation Logo"
           className="h-10 w-10 object-contain rounded"
           loading="lazy"

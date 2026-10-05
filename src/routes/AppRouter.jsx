@@ -9,10 +9,8 @@ const Volunteer = lazy(() => import("../pages/Volunteer"));
 const Support = lazy(() => import("../pages/Support"));
 const Events = lazy(() => import("../pages/Events"));
 const Gallery = lazy(() => import("../pages/Gallery"));
+const BoardMembers = lazy(() => import("../pages/BoardMembers"));
 const Login = lazy(() => import("../pages/Login"));
-const Register = lazy(() => import("../pages/Register"));
-const ForgotPassword = lazy(() => import("../pages/ForgotPassword"));
-const ResetPassword = lazy(() => import("../pages/ResetPassword"));
 const Dashboard = lazy(() => import("../pages/Dashboard"));
 const Admin = lazy(() => import("../pages/Admin"));
 const NotFound = lazy(() => import("../pages/NotFound"));
@@ -59,10 +57,8 @@ const AppRouter = () => (
         <Route path="/support" element={<Support />} />
         <Route path="/events" element={<Events />} />
         <Route path="/gallery" element={<Gallery />} />
+        <Route path="/board" element={<BoardMembers />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
         <Route
           path="/dashboard"
           element={
@@ -71,14 +67,9 @@ const AppRouter = () => (
             </RequireAuth>
           }
         />
-        <Route
-          path="/admin/*"
-          element={
-            <RequireAuth requiredRole="admin">
-              <Admin />
-            </RequireAuth>
-          }
-        />
+        {/* Admin is protected by its own passcode gate (AdminGuard) —
+            it must stay reachable even when Supabase auth is down. */}
+        <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
